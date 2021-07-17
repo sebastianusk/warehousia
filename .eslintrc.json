@@ -2,7 +2,10 @@
   "root": true,
   "ignorePatterns": ["**/*"],
   "plugins": ["@nrwl/nx", "prettier"],
-  "extends": ["prettier"],
+  "extends": [
+    "prettier",
+    "airbnb-typescript"
+  ],
   "rules": {
     "prettier/prettier": "error"
   },

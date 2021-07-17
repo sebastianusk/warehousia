@@ -1,0 +1,27 @@
+.container {
+  height: 100vh;
+  width: 100%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  /* background-image: linear-gradient(rgb(52, 172, 68), yellow); */
+}
+.wrapper {
+  /* padding: 20px; */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 0.5em;
+  padding: 42px 24px 50px;
+  color: #000000d9;
+  border: 1px solid #f0f0f0;
+  background-color: #eee;
+}
+.wrapper h3 {
+  text-align: center;
+}
+.formContainer{
+  padding: 10px;
+  max-width: 600px;
+}
+.formItem {
+  margin-bottom: 10px;
+}
