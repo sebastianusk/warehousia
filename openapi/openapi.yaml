@@ -248,7 +248,7 @@ paths:
           $ref: "#/components/responses/UnprocessableEntities"
 
 
-  /warehouse:
+  /warehouses:
     post:
       operationId: create-warehouse
       tags:
@@ -290,7 +290,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Warehouse"
 
-  /warehouse/{warehouseid}:
+  /warehouses/{warehouseid}:
     get:
       summary: Get Warehouse by ID
       description: Get warehouse by ID
@@ -342,7 +342,7 @@ paths:
         "200":
           description: Successfully delete warehouse data
 
-  /shop:
+  /shops:
     post:
       summary: Create new shop
       description: Create new shop
@@ -376,7 +376,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Shop"
 
-  /shop/{shopid}:
+  /shops/{shopid}:
     get:
       summary: Get Shop by ID
       description: Get Shop by ID
@@ -425,7 +425,7 @@ paths:
         "200":
           description: Successfully delete shop by ID
 
-  /product:
+  /products:
     post:
       summary: Create Products in bulk
       description: Create Product in bulk
@@ -469,7 +469,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Product"
-  /product/{productid}:
+  /products/{productid}:
     patch:
       summary: Edit Product By ID
       description: Edit Product by ID
@@ -492,7 +492,7 @@ paths:
         "200":
           description: Successfully edit product
 
-  /product/{productid}/log:
+  /products/{productid}/logs:
     get:
       summary: Get Product Log
       description: Get Product Log
@@ -513,7 +513,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/ProductLog"
 
-  /product/{productid}/stock/{warehouseid}:
+  /products/{productid}/stocks/{warehouseid}:
     get:
       summary: Get Product detail by location
       description: Get Product detail by location
@@ -580,7 +580,7 @@ paths:
         "200":
           description: Successfully create inbound
 
-  /transfer:
+  /transfers:
     post:
       summary: Create transfer warehouse
       description: Create transfer warehouse
@@ -664,7 +664,7 @@ paths:
                     type: string
                   shopId:
                     type: string
-  /preparation:
+  /preparations:
     post:
       summary: Create preparation
       description: Create preparation
@@ -692,7 +692,7 @@ paths:
                   preparationId:
                     type: string
 
-  /preparation/{preparationid}:
+  /preparations/{preparationid}:
     get:
       summary: Get preparation item
       description: Get preparation item
@@ -722,7 +722,7 @@ paths:
                     amount:
                       type: integer
 
-  /preparation/{preparationid}/{productid}/missing:
+  /preparations/{preparationid}/{productid}/missings:
     post:
       summary: Create missing preparation
       description: Create missing preparation
@@ -744,7 +744,7 @@ paths:
         "200":
           description: successfully create missing preparation
 
-  /transaction:
+  /transactions:
     post:
       summary: Create new preparation
       description: Create new preparation
