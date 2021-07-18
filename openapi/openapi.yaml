@@ -267,6 +267,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Warehouse"
+
   /warehouse/{warehouseid}:
     get:
       summary: Get Warehouse by ID
@@ -287,6 +288,7 @@ paths:
     patch:
       summary: Edit Warehouse Data
       description: Edit Warehouse Data
+      operationId: edit-warehouse
       tags:
         - warehouse
       parameters:
@@ -309,6 +311,7 @@ paths:
     delete:
       summary: Delete Warehouse
       description: Delete warehouse
+      operationId: delete-warehouse
       tags:
         - warehouse
       parameters:
