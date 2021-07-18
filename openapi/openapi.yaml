@@ -198,6 +198,28 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntities"
 
+  /accounts/{username}/log:
+    get:
+      summary: Get Admin Log
+      description: Get Admin Log
+      operationId: admin-log
+      tags:
+        - account
+      parameters:
+        - $ref: "#/components/parameters/username"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pagesize"
+      responses:
+        "200":
+          description: successfully get admin log
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminLog"
+
+
+
+
   /accounts/{username}/password:
     patch:
       operationId: change-others-password
@@ -644,6 +666,20 @@ components:
           type: string
         updatedAt:
           type: string
+
+    AdminLog:
+      type: object
+      properties:
+        id:
+          type: string
+        action:
+          type: string
+        remarks:
+          type: string
+        createdAt:
+          type: string
+          format: date
+
     Warehouse:
       type: object
       properties:
