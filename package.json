@@ -12,6 +12,7 @@
     "redoc-reload": "live-server --entry-file=docs/index.html --watch=./docs",
     "redoc-watch": "watch \"npm run redoc-bundle\" ./openapi",
     "api-doc": "concurrently \"npm run redoc-reload\" \"npm run redoc-watch\"",
+    "api-lint": "spectral lint openapi/openapi.yaml",
     "e2e": "nx e2e",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
@@ -27,7 +28,8 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -63,6 +65,7 @@
     "@nrwl/tao": "12.5.7",
     "@nrwl/web": "12.5.7",
     "@nrwl/workspace": "12.5.7",
+    "@stoplight/spectral": "^5.9.1",
     "@testing-library/react": "11.2.6",
     "@types/jest": "26.0.8",
     "@types/node": "14.14.33",
@@ -84,6 +87,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "7.23.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^7.0.0",
     "jest": "27.0.3",
     "live-server": "^1.2.1",
     "prettier": "^2.3.1",
