@@ -496,6 +496,7 @@ paths:
     get:
       summary: Get Product Log
       description: Get Product Log
+      operationId: product-log
       tags:
         - product
       parameters:
@@ -550,6 +551,217 @@ paths:
       responses:
         "200":
           description: Successfully edit stock
+
+  /inbounds:
+    post:
+      summary: Create new inbound
+      description: Create new inbound
+      operationId: create-inbound
+      tags:
+        - inbound
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                warehouse:
+                  type: string
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      productCode:
+                        type: string
+                      amount:
+                        type: integer
+      responses:
+        "200":
+          description: Successfully create inbound
+
+  /transfer:
+    post:
+      summary: Create transfer warehouse
+      description: Create transfer warehouse
+      operationId: create-transfer
+      tags:
+        - transfer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source:
+                  type: string
+                destination:
+                  type: string
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      productCode:
+                        type: string
+                      amount:
+                        type: integer
+      responses:
+        "200":
+          description: Successfully create transfer
+
+  /outbounds:
+    post:
+      summary: Create outbound
+      description: Create outbound
+      tags:
+        - outbound
+      operationId: create-outbound
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                warehouse:
+                  type: string
+                shop:
+                  type: string
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      productCode:
+                        type: string
+                      amount:
+                        type: integer
+      responses:
+        "200":
+          description: Successfully create new outbound
+    get:
+      summary: Get created outbound
+      description: Get created outbound
+      tags:
+        - outbound
+      parameters:
+        - $ref: "#/components/parameters/warehouse-location"
+        - $ref: "#/components/parameters/shop-target"
+      operationId: get-outbound
+      responses:
+        "200":
+          description: Successfully get created outbound
+          content:
+            application/json:
+              schema:
+                type: array
+                properties:
+                  outoundId:
+                    type: string
+                  productCode:
+                    type: string
+                  amount:
+                    type: string
+                  shopId:
+                    type: string
+  /preparation:
+    post:
+      summary: Create preparation
+      description: Create preparation
+      operationId: create-preparation
+      tags:
+        - preparation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  outboundId:
+                    type: string
+      responses:
+        "200":
+          description: Successfully create preparation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  preparationId:
+                    type: string
+
+  /preparation/{preparationid}:
+    get:
+      summary: Get preparation item
+      description: Get preparation item
+      operationId: get-preparation
+      tags:
+        - preparation
+      parameters:
+        - $ref: "#/components/parameters/preparationid"
+        - $ref: "#/components/parameters/warehouse-location"
+        - $ref: "#/components/parameters/queryproduct"
+      responses:
+        "200":
+          description: Successfully get expected preparation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    wareshouse:
+                      type: string
+                    shop:
+                      type: string
+                    productCode:
+                      type: string
+                    amount:
+                      type: integer
+
+  /preparation/{preparationid}/{productid}/missing:
+    post:
+      summary: Create missing preparation
+      description: Create missing preparation
+      tags:
+        - preparation
+      operationId: missing-preparation
+      parameters:
+        - $ref: "#/components/parameters/preparationid"
+        - $ref: "#/components/parameters/productid"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+      responses:
+        "200":
+          description: successfully create missing preparation
+
+  /transaction:
+    post:
+      summary: Create new preparation
+      description: Create new preparation
+      tags:
+        - transaction
+      operationId: create-transaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                preparationId:
+                  type: string
+      responses:
+        "200":
+          description: sucessfully create transaction
 
 servers:
   - url: https://petstore.swagger.io/v2
@@ -619,6 +831,22 @@ components:
       name: location
       description: location of the warehouse
       in: query
+      required: true
+      schema:
+        type: string
+
+    shop-target:
+      name: shop
+      description: target of the outbound
+      in: query
+      required: true
+      schema:
+        type: string
+
+    preparationid:
+      name: preparationid
+      description: id of the preparation
+      in: path
       required: true
       schema:
         type: string
