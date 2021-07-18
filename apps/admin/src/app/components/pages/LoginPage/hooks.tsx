@@ -10,7 +10,7 @@ interface LoginState {
   setPassword(inputtedPassword: string): void;
 }
 
-const loginApi = 'localhost:4200/login'
+const loginApi = 'localhost:4200/user/login'
 
 export default function useCheckLogin(): LoginState {
   const [loading, setLoading] = useState(false);
@@ -41,8 +41,8 @@ export default function useCheckLogin(): LoginState {
         history.push('/')
       }
     } catch (err) {
-        setLoading(false);
-        setError(err);
+      setLoading(false);
+      setError(err);
     };
   };
   return {

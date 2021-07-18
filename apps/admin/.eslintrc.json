@@ -18,5 +18,8 @@
       "files": ["*.js", "*.jsx"],
       "rules": {}
     }
-  ]
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
 }

@@ -4,6 +4,7 @@
   display:flex;
   justify-content: center;
   align-items: center;
+  background-color: #002140;
   /* background-image: linear-gradient(rgb(52, 172, 68), yellow); */
 }
 .wrapper {
@@ -24,4 +25,7 @@
 }
 .formItem {
   margin-bottom: 10px;
+}
+.submitButton {
+  background-color:#002140;
 }

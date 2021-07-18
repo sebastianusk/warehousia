@@ -1,0 +1,33 @@
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+  text-align: center;
+  padding: auto;
+}
+.logo h3 {
+  color: white;
+  line-height: 32px;
+}
+
+.siteLayout .siteLayoutBackground {
+  background: #fff;
+}
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 10px;
+}
+.userAvatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: white;
+  margin-bottom: 10px;
+}
+.avatarText {
+  color: white;
+  margin: 0;
+}
