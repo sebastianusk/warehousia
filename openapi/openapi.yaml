@@ -320,6 +320,88 @@ paths:
         "200":
           description: Successfully delete warehouse data
 
+  /shop:
+    post:
+      summary: Create new shop
+      description: Create new shop
+      tags:
+        - shop
+      operationId: create-shop
+      requestBody:
+        content:
+          appilcation/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        "200":
+          description: Successfully create shop
+    get:
+      summary: Get all shop
+      description: Get all shop
+      tags:
+        - shop
+      operationId: get-all-shop
+      responses:
+        "200":
+          description: Successfully get all shop
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Shop"
+
+  /shop/{shopid}:
+    get:
+      summary: Get Shop by ID
+      description: Get Shop by ID
+      tags:
+        - shop
+      operationId: get-shop-id
+      parameters:
+        - $ref: "#/components/parameters/shopid"
+      responses:
+        "200":
+          description: Successfully get shop by ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shop"
+
+    patch:
+      summary: Edit Shop by ID
+      description: Edit Shop by ID
+      parameters:
+        - $ref: "#/components/parameters/shopid"
+      tags:
+        - shop
+      operationId: edit-shop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        "200":
+          description: Successfuly edit shop by ID
+
+    delete:
+      summary: Delete Shop by ID
+      description: Delete Shop by ID
+      parameters:
+        - $ref: "#/components/parameters/shopid"
+      tags:
+        - shop
+      operationId: delete-shop
+      responses:
+        "200":
+          description: Successfully delete shop by ID
 
 servers:
   - url: https://petstore.swagger.io/v2
@@ -371,6 +453,15 @@ components:
       schema:
         type: string
 
+    shopid:
+      name: shopid
+      required: true
+      description: id of the shop
+      in: path
+      schema:
+        type: string
+
+
   schemas:
     Admin:
       type: object
@@ -400,6 +491,19 @@ components:
           type: array
           items:
             type: string
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+    Shop:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
         createdAt:
           type: string
           format: date
