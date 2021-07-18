@@ -14,6 +14,8 @@ tags:
     description: The warehouse group, where you store your product
   - name: shop
     description: The shop group, it is where we sell the product
+  - name: product
+    description: The detail about the product
   - name: inbound
     description: Action where the product getting into the warehouse
   - name: transfer
@@ -22,8 +24,6 @@ tags:
     description: Action where the product is planned to getting out from the warehouse
   - name: preparation
     description: Action where the product is prepared to leave the warehouse
-  - name: product
-    description: The detail about the product
   - name: transaction
     description: Action where product sold to the shop
 paths:
@@ -403,6 +403,132 @@ paths:
         "200":
           description: Successfully delete shop by ID
 
+  /product:
+    post:
+      summary: Create Products in bulk
+      description: Create Product in bulk
+      tags:
+        - product
+      operationId: create-product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  price:
+                    type: string
+      responses:
+        "200":
+          description: Successfully create product
+    get:
+      summary: Get List Product
+      description: Get List Product
+      tags:
+        - product
+      operationId: list-product
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pagesize"
+        - $ref: "#/components/parameters/queryproduct"
+        - $ref: "#/components/parameters/warehouse-location"
+      responses:
+        "200":
+          description: Successfully get product list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+  /product/{productid}:
+    patch:
+      summary: Edit Product By ID
+      description: Edit Product by ID
+      tags:
+        - product
+      parameters:
+        - $ref: "#/components/parameters/productid"
+      operationId: edit-product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: string
+      responses:
+        "200":
+          description: Successfully edit product
+
+  /product/{productid}/log:
+    get:
+      summary: Get Product Log
+      description: Get Product Log
+      tags:
+        - product
+      parameters:
+        - $ref: "#/components/parameters/productid"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pagesize"
+      responses:
+        "200":
+          description: Successfully get product log
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductLog"
+
+  /product/{productid}/stock/{warehouseid}:
+    get:
+      summary: Get Product detail by location
+      description: Get Product detail by location
+      tags:
+        - product
+      parameters:
+        - $ref: "#/components/parameters/productid"
+        - $ref: "#/components/parameters/warehouseid"
+      operationId: get-product-id
+      responses:
+        "200":
+          description: Successfully get product ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+    patch:
+      summary: Edit Product Stock by warehouseid
+      description: Edit Product Stock by warehouseid
+      operationId: edit-stock
+      tags:
+        - product
+      parameters:
+        - $ref: "#/components/parameters/productid"
+        - $ref: "#/components/parameters/warehouseid"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+      responses:
+        "200":
+          description: Successfully edit stock
+
 servers:
   - url: https://petstore.swagger.io/v2
 components:
@@ -436,7 +562,45 @@ components:
                   type: string
     Unauthorized:
       description: access not allowed
+
   parameters:
+    page:
+      name: page
+      description: page number
+      in: query
+      schema:
+        type: number
+
+    pagesize:
+      name: pagesize
+      description: page size
+      in: query
+      schema:
+        type: number
+
+    queryproduct:
+      name: querystring
+      description: product query string
+      in: query
+      schema:
+        type: string
+
+    productid:
+      name: productid
+      description: product id
+      in: path
+      required: true
+      schema:
+        type: string
+
+    warehouse-location:
+      name: location
+      description: location of the warehouse
+      in: query
+      required: true
+      schema:
+        type: string
+
     username:
       name: username
       required: true
@@ -510,3 +674,48 @@ components:
         updatedAt:
           type: string
           format: date
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: integer
+        stock:
+          $ref: "#/components/schemas/ProductStock"
+
+    ProductStock:
+      type: object
+      properties:
+        inLocation:
+          type: integer
+        allLocation:
+          type: integer
+        topLocation:
+          type: object
+          properties:
+            location:
+              type: string
+            stock:
+              type: integer
+
+    ProductLog:
+      type: object
+      properties:
+        id:
+          type: string
+        action:
+          type: string
+        mutation:
+          type: integer
+        stock:
+          type: integer
+        remarks:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
