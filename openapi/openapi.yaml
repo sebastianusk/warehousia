@@ -54,8 +54,8 @@ paths:
       tags:
         - account
       summary: Create Admin
-      operationId: create-admin
       description: "to create a new admin account"
+      operationId: create-admin
       requestBody:
         content:
           application/json:
@@ -83,26 +83,107 @@ paths:
           $ref: "#/components/responses/UnprocessableEntities"
         "401":
           $ref: "#/components/responses/Unauthorized"
+    get:
+      operationId: get-admins
+      tags:
+        - account
+      summary: Get Admin List
+      description: Get All Admin list by super admin
+      responses:
+        "200":
+          description: successfully get all admin
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Admin"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntities"
+  /accounts/{username}:
     patch:
+      parameters:
+        - name: username
+          required: true
+          in: path
+          schema:
+            type: string
       tags:
         - account
       summary: Edit Admin
       description: Edit admin information
-      operationId: edit-admin
+      requestBody:
+        $ref: "#/components/requestBodies/EditAdmin"
+      responses:
+        "200":
+          description: successfuly edit admin
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Admin"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntities"
+    delete:
+      parameters:
+        - name: username
+          required: true
+          in: path
+          schema:
+            type: string
+      tags:
+        - account
+      summary: Delete an Admin
+      description: removing a admin
+      responses:
+        "200":
+          description: successfully delete admin
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntities"
+
+  /accounts/{username}/password:
+    patch:
+      parameters:
+        - name: username
+          required: true
+          in: path
+          schema:
+            type: string
+      description: change other admin password by super admin
+      summary: Change Other Admin Password
+      tags:
+        - account
       requestBody:
         content:
-          applicaion/json:
+          application/json:
             schema:
               type: object
               properties:
                 username:
                   type: string
-                role:
+                password:
                   type: string
-                warehouse:
-                  type: array
-                  items:
-                    type: string
+      responses:
+        "200":
+          description: successfully change other admin password
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntities"
+
+  /accounts/me:
+    patch:
+      description: change logged in admin's dta
+      summary: Change my data
+      tags:
+        - account
+      requestBody:
+        $ref: "#/components/requestBodies/EditAdmin"
       responses:
         "200":
           description: successfuly edit admin
@@ -115,12 +196,46 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntities"
 
-externalDocs:
-  description: Find out more about Swagger
-  url: http://swagger.io
+  /accounts/me/password:
+    patch:
+      description: change logged in admin's password
+      summary: Change my password
+      tags:
+        - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+      responses:
+        "200":
+          description: successfuly change my password
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntities"
+
+
 servers:
   - url: https://petstore.swagger.io/v2
 components:
+  requestBodies:
+    EditAdmin:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              role:
+                type: string
+              warehouse:
+                type: array
+                items:
+                  type: string
+
   responses:
     UnprocessableEntities:
       description: failed to process one of the field
