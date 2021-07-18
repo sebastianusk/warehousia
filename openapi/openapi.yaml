@@ -46,9 +46,10 @@ paths:
                   type: string
       responses:
         "200":
-          description: successully login
+          description: successfully login
         "401":
           $ref: "#/components/responses/Unauthorized"
+
   /accounts:
     post:
       tags:
@@ -74,7 +75,7 @@ paths:
                     type: string
       responses:
         "200":
-          description: successfuly create admin
+          description: successfully create admin
           content:
             application/json:
               schema:
@@ -83,6 +84,7 @@ paths:
           $ref: "#/components/responses/UnprocessableEntities"
         "401":
           $ref: "#/components/responses/Unauthorized"
+
     get:
       operationId: get-admins
       tags:
@@ -102,24 +104,75 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "422":
           $ref: "#/components/responses/UnprocessableEntities"
+
+  /accounts/me:
+    get:
+      operationId: get-my-admin
+      summary: Get My Admin data
+      description: Get My Admin
+      tags:
+        - account
+      responses:
+        "200":
+          description: Successfully get admin by id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Admin"
+
+  /accounts/me/password:
+    patch:
+      operationId: change-my-password
+      description: change logged in admin's password
+      summary: Change My Password
+      tags:
+        - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+      responses:
+        "200":
+          description: successfully change my password
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntities"
+
   /accounts/{username}:
+    get:
+      operationId: get-admin-id
+      parameters:
+        - $ref: "#/components/parameters/username"
+      summary: Get Admin by ID
+      description: Get Admin by ID
+      tags:
+        - account
+      responses:
+        "200":
+          description: Successfully get admin by id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Admin"
+
     patch:
       operationId: edit-admin
       parameters:
-        - name: username
-          required: true
-          in: path
-          schema:
-            type: string
+        - $ref: "#/components/parameters/username"
       tags:
         - account
-      summary: Edit Admin
-      description: Edit admin information
+      summary: Edit Admin by ID
+      description: Edit admin by ID
       requestBody:
         $ref: "#/components/requestBodies/EditAdmin"
       responses:
         "200":
-          description: successfuly edit admin
+          description: successfully edit admin
           content:
             application/json:
               schema:
@@ -128,18 +181,15 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "422":
           $ref: "#/components/responses/UnprocessableEntities"
+
     delete:
       parameters:
-        - name: username
-          required: true
-          in: path
-          schema:
-            type: string
+      - $ref: "#/components/parameters/username"
       tags:
         - account
       operationId: delete-admin
-      summary: Delete an Admin
-      description: removing a admin
+      summary: Delete an Admin by ID
+      description: Delete an Admin by ID
       responses:
         "200":
           description: successfully delete admin
@@ -152,13 +202,9 @@ paths:
     patch:
       operationId: change-others-password
       parameters:
-        - name: username
-          required: true
-          in: path
-          schema:
-            type: string
-      description: change other admin password by super admin
-      summary: Change Other Admin Password
+        - $ref: "#/components/parameters/username"
+      description: change admin password by ID
+      summary: Change Admin Password by ID
       tags:
         - account
       requestBody:
@@ -179,49 +225,97 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntities"
 
-  /accounts/me:
-    patch:
-      operationId: change-my-data
-      description: change logged in admin's dta
-      summary: Change my data
-      tags:
-        - account
-      requestBody:
-        $ref: "#/components/requestBodies/EditAdmin"
-      responses:
-        "200":
-          description: successfuly edit admin
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Admin"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "422":
-          $ref: "#/components/responses/UnprocessableEntities"
 
-  /accounts/me/password:
-    patch:
-      operationId: change-my-password
-      description: change logged in admin's password
-      summary: Change my password
+  /warehouse:
+    post:
+      operationId: create-warehouse
       tags:
-        - account
+        - warehouse
+      summary: Create Warehouse
+      description: Create new warehouse
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                password:
+                name:
                   type: string
+                features:
+                  type: array
+                  items:
+                    type: string
       responses:
         "200":
-          description: successfuly change my password
+          description: successfully create warehouse
         "401":
           $ref: "#/components/responses/Unauthorized"
         "422":
           $ref: "#/components/responses/UnprocessableEntities"
+    get:
+      summary: Get Warehouse List
+      operationId: warehouse-list
+      description: Get list of warehouse
+      tags:
+        - warehouse
+      responses:
+        "200":
+          description: successfully get list of warehouse
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Warehouse"
+  /warehouse/{warehouseid}:
+    get:
+      summary: Get Warehouse by ID
+      description: Get warehouse by ID
+      operationId: get-warehouse-id
+      parameters:
+        - $ref: "#/components/parameters/warehouseid"
+      tags:
+        - warehouse
+      responses:
+        "200":
+          description: successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Warehouse"
+
+    patch:
+      summary: Edit Warehouse Data
+      description: Edit Warehouse Data
+      tags:
+        - warehouse
+      parameters:
+        - $ref: "#/components/parameters/warehouseid"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                features:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Successfully edit warehouse data
+    delete:
+      summary: Delete Warehouse
+      description: Delete warehouse
+      tags:
+        - warehouse
+      parameters:
+        - $ref: "#/components/parameters/warehouseid"
+      responses:
+        "200":
+          description: Successfully delete warehouse data
 
 
 servers:
@@ -257,10 +351,23 @@ components:
                   type: string
     Unauthorized:
       description: access not allowed
-      content:
-        application/json:
-          schema:
-            type: string
+  parameters:
+    username:
+      name: username
+      required: true
+      description: username of the admin
+      in: path
+      schema:
+        type: string
+
+    warehouseid:
+      name: warehouseid
+      required: true
+      description: id of the warehouse
+      in: path
+      schema:
+        type: string
+
   schemas:
     Admin:
       type: object
@@ -279,3 +386,20 @@ components:
           type: string
         updatedAt:
           type: string
+    Warehouse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        features:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
