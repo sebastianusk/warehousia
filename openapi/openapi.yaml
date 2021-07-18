@@ -104,6 +104,7 @@ paths:
           $ref: "#/components/responses/UnprocessableEntities"
   /accounts/{username}:
     patch:
+      operationId: edit-admin
       parameters:
         - name: username
           required: true
@@ -136,6 +137,7 @@ paths:
             type: string
       tags:
         - account
+      operationId: delete-admin
       summary: Delete an Admin
       description: removing a admin
       responses:
@@ -148,6 +150,7 @@ paths:
 
   /accounts/{username}/password:
     patch:
+      operationId: change-others-password
       parameters:
         - name: username
           required: true
@@ -178,6 +181,7 @@ paths:
 
   /accounts/me:
     patch:
+      operationId: change-my-data
       description: change logged in admin's dta
       summary: Change my data
       tags:
@@ -198,6 +202,7 @@ paths:
 
   /accounts/me/password:
     patch:
+      operationId: change-my-password
       description: change logged in admin's password
       summary: Change my password
       tags:
