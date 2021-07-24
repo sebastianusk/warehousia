@@ -9,3 +9,12 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
+model Admin {
+  username String @id
+  password String
+  role String
+  warehouses String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
