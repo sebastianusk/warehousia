@@ -12,6 +12,7 @@
     "db-up": "docker-compose -f dep-containers/docker-compose.yaml up -d",
     "db-down": "docker-compose -f dep-containers/docker-compose.yaml down",
     "db-clean": "sudo rm -rf dep-containers/data && npm run db-down && npm run db-up",
+    "db-generate": "prisma generate",
     "redoc-bundle": "redoc-cli bundle ./openapi/openapi.yaml --output ./docs/index.html",
     "redoc-reload": "live-server --entry-file=docs/index.html --watch=./docs",
     "redoc-watch": "watch \"npm run redoc-bundle\" ./openapi",
