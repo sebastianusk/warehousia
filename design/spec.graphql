@@ -1,0 +1,300 @@
+# Query
+type Query {
+  admins(query: String, pagination: PaginationInput): [Admin]
+  me: Admin
+  warehouses(query: String): [Warehouse]
+  shops(query: String): [Shop]
+  products(query: String, warehouseId: String!, pagination: PaginationInput): [Product]
+  outbounds(warehouseId: String!, shopId: String!, pagination: PaginationInput): Outbound
+  demands(warehouseId: String, shopId: String, pagination: PaginationInput): [Demand]
+  preparations(preparationId: String): Preparation
+  transactions(productId: String, warehouseId: String, shopId: String, pagination: PaginationInput): [Transaction]
+  inbounds(warehouseId: String!, pagination: PaginationInput): Inbounds
+  transfers(sourceId: String!, destId: String!, pagination: PaginationInput): Transfers
+}
+
+
+# Mutation
+type Mutation {
+  addAdmin(input: AddAdminInput): AdminPayload
+  editAdmin(input: EditAdminInput): AdminPayload
+  deactiveAdmin(input: DeactivateAdminInput): AdminPayload
+  changeAdminPassword(input: ChangeAdminPasswordInput): AdminPayload
+  changeMyPassword(input: ChangeMyPasswordInput): AdminPayload
+
+  addWarehouse(input: WarehouseInput): IdPayload
+  editWarehouse(input: WarehouseInput): IdPayload
+  deativeWarehouse(input: IdInput): IdPayload
+
+  addShop(input: ShopInput): IdPayload
+  editShop(input: ShopInput): IdPayload
+  deactiveShop(input: IdInput): IdPayload
+
+  addProduct(input: ProductInput): IdPayload
+  editProduct(input: ProductInput): IdPayload
+  editProductStock(input: StockProductInput): IdPayload
+
+  addOutbound(input: OutboundInput): OutboundResponse
+  addPreparation(input: AddPreparationInput): IdPayload
+  addMissing(input: AddMissingInput): IdPayload
+  addTransaction(input: AddTransactionInput): IdPayload
+
+  addInbound(input: InboundInput): IdPayload
+  addTransfer(input: TransferInput): IdPayload
+}
+
+
+# Generic Utils Object
+input PaginationInput {
+  offset: Int
+  limit: Int
+}
+
+type IdPayload {
+  id: String!
+}
+
+input IdInput {
+  id: String!
+}
+
+
+# Admin Objects
+input AddAdminInput {
+  username: String!
+  password: String!
+  role: Role!
+  warehouse: [String]
+}
+
+input EditAdminInput {
+  username: String!
+  role: Role!
+  warehouse: [String]
+}
+
+input DeactivateAdminInput {
+  username: String!
+}
+
+input ChangeMyPasswordInput {
+  oldPassword: String!
+  newPassword: String!
+}
+
+input ChangeAdminPasswordInput {
+  adminId: String!
+  password: String!
+}
+
+type AdminPayload {
+  username: String!
+}
+
+type Admin {
+  username: String!
+  role: Role!
+  warehouse: [String]!
+  createdAt: String!
+  updatedAt: String!
+  log: [AdminLog]
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}
+
+type AdminLog {
+  action: String!
+  createdAt: String!
+  remarks: String
+}
+
+
+# Product Objects
+type Product {
+  id: String!
+  name: String!
+  stock: Stock!
+  createdAt: String!
+  updatedAt: String!
+  log: [ProductLog]
+}
+
+type Stock {
+  warehouse: Warehouse!
+  amount: Int!
+  all:Int!
+  topWarehouse: Warehouse!
+  topAmount: Int!
+}
+
+input ProductInput {
+  id: String!
+  name: String
+}
+
+input StockProductInput {
+  id: String!
+  warehouse: String!
+  stock: Int!
+}
+
+type ProductAmount {
+  id: String!
+  product: Product!
+  amount: Int!
+}
+
+input ProductAmountInput {
+  productId: String
+  amount: Int!
+}
+
+type ProductLog {
+  id: String!
+  action: String!
+  amount: Int!
+  after: Int!
+  createdBy: Admin!
+  createdAt: String!
+}
+
+
+# Shop Object
+type Shop {
+  id: String!
+  name: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input ShopInput {
+  id: String!
+  name: String
+}
+
+
+# Warehouse Object
+type Warehouse {
+  id: String!
+  name: String!
+  features: [Features]
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum Features {
+  INBOUND
+  OUTBOUND
+  TRANSFER
+}
+
+input WarehouseInput {
+  id: String!
+  name: String!
+  features: [Features]
+}
+
+
+# Outbound Objects
+type Outbound {
+  id: String!
+  createdAt: String!
+  createdBy: Admin!
+  shop: Shop!
+  warehouse: Warehouse!
+  items: [ProductAmount]!
+}
+
+input OutboundInput {
+  warehouseId: String!
+  shopId: String!
+  items: [ProductAmountInput]
+}
+
+type OutboundResponse {
+  outbounds: [IdPayload]!
+  demands: [IdPayload]
+}
+
+type Demand {
+  id: String!
+  warehouse: Warehouse!
+  shop: Shop!
+  product: Product
+  amount: Int!
+  createdAt: String!
+  createdBy: Admin!
+}
+
+type Preparation {
+  id: String!
+  warehouse: Warehouse!
+  shop: Shop!
+  items: [PreparationItem]
+}
+
+type PreparationItem {
+  product: Product!
+  expected: Int!
+  actual: Int!
+}
+
+input AddPreparationInput {
+  shopId: String!
+  warehouseId: String!
+}
+
+input AddMissingInput {
+  preparationId: String!
+  productId: String!
+  missingAmount: Int!
+}
+
+input AddTransactionInput {
+  preparationId: String!
+}
+
+type Transaction {
+  id: String!
+  shop: Shop!
+  warehouse: Warehouse!
+  items: Product!
+  amount: Int!
+  createdAt: String!
+  createdBy: String!
+}
+
+
+# Inbound Objects
+type Inbounds {
+  id: String!
+  warehouse: Warehouse!
+  items: [ProductAmount]
+  createdAt: String!
+  createdBy: String!
+}
+
+input InboundInput {
+  warehouseId: String!
+  items: [ProductAmountInput]
+}
+
+
+# Transfers Objects
+type Transfers {
+  id: String!
+  source: Warehouse!
+  destination: Warehouse!
+  items: [ProductAmount]
+  createdAt: String!
+  createdBy: String!
+}
+
+input TransferInput {
+  sourceId: String!
+  destId: String!
+  items: [ProductAmountInput]!
+}
