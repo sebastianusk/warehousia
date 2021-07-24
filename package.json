@@ -102,7 +102,6 @@
     "live-server": "^1.2.1",
     "prettier": "^2.3.1",
     "prisma": "^2.27.0",
-    "redoc-cli": "^0.12.1",
     "ts-jest": "27.0.3",
     "ts-morph": "^11.0.3",
     "ts-node": "~9.1.1",
