@@ -28,7 +28,7 @@
   },
   "projects": {
     "admin": {
-      "tags": []
+      "tags": ["api"]
     },
     "admin-e2e": {
       "tags": [],

@@ -1,11 +1,20 @@
 import { Module } from '@nestjs/common';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { GraphQLModule } from '@nestjs/graphql';
+import { join } from 'path';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    GraphQLModule.forRoot({
+      mocks: true,
+      playground: true, 
+      debug: true,
+      typePaths: ['./design/spec.graphql'],
+      definitions: {
+        path: join(process.cwd(), 'apps/api/src/graphql.ts'),
+        outputAs: 'class',
+      }
+    }),
+  ],
 })
 export class AppModule {}

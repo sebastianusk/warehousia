@@ -4,7 +4,7 @@ type Query {
   me: Admin
   warehouses(query: String): [Warehouse]
   shops(query: String): [Shop]
-  products(query: String, warehouseId: String!, pagination: PaginationInput): [Product]
+  products(warehouseId: String!, query: String, pagination: PaginationInput): [Product]
   outbounds(warehouseId: String!, shopId: String!, pagination: PaginationInput): Outbound
   demands(warehouseId: String, shopId: String, pagination: PaginationInput): [Demand]
   preparations(preparationId: String): Preparation
