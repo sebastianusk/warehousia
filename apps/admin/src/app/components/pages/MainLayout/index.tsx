@@ -1,11 +1,11 @@
-import { ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import {
   InboxOutlined,
   GroupOutlined,
   HomeOutlined,
   UserOutlined,
-  LogoutOutlined
+  LogoutOutlined,
 } from '@ant-design/icons';
 import styles from './index.module.css';
 import useLayoutHooks from './hooks';
@@ -62,7 +62,7 @@ function MainLayout(): ReactElement {
         <Content style={{ margin: '0 16px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item>Warehouse</Breadcrumb.Item>
-            <Breadcrumb.Item>Inbound</Breadcrumb.Item>
+            <Breadcrumb.Item>{currentDir}</Breadcrumb.Item>
           </Breadcrumb>
           <div
             className={styles.siteLayoutBackground}

@@ -15,18 +15,18 @@ export default function useLayoutHooks(): LayoutState {
   const history = useHistory();
 
   const onCollapse = (): void => {
-    setCollapsed(!collapsed)
-  }
+    setCollapsed(!collapsed);
+  };
 
   const changeDir = (targetDir: string): void => {
-    setCurrentDir(targetDir)
-    history.push(targetDir)
-  }
+    setCurrentDir(targetDir);
+    history.push(targetDir);
+  };
 
   return {
     collapsed,
     currentDir,
     onCollapse,
-    changeDir
+    changeDir,
   };
 }

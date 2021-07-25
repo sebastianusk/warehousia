@@ -1,7 +1,7 @@
-import { ReactElement } from 'react';
-import styles from './index.module.css';
-
+import React, { ReactElement } from 'react';
 import { Form, Input, Button, Col, Row, Alert, Spin } from 'antd';
+
+import styles from './index.module.css';
 import useCheckLogin from './hooks';
 
 function LoginPage(): ReactElement {
