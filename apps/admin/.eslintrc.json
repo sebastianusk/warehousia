@@ -20,6 +20,6 @@
     }
   ],
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": ["apps/admin/tsconfig.*?.json"]
   }
 }

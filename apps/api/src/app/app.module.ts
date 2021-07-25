@@ -7,14 +7,14 @@ import { join } from 'path';
   imports: [
     GraphQLModule.forRoot({
       mocks: true,
-      playground: true, 
+      playground: true,
       debug: true,
       typePaths: ['./design/spec.graphql'],
       definitions: {
         path: join(process.cwd(), 'apps/api/src/graphql.ts'),
         outputAs: 'class',
-      }
+      },
     }),
   ],
 })
-export class AppModule {}
+export default class AppModule {}

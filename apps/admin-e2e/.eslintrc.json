@@ -13,5 +13,8 @@
         "no-undef": "off"
       }
     }
-  ]
+  ],
+  "parserOptions": {
+    "project": ["apps/admin-e2e/tsconfig.*?.json"]
+  }
 }

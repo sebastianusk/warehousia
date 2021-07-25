@@ -2,10 +2,7 @@
   "root": true,
   "ignorePatterns": ["**/*"],
   "plugins": ["@nrwl/nx", "prettier", "@typescript-eslint"],
-  "extends": [
-    "prettier",
-    "airbnb-typescript"
-  ],
+  "extends": ["prettier"],
   "rules": {
     "prettier/prettier": "error"
   },
@@ -30,7 +27,10 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
+      "extends": ["plugin:@nrwl/nx/typescript", "airbnb-typescript"],
+      "parserOptions": {
+        "project": ["tsconfig.*?.json"]
+      },
       "rules": {}
     },
     {
