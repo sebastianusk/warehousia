@@ -14,31 +14,31 @@ interface LoginState {
 export default function useCheckLogin(): LoginState {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const history = useHistory();
 
   const resetForm = (): void => {
-    setUsername('')
-    setPassword('')
-  }
+    setUsername('');
+    setPassword('');
+  };
 
   const handleSubmit = async (): Promise<void> => {
     setLoading(true);
     try {
-      await postLogin(username, password)
-      resetForm()
-      history.push('/')
+      await postLogin(username, password);
+      resetForm();
+      history.push('/');
     } catch (err) {
       setLoading(false);
       setError(err);
-    };
+    }
   };
   return {
     loading,
     error,
     handleSubmit,
     setUsername,
-    setPassword
+    setPassword,
   };
 }
