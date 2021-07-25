@@ -9,7 +9,9 @@
   color: white;
   line-height: 32px;
 }
-
+.header {
+  padding: 0;
+}
 .siteLayout .siteLayoutBackground {
   background: #fff;
 }

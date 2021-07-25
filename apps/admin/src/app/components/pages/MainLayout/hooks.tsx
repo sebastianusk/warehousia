@@ -18,9 +18,9 @@ export default function useLayoutHooks(): LayoutState {
     setCollapsed(!collapsed);
   };
 
-  const changeDir = (targetDir: string): void => {
+  const changeDir = (targetDir: string) => {
     setCurrentDir(targetDir);
-    history.push(targetDir);
+    history.push(`/${targetDir.toLowerCase()}`);
   };
 
   return {

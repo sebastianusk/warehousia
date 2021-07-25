@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import {
   InboxOutlined,
@@ -13,8 +13,9 @@ import useLayoutHooks from './hooks';
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
-function MainLayout(): ReactElement {
-  const { collapsed, onCollapse, currentDir } = useLayoutHooks();
+// eslint-disable-next-line react/prop-types
+const MainLayout: React.FC = ({ children }) => {
+  const { collapsed, onCollapse, currentDir, changeDir } = useLayoutHooks();
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
@@ -30,45 +31,46 @@ function MainLayout(): ReactElement {
         </div>
         <Menu
           theme="dark"
-          defaultSelectedKeys={['warehouse-inbound']}
+          onClick={(e) => changeDir(e.key)}
+          defaultSelectedKeys={[currentDir]}
           mode="inline"
         >
           <Menu.Item key="products" icon={<InboxOutlined />}>
             Products
           </Menu.Item>
-          <SubMenu key="warehouse" icon={<HomeOutlined />} title="Warehouse">
-            <Menu.Item key="warehouse-inbound">Inbound</Menu.Item>
-            <Menu.Item key="warehouse-transfer">Transfer</Menu.Item>
-            <Menu.Item key="warehouse-outbound">Outbound</Menu.Item>
-            <Menu.Item key="warehouse-preparing">Preparing</Menu.Item>
-            <Menu.Item key="warehouse-transaction">Transaction</Menu.Item>
+          <SubMenu
+            key="Home-Warehouse"
+            icon={<HomeOutlined />}
+            title="Warehouse"
+          >
+            <Menu.Item key="Warehouse-Inbound">Inbound</Menu.Item>
+            <Menu.Item key="Warehouse-Transfer">Transfer</Menu.Item>
+            <Menu.Item key="Warehouse-Outbound">Outbound</Menu.Item>
+            <Menu.Item key="Warehouse-Preparing">Preparing</Menu.Item>
+            <Menu.Item key="Warehouse-Transaction">Transaction</Menu.Item>
           </SubMenu>
-          <Menu.Item key="7" icon={<GroupOutlined />}>
+          <Menu.Item key="Admin-menu" icon={<GroupOutlined />}>
             Admin Menu
           </Menu.Item>
-          <Menu.Item key="8" icon={<UserOutlined />}>
+          <Menu.Item key="Account" icon={<UserOutlined />}>
             Account
           </Menu.Item>
-          <Menu.Item key="9" icon={<LogoutOutlined />}>
+          <Menu.Item key="Logout" icon={<LogoutOutlined />}>
             Log out
           </Menu.Item>
         </Menu>
       </Sider>
       <Layout>
-        <Header
-          className={styles.siteLayoutBackground}
-          style={{ padding: 0 }}
-        />
+        <Header className={styles.header} />
         <Content style={{ margin: '0 16px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Warehouse</Breadcrumb.Item>
             <Breadcrumb.Item>{currentDir}</Breadcrumb.Item>
           </Breadcrumb>
           <div
             className={styles.siteLayoutBackground}
             style={{ padding: 24, minHeight: 360 }}
           >
-            data to show
+            {children}
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>Warehousia ©2021</Footer>
