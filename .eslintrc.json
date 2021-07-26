@@ -1,14 +1,15 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx", "prettier", "@typescript-eslint"],
-  "extends": ["prettier"],
+  "plugins": ["@nrwl/nx", "@typescript-eslint", "prettier"],
+  "extends": [],
   "rules": {
     "prettier/prettier": "error"
   },
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "extends": ["airbnb-typescript", "prettier"],
       "rules": {
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
@@ -27,7 +28,7 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript", "airbnb-typescript"],
+      "extends": [],
       "parserOptions": {
         "project": ["tsconfig.*?.json"]
       },
@@ -35,7 +36,7 @@
     },
     {
       "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nrwl/nx/javascript"],
+      "extends": [],
       "rules": {}
     }
   ]

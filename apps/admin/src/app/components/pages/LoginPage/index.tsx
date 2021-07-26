@@ -5,7 +5,8 @@ import styles from './index.module.css';
 import useCheckLogin from './hooks';
 
 function LoginPage(): ReactElement {
-  const { loading, error, handleSubmit, setUsername, setPassword } = useCheckLogin();
+  const { loading, error, handleSubmit, setUsername, setPassword } =
+    useCheckLogin();
 
   return (
     <div className={styles.container}>
@@ -24,7 +25,9 @@ function LoginPage(): ReactElement {
               <Form.Item
                 label="Username"
                 name="username"
-                rules={[{ required: true, message: 'Please input your username!' }]}
+                rules={[
+                  { required: true, message: 'Please input your username!' },
+                ]}
                 className={styles.formItem}
               >
                 <Input
@@ -37,7 +40,9 @@ function LoginPage(): ReactElement {
               <Form.Item
                 label="Password"
                 name="password"
-                rules={[{ required: true, message: 'Please input your password!' }]}
+                rules={[
+                  { required: true, message: 'Please input your password!' },
+                ]}
               >
                 <Input.Password
                   onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
@@ -46,13 +51,18 @@ function LoginPage(): ReactElement {
                 />
               </Form.Item>
               <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button type="primary" htmlType="submit" onClick={handleSubmit} className={styles.submitButton}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={handleSubmit}
+                  className={styles.submitButton}
+                >
                   Login
                 </Button>
               </Form.Item>
               {error && (
                 <Row>
-                  <Col span="24"></Col>
+                  <Col span="24" />
                   <Col span="24">
                     <Alert message="invalid email/password" type="warning" />
                   </Col>
