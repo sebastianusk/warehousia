@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
-import { postLogin } from '../../../services/login';
+import postLogin from '../../services/login';
 
 interface LoginState {
   loading: boolean;

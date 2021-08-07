@@ -1,7 +1,7 @@
 import React, { Switch, Route } from 'react-router-dom';
-import LoginPage from './components/pages/LoginPage';
-import MainLayout from './components/pages/MainLayout';
-import WarehouseInboundPage from './components/pages/WarehouseInboundPage';
+import LoginPage from './pages/LoginPage';
+import MainLayout from './components/MainLayout';
+import WarehouseInboundPage from './pages/WarehouseInboundPage';
 import GuardedRoute from './commons/guardedRoute';
 import checkAuth from './commons/checkAuth';
 

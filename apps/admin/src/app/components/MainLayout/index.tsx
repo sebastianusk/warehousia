@@ -77,6 +77,6 @@ const MainLayout: React.FC = ({ children }) => {
       </Layout>
     </Layout>
   );
-}
+};
 
 export default MainLayout;

@@ -13,7 +13,7 @@
   padding: 0;
 }
 .siteLayout .siteLayoutBackground {
-  background: #fff;
+  /* background: #fff; */
 }
 .userInfo {
   display: flex;
