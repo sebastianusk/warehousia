@@ -1,14 +1,14 @@
 # Query
 type Query {
-  admins(query: String, pagination: PaginationInput): [Admin]
+  admins(query: String, pagination: PaginationInput): AdminList
   me: Admin
-  warehouses(query: String): [Warehouse]
-  shops(query: String): [Shop]
-  products(warehouseId: String!, query: String, pagination: PaginationInput): [Product]
+  warehouses(query: String, pagination: PaginationInput): WarehouseList
+  shops(query: String, pagination): ShopList
+  products(warehouseId: String!, query: String, pagination: PaginationInput): ProductList
   outbounds(warehouseId: String!, shopId: String!, pagination: PaginationInput): Outbound
-  demands(warehouseId: String, shopId: String, pagination: PaginationInput): [Demand]
+  demands(warehouseId: String, shopId: String, pagination: PaginationInput): DemandList
   preparations(preparationId: String): Preparation
-  transactions(productId: String, warehouseId: String, shopId: String, pagination: PaginationInput): [Transaction]
+  transactions(productId: String, warehouseId: String, shopId: String, pagination: PaginationInput): TransactionList
   inbounds(warehouseId: String!, pagination: PaginationInput): Inbounds
   transfers(sourceId: String!, destId: String!, pagination: PaginationInput): Transfers
 }
@@ -46,7 +46,7 @@ type Mutation {
 
 # Generic Utils Object
 input PaginationInput {
-  offset: Int
+  cursor: String
   limit: Int
 }
 
@@ -57,7 +57,6 @@ type IdPayload {
 input IdInput {
   id: String!
 }
-
 
 # Admin Objects
 input AddAdminInput {
@@ -87,6 +86,11 @@ input ChangeAdminPasswordInput {
   password: String!
 }
 
+type AdminList {
+  cursor: String!
+  data: [Admin]
+}
+
 type AdminPayload {
   username: String!
 }
@@ -113,6 +117,11 @@ type AdminLog {
 
 
 # Product Objects
+type ProductList {
+  cursor: String
+  data: [Product]
+}
+
 type Product {
   id: String!
   name: String!
@@ -163,6 +172,11 @@ type ProductLog {
 
 
 # Shop Object
+type ShopList {
+  cursor: String!
+  data: [Shop]
+}
+
 type Shop {
   id: String!
   name: String!
@@ -177,6 +191,11 @@ input ShopInput {
 
 
 # Warehouse Object
+type WarehouseList {
+  cursor: String!
+  data: [Warehouse]
+}
+
 type Warehouse {
   id: String!
   name: String!
@@ -219,6 +238,11 @@ type OutboundResponse {
   demands: [IdPayload]
 }
 
+type DemandList {
+  cursor: String!
+  data: [Demand]!
+}
+
 type Demand {
   id: String!
   warehouse: Warehouse!
@@ -255,6 +279,11 @@ input AddMissingInput {
 
 input AddTransactionInput {
   preparationId: String!
+}
+
+type TransactionList {
+  cursor: String!
+  data: [Transaction]
 }
 
 type Transaction {
