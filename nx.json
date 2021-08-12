@@ -30,10 +30,6 @@
     "admin": {
       "tags": ["api"]
     },
-    "admin-e2e": {
-      "tags": [],
-      "implicitDependencies": ["admin"]
-    },
     "api": {
       "tags": []
     }
