@@ -5,7 +5,7 @@
   "scripts": {
     "nx": "nx",
     "start": "nx serve",
-    "build": "nx build",
+    "build": "nx run-many --target=build --projects=api,admin",
     "test": "nx test",
     "lint": "nx run-many --all --target=lint",
     "gql": "nx serve api",
