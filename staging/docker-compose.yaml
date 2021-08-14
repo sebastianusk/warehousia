@@ -1,0 +1,16 @@
+version: "3"
+services:
+  proxy:
+    image: openresty/openresty
+    network_mode: host
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./nginx:/etc/nginx"
+  admin:
+    image: ghcr.io/sebastianusk/warehousia-admin
+    restart: always
+    ports:
+      - "8080:80"
