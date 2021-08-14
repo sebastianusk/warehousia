@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
           repository: sebastianusk/warehousia-admin
-          file: apps/admin/Dockerfile
+          dockerfile: apps/admin/Dockerfile
       - name: build-api
         uses: docker/build-push-action@v1
         with:
@@ -31,4 +31,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
           repository: sebastianusk/warehousia-api
-          file: apps/api/Dockerfile
+          dockerfile: apps/api/Dockerfile
