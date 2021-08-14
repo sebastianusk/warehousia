@@ -1,14 +1,17 @@
 version: "3"
 services:
   proxy:
-    image: openresty/openresty
+    image: jonasal/nginx-certbot:latest
     network_mode: host
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - "./nginx:/etc/nginx"
+      - "./user_conf.d:/etc/nginx/user_conf.d"
+      - "./letsencrypt:/etc/letsencrypt"
+    env_file:
+      - ./nginx-certbot.env
   admin:
     image: ghcr.io/sebastianusk/warehousia-admin
     restart: always
