@@ -17,3 +17,8 @@ services:
     restart: always
     ports:
       - "8080:80"
+  api:
+    image: ghcr.io/sebastianusk/warehousia-api
+    restart: always
+    ports:
+      - "3333:3333"
