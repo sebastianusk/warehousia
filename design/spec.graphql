@@ -1,9 +1,8 @@
-# Query
 type Query {
   admins(query: String, pagination: PaginationInput): AdminList
   me: Admin
   warehouses(query: String, pagination: PaginationInput): WarehouseList
-  shops(query: String, pagination): ShopList
+  shops(query: String, pagination: PaginationInput): ShopList
   products(warehouseId: String!, query: String, pagination: PaginationInput): ProductList
   outbounds(warehouseId: String!, shopId: String!, pagination: PaginationInput): Outbound
   demands(warehouseId: String, shopId: String, pagination: PaginationInput): DemandList

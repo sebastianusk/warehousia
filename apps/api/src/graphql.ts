@@ -19,7 +19,7 @@ export enum Features {
 }
 
 export class PaginationInput {
-    offset?: Nullable<number>;
+    cursor?: Nullable<string>;
     limit?: Nullable<number>;
 }
 
@@ -114,23 +114,23 @@ export class TransferInput {
 }
 
 export abstract class IQuery {
-    abstract admins(query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<Nullable<Admin>[]> | Promise<Nullable<Nullable<Admin>[]>>;
+    abstract admins(query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<AdminList> | Promise<Nullable<AdminList>>;
 
     abstract me(): Nullable<Admin> | Promise<Nullable<Admin>>;
 
-    abstract warehouses(query?: Nullable<string>): Nullable<Nullable<Warehouse>[]> | Promise<Nullable<Nullable<Warehouse>[]>>;
+    abstract warehouses(query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<WarehouseList> | Promise<Nullable<WarehouseList>>;
 
-    abstract shops(query?: Nullable<string>): Nullable<Nullable<Shop>[]> | Promise<Nullable<Nullable<Shop>[]>>;
+    abstract shops(query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<ShopList> | Promise<Nullable<ShopList>>;
 
-    abstract products(warehouseId: string, query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<Nullable<Product>[]> | Promise<Nullable<Nullable<Product>[]>>;
+    abstract products(warehouseId: string, query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<ProductList> | Promise<Nullable<ProductList>>;
 
     abstract outbounds(warehouseId: string, shopId: string, pagination?: Nullable<PaginationInput>): Nullable<Outbound> | Promise<Nullable<Outbound>>;
 
-    abstract demands(warehouseId?: Nullable<string>, shopId?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<Nullable<Demand>[]> | Promise<Nullable<Nullable<Demand>[]>>;
+    abstract demands(warehouseId?: Nullable<string>, shopId?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<DemandList> | Promise<Nullable<DemandList>>;
 
     abstract preparations(preparationId?: Nullable<string>): Nullable<Preparation> | Promise<Nullable<Preparation>>;
 
-    abstract transactions(productId?: Nullable<string>, warehouseId?: Nullable<string>, shopId?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<Nullable<Transaction>[]> | Promise<Nullable<Nullable<Transaction>[]>>;
+    abstract transactions(productId?: Nullable<string>, warehouseId?: Nullable<string>, shopId?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<TransactionList> | Promise<Nullable<TransactionList>>;
 
     abstract inbounds(warehouseId: string, pagination?: Nullable<PaginationInput>): Nullable<Inbounds> | Promise<Nullable<Inbounds>>;
 
@@ -183,6 +183,11 @@ export class IdPayload {
     id: string;
 }
 
+export class AdminList {
+    cursor: string;
+    data?: Nullable<Nullable<Admin>[]>;
+}
+
 export class AdminPayload {
     username: string;
 }
@@ -200,6 +205,11 @@ export class AdminLog {
     action: string;
     createdAt: string;
     remarks?: Nullable<string>;
+}
+
+export class ProductList {
+    cursor?: Nullable<string>;
+    data?: Nullable<Nullable<Product>[]>;
 }
 
 export class Product {
@@ -234,11 +244,21 @@ export class ProductLog {
     createdAt: string;
 }
 
+export class ShopList {
+    cursor: string;
+    data?: Nullable<Nullable<Shop>[]>;
+}
+
 export class Shop {
     id: string;
     name: string;
     createdAt: string;
     updatedAt: string;
+}
+
+export class WarehouseList {
+    cursor: string;
+    data?: Nullable<Nullable<Warehouse>[]>;
 }
 
 export class Warehouse {
@@ -263,6 +283,11 @@ export class OutboundResponse {
     demands?: Nullable<Nullable<IdPayload>[]>;
 }
 
+export class DemandList {
+    cursor: string;
+    data: Nullable<Demand>[];
+}
+
 export class Demand {
     id: string;
     warehouse: Warehouse;
@@ -284,6 +309,11 @@ export class PreparationItem {
     product: Product;
     expected: number;
     actual: number;
+}
+
+export class TransactionList {
+    cursor: string;
+    data?: Nullable<Nullable<Transaction>[]>;
 }
 
 export class Transaction {
