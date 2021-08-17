@@ -62,16 +62,11 @@ const MainLayout: React.FC = ({ children }) => {
       </Sider>
       <Layout>
         <Header className={styles.header} />
-        <Content style={{ margin: '0 16px' }}>
+        <Content className={styles.contentLayout}>
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item>{currentDir}</Breadcrumb.Item>
           </Breadcrumb>
-          <div
-            className={styles.siteLayoutBackground}
-            style={{ padding: 24, minHeight: 360 }}
-          >
-            {children}
-          </div>
+          <div style={{ padding: 24, minHeight: 360 }}>{children}</div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>Warehousia ©2021</Footer>
       </Layout>

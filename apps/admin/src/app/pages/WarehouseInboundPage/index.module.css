@@ -1,6 +1,10 @@
+.pageContainer {
+  background-color: white;
+}
 .dropdownButton {
   background-color: rgb(230, 230, 230);
   border: none;
+  border-radius: 2px;
   color: black;
   padding: 10px 15px;
   text-align: center;

@@ -26,7 +26,7 @@ export default function WarehouseInboundPage(): ReactElement {
   );
 
   return (
-    <>
+    <div className={styles.pageContainer}>
       <h2>INBOUND PAGE</h2>
       <Dropdown
         overlay={menu}
@@ -43,6 +43,6 @@ export default function WarehouseInboundPage(): ReactElement {
       </Dropdown>
       <InlineProductForm />
       <ProductListEditor />
-    </>
+    </div>
   );
 }

@@ -12,8 +12,9 @@
 .header {
   padding: 0;
 }
-.siteLayout .siteLayoutBackground {
-  /* background: #fff; */
+.contentLayout{
+  background: #fff;
+  padding: 0 16px;
 }
 .userInfo {
   display: flex;
