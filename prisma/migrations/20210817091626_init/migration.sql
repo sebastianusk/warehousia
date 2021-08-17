@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Admin" (
+CREATE TABLE "admin" (
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" TEXT NOT NULL,
@@ -8,4 +8,13 @@ CREATE TABLE "Admin" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     PRIMARY KEY ("username")
+);
+
+-- CreateTable
+CREATE TABLE "session" (
+    "key" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "expiredAt" TIMESTAMP(3) NOT NULL,
+
+    PRIMARY KEY ("key")
 );

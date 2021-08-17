@@ -13,6 +13,7 @@
     "db-down": "docker-compose -f dep-containers/docker-compose.yaml down",
     "db-remove": "sudo rm -rf dep-containers/data prisma/migrations/",
     "db-clean": "npm run db-down && npm run db-remove && npm run db-up && prisma migrate dev --name init",
+    "db-generate": "prisma generate",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
     "affected:build": "nx affected:build",

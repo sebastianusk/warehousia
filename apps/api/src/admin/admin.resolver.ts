@@ -13,4 +13,15 @@ export default class AdminResolver {
       username,
     };
   }
+
+  @Mutation()
+  async login(
+    @Args('username') username: string,
+    @Args('password') password: string
+  ) {
+    const session = await this.adminService.login(username, password);
+    return {
+      session,
+    };
+  }
 }

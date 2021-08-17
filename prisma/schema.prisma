@@ -10,11 +10,17 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Admin {
+model admin {
   username String @id
   password String
   role String
   warehouses String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model session {
+  key String @id @default(uuid())
+  username String
+  expiredAt DateTime
 }

@@ -28,4 +28,23 @@ export default class AdminService {
     });
     return data.username;
   }
+
+  async login(username: string, password: string): Promise<string> {
+    const user = await this.db.admin.findFirst({
+      where: {
+        username,
+      },
+    });
+    const result = await bcrypt.compare(password, user.password);
+    if (!result) {
+      throw new Error('username/password false');
+    }
+    const session = await this.db.session.create({
+      data: {
+        username,
+        expiredAt: new Date().toISOString(),
+      },
+    });
+    return session.key;
+  }
 }
