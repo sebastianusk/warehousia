@@ -3,6 +3,7 @@ import { Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import styles from './index.module.css';
 import InlineProductForm from '../../components/inlineProductForm';
+import ProductListEditor from '../../components/ProductListEditor';
 
 export default function WarehouseInboundPage(): ReactElement {
   const [showDropDown, setShowDropDown] = useState(false);
@@ -36,14 +37,12 @@ export default function WarehouseInboundPage(): ReactElement {
           className={styles.dropdownButton}
           onClick={(e) => e.preventDefault()}
           type="button"
-          // onKeyDown={() => {}}
-          // role="button"
-          // tabIndex={0}
         >
           {selectedWarehouse} <DownOutlined />
         </button>
       </Dropdown>
       <InlineProductForm />
+      <ProductListEditor />
     </>
   );
 }

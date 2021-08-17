@@ -1,10 +1,8 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import { Form, Input, Button, InputNumber } from 'antd';
 import styles from './index.module.css';
 
 export default function InlineProductForm(): ReactElement {
-  const form = Form.useForm();
-
   return (
     <div className={styles.formContainer}>
       <Form layout="inline">
