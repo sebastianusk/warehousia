@@ -15,6 +15,7 @@ type Query {
 
 # Mutation
 type Mutation {
+  login(username: String, password: String): SessionPayload
   addAdmin(input: AddAdminInput): AdminPayload
   editAdmin(input: EditAdminInput): AdminPayload
   deactiveAdmin(input: DeactivateAdminInput): AdminPayload
@@ -92,6 +93,10 @@ type AdminList {
 
 type AdminPayload {
   username: String!
+}
+
+type SessionPayload {
+  session: String!
 }
 
 type Admin {
