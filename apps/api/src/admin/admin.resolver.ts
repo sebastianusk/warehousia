@@ -8,6 +8,9 @@ export default class AdminResolver {
 
   @Mutation()
   async addAdmin(@Args('input') input: AddAdminInput) {
-    return this.adminService.addAdmin(input);
+    const username = await this.adminService.addAdmin(input);
+    return {
+      username,
+    };
   }
 }
