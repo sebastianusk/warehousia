@@ -14,9 +14,9 @@ export function getEnv(key: Config): string {
 }
 
 export function getEnvNumber(key: Config): number {
-  const env = process.env[key] || configs[key];
+  const env = parseInt(process.env[key], 10) || configs[key];
   if (typeof env !== 'number') {
-    throw new Error(`env type asked is string, but got ${typeof env}`);
+    throw new Error(`env type asked is number, but got ${typeof env}`);
   }
   return env;
 }

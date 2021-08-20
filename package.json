@@ -6,6 +6,7 @@
     "nx": "nx",
     "start": "nx serve",
     "build": "nx run-many --target=build --projects=api,admin",
+    "build-api": "nx build api",
     "test": "nx test",
     "lint": "nx run-many --all --target=lint",
     "gql": "nx serve api",

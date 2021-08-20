@@ -41,7 +41,6 @@ export default class AdminService {
       throw new Error('username/password false');
     }
     const sessionExpired = getEnvNumber('SESSION_EXPIRED');
-    console.log(sessionExpired);
     const expiredAt = new Date(new Date().getTime() + sessionExpired);
     const session = await this.db.session.create({
       data: {
