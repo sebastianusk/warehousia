@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AddAdminInput } from '../graphql';
 import DBService from '../db/db.service';
+import { getEnvNumber } from '../config';
 
 export type AdminInputModel = {
   username: string;
@@ -39,10 +40,13 @@ export default class AdminService {
     if (!result) {
       throw new Error('username/password false');
     }
+    const sessionExpired = getEnvNumber('SESSION_EXPIRED');
+    console.log(sessionExpired);
+    const expiredAt = new Date(new Date().getTime() + sessionExpired);
     const session = await this.db.session.create({
       data: {
         username,
-        expiredAt: new Date().toISOString(),
+        expiredAt,
       },
     });
     return session.key;
