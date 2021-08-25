@@ -102,7 +102,7 @@ type SessionPayload {
 type Admin {
   username: String!
   role: Role!
-  warehouse: [String]!
+  warehouses: [String]!
   createdAt: String!
   updatedAt: String!
   log: [AdminLog]

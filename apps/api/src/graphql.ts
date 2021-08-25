@@ -201,7 +201,7 @@ export class SessionPayload {
 export class Admin {
     username: string;
     role: Role;
-    warehouse: Nullable<string>[];
+    warehouses: Nullable<string>[];
     createdAt: string;
     updatedAt: string;
     log?: Nullable<Nullable<AdminLog>[]>;

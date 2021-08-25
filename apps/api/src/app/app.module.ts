@@ -19,6 +19,7 @@ import DBModule from '../db/db.module';
         path: join(process.cwd(), 'apps/api/src/graphql.ts'),
         outputAs: 'class',
       },
+      context: ({ req }) => ({ request: req }),
     }),
   ],
 })

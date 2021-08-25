@@ -50,4 +50,16 @@ export default class AdminService {
     });
     return session.key;
   }
+
+  async authenticate(key: string): Promise<string> {
+    const session = await this.db.session.findFirst({
+      where: {
+        key,
+      },
+    });
+    if (session.expiredAt.getTime() < new Date().getTime()) {
+      throw new Error('Expired');
+    }
+    return session.username;
+  }
 }
