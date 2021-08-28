@@ -1,6 +1,8 @@
 export const configs = {
   DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/postgres',
   SESSION_EXPIRED: 86400000,
+  JWT_SECRET: 'secretKey',
+  JWT_EXPIRES_IN: '60s',
 };
 
 type Config = keyof typeof configs;

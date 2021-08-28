@@ -1,6 +1,6 @@
-import { UseGuards } from '@nestjs/common';
+import { UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import AuthGuard from '../common/auth.guard';
+import AuthInterceptor from '../common/auth.guard';
 import { AddAdminInput, Admin, Role } from '../graphql';
 import AdminService from './admin.service';
 
@@ -16,19 +16,8 @@ export default class AdminResolver {
     };
   }
 
-  @Mutation()
-  async login(
-    @Args('username') username: string,
-    @Args('password') password: string
-  ) {
-    const session = await this.adminService.login(username, password);
-    return {
-      session,
-    };
-  }
-
   @Query()
-  @UseGuards(AuthGuard)
+  @UseInterceptors(AuthInterceptor)
   async me(): Promise<Admin> {
     return {
       username: 'Bubur',

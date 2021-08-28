@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { AddAdminInput } from '../graphql';
 import DBService from '../db/db.service';
 import { getEnvNumber } from '../config';
+import { admin } from '.prisma/client';
 
 export type AdminInputModel = {
   username: string;
@@ -28,6 +29,10 @@ export default class AdminService {
       },
     });
     return data.username;
+  }
+
+  async findOne(username: string): Promise<admin> {
+    return this.db.admin.findFirst({ where: { username } });
   }
 
   async login(username: string, password: string): Promise<string> {

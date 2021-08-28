@@ -3,11 +3,13 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import AdminModule from '../admin/admin.module';
+import AuthModule from '../auth/auth.module';
 import DBModule from '../db/db.module';
 
 @Module({
   imports: [
     DBModule,
+    AuthModule,
     AdminModule,
     GraphQLModule.forRoot({
       mocks: true,

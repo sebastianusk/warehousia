@@ -6,5 +6,6 @@ import AdminService from './admin.service';
 @Module({
   imports: [DBModule],
   providers: [AdminResolver, AdminService],
+  exports: [AdminService],
 })
 export default class AdminModule {}
