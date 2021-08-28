@@ -13,7 +13,6 @@
   padding: 0;
 }
 .contentLayout{
-  background: #fff;
   padding: 0 16px;
 }
 .userInfo {
@@ -34,4 +33,14 @@
   color: white;
   margin: 0;
   text-align: center;
+}
+.pageContainer {
+  min-height: 90vh;
+  max-width: 1136px;
+  margin: auto;
+}
+.sider {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
 }

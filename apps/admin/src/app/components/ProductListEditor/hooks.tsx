@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 interface ProductListState {
   productData: ProductListType;
-  setProductData: any;
   handleEdit(): boolean;
   handleDelete(): boolean;
 }
@@ -42,7 +41,6 @@ export default function useProductList(): ProductListState {
 
   return {
     productData,
-    setProductData,
     handleEdit,
     handleDelete,
   };

@@ -1,14 +1,12 @@
 import React, { ReactElement } from 'react';
-import { Table, Space } from 'antd';
+import { Table, Space, Button } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import useProductList from './hooks';
-import styles from './index.module.css';
 
 const { Column } = Table;
 
 export default function ProductListEditor(): ReactElement {
-  const { productData, setProductData, handleEdit, handleDelete } =
-    useProductList();
+  const { productData, handleEdit, handleDelete } = useProductList();
 
   return (
     <Table dataSource={productData}>
@@ -20,24 +18,16 @@ export default function ProductListEditor(): ReactElement {
         key="action"
         render={(text, record) => (
           <Space size="middle">
-            <span
-              onClick={handleEdit}
-              onKeyUp={handleEdit}
-              role="presentation"
-              className={styles.actionItem}
-            >
-              <EditOutlined />
-              &nbsp;Edit
-            </span>
-            <span
+            <Button size="small" icon={<EditOutlined />} onClick={handleEdit}>
+              Edit
+            </Button>
+            <Button
+              size="small"
+              icon={<DeleteOutlined />}
               onClick={handleDelete}
-              onKeyUp={handleDelete}
-              role="presentation"
-              className={styles.actionItem}
             >
-              <DeleteOutlined />
-              &nbsp;Delete
-            </span>
+              Delete
+            </Button>
           </Space>
         )}
       />

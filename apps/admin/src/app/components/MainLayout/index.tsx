@@ -10,14 +10,14 @@ import {
 import styles from './index.module.css';
 import useLayoutHooks from './hooks';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 // eslint-disable-next-line react/prop-types
 const MainLayout: React.FC = ({ children }) => {
   const { collapsed, onCollapse, currentDir, changeDir } = useLayoutHooks();
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh'}}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
         <div className={styles.logo}>
           <h3>WAREHOUSIA</h3>
@@ -61,12 +61,9 @@ const MainLayout: React.FC = ({ children }) => {
         </Menu>
       </Sider>
       <Layout>
-        <Header className={styles.header} />
+        {/* <Header className={styles.header} /> */}
         <Content className={styles.contentLayout}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>{currentDir}</Breadcrumb.Item>
-          </Breadcrumb>
-          <div style={{ padding: 24, minHeight: 360 }}>{children}</div>
+          <div className={styles.pageContainer}>{children}</div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>Warehousia ©2021</Footer>
       </Layout>
