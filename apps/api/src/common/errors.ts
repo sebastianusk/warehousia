@@ -1,8 +1,14 @@
-import { AuthenticationError } from 'apollo-server-express';
+/* eslint-disable max-classes-per-file */
+import { AuthenticationError, UserInputError } from 'apollo-server-express';
 
-// eslint-disable-next-line import/prefer-default-export
 export class LoginError extends AuthenticationError {
   constructor() {
     super('username or password wrong');
+  }
+}
+
+export class CreateUserError extends UserInputError {
+  constructor() {
+    super('user already exists');
   }
 }
