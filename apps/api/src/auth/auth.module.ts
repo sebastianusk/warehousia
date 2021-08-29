@@ -5,7 +5,7 @@ import AdminModule from '../admin/admin.module';
 import AuthResolver from './auth.resolver';
 import AuthService from './auth.service';
 import jwtConstants from './constant';
-import LocalStrategy from './local.strategy';
+import JwtStrategy from './jwt.strategy';
 
 @Module({
   imports: [
@@ -16,7 +16,6 @@ import LocalStrategy from './local.strategy';
       signOptions: { expiresIn: jwtConstants.expiresIn },
     }),
   ],
-  providers: [AuthResolver, AuthService, LocalStrategy],
-  exports: [AuthService],
+  providers: [AuthResolver, AuthService, JwtStrategy],
 })
 export default class AuthModule {}

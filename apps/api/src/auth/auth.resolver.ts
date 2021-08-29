@@ -11,7 +11,7 @@ export default class AuthResolver {
     @Args('username') username: string,
     @Args('password') password: string
   ) {
-    const user = this.authService.validateUser(username, password);
+    const user = await this.authService.validateUser(username, password);
     if (!user) {
       throw new AuthenticationError('username/password wrong');
     }

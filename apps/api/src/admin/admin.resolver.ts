@@ -1,6 +1,6 @@
-import { UseInterceptors } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import AuthInterceptor from '../common/auth.guard';
+import { CurrentUser, JwtAuthGuard } from '../auth/auth.guard';
 import { AddAdminInput, Admin, Role } from '../graphql';
 import AdminService from './admin.service';
 
@@ -17,14 +17,15 @@ export default class AdminResolver {
   }
 
   @Query()
-  @UseInterceptors(AuthInterceptor)
-  async me(): Promise<Admin> {
+  @UseGuards(JwtAuthGuard)
+  async me(@CurrentUser() user: any): Promise<Admin> {
+    const data = await this.adminService.findOne(user.username);
     return {
-      username: 'Bubur',
+      username: data.username,
       role: Role.SUPER_ADMIN,
-      warehouses: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: data.createdAt.toISOString(),
+      updatedAt: data.updatedAt.toISOString(),
+      warehouses: data.warehouses,
     };
   }
 }
