@@ -2,15 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AddAdminInput } from '../graphql';
 import DBService from '../db/db.service';
-import { getEnvNumber } from '../config';
-import { admin } from '.prisma/client';
-
-export type AdminInputModel = {
-  username: string;
-  password: string;
-  role: string;
-  warehouse: string[];
-};
+import AdminModel from './admin.dto';
 
 const saltRounds = 10;
 
@@ -31,7 +23,18 @@ export default class AdminService {
     return data.username;
   }
 
-  async findOne(username: string): Promise<admin> {
-    return this.db.admin.findFirst({ where: { username } });
+  async validateUser(username: string, password: string): Promise<any> {
+    const user = await this.db.admin.findFirst({ where: { username } });
+    const result = await bcrypt.compare(password, user.password);
+    if (result) {
+      return user;
+    }
+    return null;
+  }
+
+  async findOne(username: string): Promise<AdminModel> {
+    const data = await this.db.admin.findFirst({ where: { username } });
+    const model = AdminModel.fromDB(data);
+    return model;
   }
 }

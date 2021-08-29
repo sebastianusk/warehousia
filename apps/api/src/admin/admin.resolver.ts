@@ -20,12 +20,6 @@ export default class AdminResolver {
   @UseGuards(JwtAuthGuard)
   async me(@CurrentUser() user: any): Promise<Admin> {
     const data = await this.adminService.findOne(user.username);
-    return {
-      username: data.username,
-      role: Role.SUPER_ADMIN,
-      createdAt: data.createdAt.toISOString(),
-      updatedAt: data.updatedAt.toISOString(),
-      warehouses: data.warehouses,
-    };
+    return data.toResponse();
   }
 }
