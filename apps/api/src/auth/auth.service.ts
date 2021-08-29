@@ -16,6 +16,8 @@ export default class AuthService {
     if (!user) {
       throw new LoginError();
     }
-    return this.jwtService.sign(user);
+    return this.jwtService.sign({
+      username: user.username,
+    });
   }
 }

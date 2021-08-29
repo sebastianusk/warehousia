@@ -23,11 +23,11 @@ export default class AdminService {
     return data.username;
   }
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(username: string, password: string): Promise<AdminModel> {
     const user = await this.db.admin.findFirst({ where: { username } });
     const result = await bcrypt.compare(password, user.password);
     if (result) {
-      return user;
+      return AdminModel.fromDB(user);
     }
     return null;
   }
