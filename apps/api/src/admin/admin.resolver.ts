@@ -15,7 +15,12 @@ export default class AdminResolver {
   @Roles(RoleModel.SUPER_ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   async addAdmin(@Args('input') input: AddAdminInput) {
-    const username = await this.adminService.addAdmin(input);
+    const username = await this.adminService.addAdmin(
+      input.username,
+      input.password,
+      input.warehouse,
+      input.role
+    );
     return {
       username,
     };

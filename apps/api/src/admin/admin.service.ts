@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { AddAdminInput } from '../graphql';
 import DBService from '../db/db.service';
 import AdminModel from './admin.dto';
 import { CreateUserError } from '../common/errors';
@@ -11,19 +10,25 @@ const saltRounds = 10;
 export default class AdminService {
   constructor(private db: DBService) {}
 
-  async addAdmin(input: AddAdminInput): Promise<string> {
-    const hashedPassword = await bcrypt.hash(input.password, saltRounds);
+  async addAdmin(
+    username: string,
+    password: string,
+    warehouse: string[],
+    role: string
+  ): Promise<string> {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
     try {
       const data = await this.db.admin.create({
         data: {
-          username: input.username,
+          username,
           password: hashedPassword,
-          warehouses: input.warehouse,
-          role: input.role,
+          warehouses: warehouse,
+          role,
         },
       });
       return data.username;
     } catch (error) {
+      console.log(error);
       throw new CreateUserError();
     }
   }

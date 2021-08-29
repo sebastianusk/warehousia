@@ -10,6 +10,7 @@
     "test": "nx test",
     "lint": "nx run-many --all --target=lint",
     "gql": "nx serve api",
+    "data-seed": "ts-node --project apps/api/tsconfig.json --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\" apps/api/src/seed.ts",
     "db-up": "docker-compose -f dep-containers/docker-compose.yaml up -d",
     "db-down": "docker-compose -f dep-containers/docker-compose.yaml down",
     "db-remove": "sudo rm -rf dep-containers/data prisma/migrations/",
