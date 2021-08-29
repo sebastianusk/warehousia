@@ -1,19 +1,22 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser, JwtAuthGuard } from '../auth/auth.guard';
-import { Roles } from '../auth/roles.decorator';
-import RolesGuard from '../auth/roles.guard';
 import { AddAdminInput, Admin } from '../graphql';
-import { RoleModel } from './admin.dto';
+import { CheckPolicies } from './acl.decorator';
+import PoliciesGuard from './acl.guard';
+import AdminModel from './admin.dto';
 import AdminService from './admin.service';
+import { Action, AppAbility } from './factory';
 
 @Resolver('Admin')
 export default class AdminResolver {
   constructor(private adminService: AdminService) {}
 
   @Mutation()
-  @Roles(RoleModel.SUPER_ADMIN)
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Update, AdminModel)
+  )
   async addAdmin(@Args('input') input: AddAdminInput) {
     const username = await this.adminService.addAdmin(
       input.username,
