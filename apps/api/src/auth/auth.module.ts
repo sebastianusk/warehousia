@@ -6,6 +6,7 @@ import AuthResolver from './auth.resolver';
 import AuthService from './auth.service';
 import jwtConstants from './constant';
 import JwtStrategy from './jwt.strategy';
+import RolesGuard from './roles.guard';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import JwtStrategy from './jwt.strategy';
       signOptions: { expiresIn: jwtConstants.expiresIn },
     }),
   ],
-  providers: [AuthResolver, AuthService, JwtStrategy],
+  providers: [AuthResolver, AuthService, JwtStrategy, RolesGuard],
 })
 export default class AuthModule {}
