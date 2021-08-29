@@ -34,37 +34,4 @@ export default class AdminService {
   async findOne(username: string): Promise<admin> {
     return this.db.admin.findFirst({ where: { username } });
   }
-
-  async login(username: string, password: string): Promise<string> {
-    const user = await this.db.admin.findFirst({
-      where: {
-        username,
-      },
-    });
-    const result = await bcrypt.compare(password, user.password);
-    if (!result) {
-      throw new Error('username/password false');
-    }
-    const sessionExpired = getEnvNumber('SESSION_EXPIRED');
-    const expiredAt = new Date(new Date().getTime() + sessionExpired);
-    const session = await this.db.session.create({
-      data: {
-        username,
-        expiredAt,
-      },
-    });
-    return session.key;
-  }
-
-  async authenticate(key: string): Promise<string> {
-    const session = await this.db.session.findFirst({
-      where: {
-        key,
-      },
-    });
-    if (session.expiredAt.getTime() < new Date().getTime()) {
-      throw new Error('Expired');
-    }
-    return session.username;
-  }
 }
