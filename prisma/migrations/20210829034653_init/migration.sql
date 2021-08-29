@@ -9,12 +9,3 @@ CREATE TABLE "admin" (
 
     PRIMARY KEY ("username")
 );
-
--- CreateTable
-CREATE TABLE "session" (
-    "key" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
-    "expiredAt" TIMESTAMP(3) NOT NULL,
-
-    PRIMARY KEY ("key")
-);
