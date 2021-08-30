@@ -26,7 +26,7 @@ export default function ProductsPage(): ReactElement {
         <div className={styles.flexContainer}>
           <h2>Product List</h2>
           <Input.Search
-            placeholder="input search text"
+            placeholder="search by product name"
             onSearch={onSearch}
             style={{ width: 200 }}
           />

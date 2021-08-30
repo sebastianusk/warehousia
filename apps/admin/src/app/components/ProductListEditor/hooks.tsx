@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 interface ProductListState {
   productData: ProductListType;
   handleEdit(): boolean;
   handleDelete(): boolean;
+  handleRowClick(
+    e: React.MouseEvent<HTMLElement>,
+    rowIndex: any,
+    record: any
+  ): boolean;
 }
 
 type ProductListType = {
@@ -34,14 +40,27 @@ export default function useProductList(): ProductListState {
       amount: 0,
     },
   ]);
+  const history = useHistory();
 
   const handleEdit = () => true;
 
   const handleDelete = () => true;
 
+  const handleRowClick = (
+    e: React.MouseEvent<HTMLElement>,
+    rowIndex: any,
+    record: any
+  ) => {
+    // eslint-disable-next-line no-console
+    console.log(record);
+    history.push(`/product-detail/${record.productCode}`);
+    return true;
+  };
+
   return {
     productData,
     handleEdit,
     handleDelete,
+    handleRowClick,
   };
 }
