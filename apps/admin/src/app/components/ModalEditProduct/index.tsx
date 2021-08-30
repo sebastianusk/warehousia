@@ -82,7 +82,7 @@ export default function ModalEditProduct({
                 <Input
                   placeholder="input product's stock"
                   onChange={onInputProductStock}
-                  value={initialData.amount}
+                  value={initialData.stock}
                 />
               </Form.Item>
             </Form>
