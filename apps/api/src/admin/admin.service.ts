@@ -47,4 +47,21 @@ export default class AdminService {
     const model = AdminModel.fromDB(data);
     return model;
   }
+
+  async getList(
+    query: string,
+    limit: number,
+    offset: number
+  ): Promise<AdminModel[]> {
+    const data = await this.db.admin.findMany({
+      skip: offset * limit,
+      take: limit,
+      where: {
+        username: {
+          startsWith: query,
+        },
+      },
+    });
+    return data.map((item) => AdminModel.fromDB(item));
+  }
 }
