@@ -1,5 +1,5 @@
 type Query {
-  admins(query: String, pagination: PaginationInput): AdminList
+  admins(query: String, pagination: OffsetPaginationInput): AdminList
   me: Admin
   warehouses(query: String, pagination: PaginationInput): WarehouseList
   shops(query: String, pagination: PaginationInput): ShopList
@@ -50,6 +50,11 @@ input PaginationInput {
   limit: Int
 }
 
+input OffsetPaginationInput {
+  offset: Int
+  limit: Int
+}
+
 type IdPayload {
   id: String!
 }
@@ -87,7 +92,6 @@ input ChangeAdminPasswordInput {
 }
 
 type AdminList {
-  cursor: String!
   data: [Admin]
 }
 

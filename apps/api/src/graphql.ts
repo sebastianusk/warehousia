@@ -23,6 +23,11 @@ export class PaginationInput {
     limit?: Nullable<number>;
 }
 
+export class OffsetPaginationInput {
+    offset?: Nullable<number>;
+    limit?: Nullable<number>;
+}
+
 export class IdInput {
     id: string;
 }
@@ -114,7 +119,7 @@ export class TransferInput {
 }
 
 export abstract class IQuery {
-    abstract admins(query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<AdminList> | Promise<Nullable<AdminList>>;
+    abstract admins(query?: Nullable<string>, pagination?: Nullable<OffsetPaginationInput>): Nullable<AdminList> | Promise<Nullable<AdminList>>;
 
     abstract me(): Nullable<Admin> | Promise<Nullable<Admin>>;
 
@@ -186,7 +191,6 @@ export class IdPayload {
 }
 
 export class AdminList {
-    cursor: string;
     data?: Nullable<Nullable<Admin>[]>;
 }
 
