@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import { adminlog } from '.prisma/client';
 import { admin } from '.prisma/client';
 import { Admin, AdminLog, Role } from '../graphql';
 
@@ -64,5 +65,9 @@ export class AdminLogModel {
       createdAt: this.createdAt.toISOString(),
       remarks: JSON.stringify(this.remarks),
     };
+  }
+
+  static fromDB(data: adminlog): AdminLogModel {
+    return new AdminLogModel(data.action, data.createdAt, data.remarks);
   }
 }

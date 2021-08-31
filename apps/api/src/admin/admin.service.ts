@@ -66,6 +66,14 @@ export default class AdminService {
   }
 
   async getLogs(username: string): Promise<AdminLogModel[]> {
-    return [new AdminLogModel('test', new Date(), { orderId: 123, username })];
+    const data = await this.db.adminlog.findMany({
+      where: {
+        username: {
+          equals: username,
+        },
+      },
+      take: 5,
+    });
+    return data.map((item) => AdminLogModel.fromDB(item));
   }
 }

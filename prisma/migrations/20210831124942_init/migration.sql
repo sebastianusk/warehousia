@@ -9,3 +9,14 @@ CREATE TABLE "admin" (
 
     PRIMARY KEY ("username")
 );
+
+-- CreateTable
+CREATE TABLE "adminlog" (
+    "id" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "action" TEXT NOT NULL,
+    "remarks" JSONB,
+
+    PRIMARY KEY ("id")
+);
