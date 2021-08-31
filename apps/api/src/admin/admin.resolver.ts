@@ -1,15 +1,23 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { CurrentUser, JwtAuthGuard } from '../auth/auth.guard';
 import {
   AddAdminInput,
   Admin,
   AdminList,
+  AdminLog,
   OffsetPaginationInput,
 } from '../graphql';
 import { CheckPolicies } from './acl.decorator';
 import PoliciesGuard from './acl.guard';
-import AdminModel from './admin.dto';
+import { AdminModel } from './admin.dto';
 import AdminService from './admin.service';
 import { Action, AppAbility } from './factory';
 
@@ -58,5 +66,11 @@ export default class AdminResolver {
     return {
       data: list.map((item) => item.toResponse()),
     };
+  }
+
+  @ResolveField()
+  async log(@Parent() admin: Admin): Promise<AdminLog[]> {
+    const data = await this.adminService.getLogs(admin.username);
+    return data.map((item) => item.toResponse());
   }
 }

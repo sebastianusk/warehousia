@@ -6,7 +6,7 @@ import {
   InferSubjects,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import AdminModel, { RoleModel } from '../admin/admin.dto';
+import { AdminModel, RoleModel } from './admin.dto';
 
 export enum Action {
   Manage = 'manage',

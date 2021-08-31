@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import DBService from '../db/db.service';
-import AdminModel from './admin.dto';
 import { CreateUserError } from '../common/errors';
+import { AdminLogModel, AdminModel } from './admin.dto';
 
 const saltRounds = 10;
 
@@ -63,5 +63,9 @@ export default class AdminService {
       },
     });
     return data.map((item) => AdminModel.fromDB(item));
+  }
+
+  async getLogs(username: string): Promise<AdminLogModel[]> {
+    return [new AdminLogModel('test', new Date(), { orderId: 123, username })];
   }
 }

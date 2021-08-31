@@ -1,12 +1,13 @@
+/* eslint-disable max-classes-per-file */
 import { admin } from '.prisma/client';
-import { Admin, Role } from '../graphql';
+import { Admin, AdminLog, Role } from '../graphql';
 
 export enum RoleModel {
   ADMIN = 'ADMIN',
   SUPER_ADMIN = 'SUPER_ADMIN',
 }
 
-export default class AdminModel {
+export class AdminModel {
   static fromDBRole(role: string): RoleModel {
     if (role === 'SUPER_ADMIN') {
       return RoleModel.SUPER_ADMIN;
@@ -46,6 +47,22 @@ export default class AdminModel {
       updatedAt: this.updatedAt.toISOString(),
       createdAt: this.createdAt.toISOString(),
       warehouses: this.warehouse,
+    };
+  }
+}
+
+export class AdminLogModel {
+  constructor(
+    public action: string,
+    public createdAt: Date,
+    public remarks: any
+  ) {}
+
+  toResponse(): AdminLog {
+    return {
+      action: this.action,
+      createdAt: this.createdAt.toISOString(),
+      remarks: JSON.stringify(this.remarks),
     };
   }
 }
