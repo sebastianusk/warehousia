@@ -27,12 +27,14 @@ jobs:
         with:
           push: true
           registry: ghcr.io
-          repository: sebastianusk/warehousia-admin:latest
+          repository: sebastianusk/warehousia-admin
           dockerfile: apps/admin/Dockerfile
+          tags: latest
       - name: build-api
         uses: docker/build-push-action@v2
         with:
           push: true
           registry: ghcr.io
-          repository: sebastianusk/warehousia-api:latest
+          repository: sebastianusk/warehousia-api
           dockerfile: apps/api/Dockerfile
+          tags: latest
