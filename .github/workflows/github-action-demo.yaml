@@ -19,6 +19,7 @@ jobs:
       - name: build-admin
         uses: docker/build-push-action@v1
         with:
+          push: true
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
@@ -27,6 +28,7 @@ jobs:
       - name: build-api
         uses: docker/build-push-action@v1
         with:
+          push: true
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
