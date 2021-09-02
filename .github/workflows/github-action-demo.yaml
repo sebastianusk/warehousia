@@ -16,21 +16,23 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run build
-      - name: build-admin
-        uses: docker/build-push-action@v1
+      - name: Login to Registry
+        uses: docker/login-action
         with:
-          push: true
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: build-admin
+        uses: docker/build-push-action
+        with:
+          push: true
           registry: ghcr.io
-          repository: sebastianusk/warehousia-admin
+          repository: sebastianusk/warehousia-admin:latest
           dockerfile: apps/admin/Dockerfile
       - name: build-api
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action
         with:
           push: true
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
-          repository: sebastianusk/warehousia-api
+          repository: sebastianusk/warehousia-api:latest
           dockerfile: apps/api/Dockerfile
