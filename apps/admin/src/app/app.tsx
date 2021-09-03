@@ -6,6 +6,7 @@ import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import WarehouseInboundPage from './pages/WarehouseInboundPage';
 import WarehouseTransferPage from './pages/WarehouseTransferPage';
+import WarehouseOutboundPage from './pages/WarehouseOutboundPage';
 
 import GuardedRoute from './commons/guardedRoute';
 import checkAuth from './commons/checkAuth';
@@ -38,8 +39,11 @@ export default function App() {
             component={WarehouseTransferPage}
             isAuthenticated={checkAuth()}
           />
-          {/* <Route path="/warehouse-transfer" component={MainLayout} /> */}
-          {/* <Route path="/warehouse-outbound" component={MainLayout} /> */}
+          <GuardedRoute
+            path="/warehouse-outbound"
+            component={WarehouseOutboundPage}
+            isAuthenticated={checkAuth()}
+          />
           {/* <Route path="/warehouse-preparing" component={MainLayout} /> */}
           {/* <Route path="/admin-menu" component={MainLayout} /> */}
           {/* <Route path="/account" component={MainLayout} /> */}

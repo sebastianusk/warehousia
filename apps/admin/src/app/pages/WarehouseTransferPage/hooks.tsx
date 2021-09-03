@@ -13,17 +13,14 @@ interface TransferPageState {
   warehouseListTo: string[];
 }
 
+const warehouseList = ['Warehouse A', 'Warehouse B', 'Warehouse C'];
+
 export default function useTranserPageHooks(): TransferPageState {
   const [showDropDownFrom, setShowDropDownFrom] = useState(false);
   const [showDropDownTo, setShowDropDownTo] = useState(false);
   const [selectedWarehouseFrom, setSelectedWarehouseFrom] =
     useState('Warehouse A');
   const [selectedWarehouseTo, setSelectedWarehouseTo] = useState('Warehouse B');
-  const [warehouseList, setWarehouseList] = useState([
-    'Warehouse A',
-    'Warehouse B',
-    'Warehouse C',
-  ]);
   const [warehouseListFrom, setWarehouseListFrom] = useState(warehouseList);
   const [warehouseListTo, setWarehouseListTo] = useState(warehouseList);
 
