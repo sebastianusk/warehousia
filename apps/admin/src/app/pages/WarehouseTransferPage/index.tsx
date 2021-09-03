@@ -69,6 +69,7 @@ export default function WarehouseTransferPage(): ReactElement {
         </Space>
       </Card>
       <Card className={styles.card}>
+        <h3>Items to transfer</h3>
         <InlineProductForm />
         <Divider />
         <ProductListEditor />
