@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import { useHistory } from 'react-router-dom';
 
 interface ProductListState {
   productData: ProductListType;
-  handleEdit(): boolean;
+  handleEdit(data: any): void;
   handleDelete(): boolean;
   handleRowClick(
     e: React.MouseEvent<HTMLElement>,
     rowIndex: any,
     record: any
   ): boolean;
+  showModalEdit: boolean;
+  setShowModalEdit: Dispatch<SetStateAction<boolean>>;
+  dataToBeEdited: any;
 }
 
 type ProductListType = {
@@ -20,6 +23,8 @@ type ProductListType = {
 }[];
 
 export default function useProductList(): ProductListState {
+  const [showModalEdit, setShowModalEdit] = useState<boolean>(false);
+  const [dataToBeEdited, setDataToBeEdited] = useState<any>({});
   const [productData, setProductData] = useState<ProductListType>([
     {
       key: '1',
@@ -40,9 +45,13 @@ export default function useProductList(): ProductListState {
       amount: 0,
     },
   ]);
+
   const history = useHistory();
 
-  const handleEdit = () => true;
+  const handleEdit = (data: any) => {
+    setDataToBeEdited(data);
+    setShowModalEdit(true);
+  };
 
   const handleDelete = () => true;
 
@@ -62,5 +71,8 @@ export default function useProductList(): ProductListState {
     handleEdit,
     handleDelete,
     handleRowClick,
+    showModalEdit,
+    setShowModalEdit,
+    dataToBeEdited,
   };
 }

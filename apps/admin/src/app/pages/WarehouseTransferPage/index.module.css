@@ -12,5 +12,13 @@
 .bottomAction {
   display: flex;
   justify-content: space-between;
-  margin-top: 30px;
+  margin-top: 40px;
+}
+.warehousePicker {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+.dropdownLeft {
+  margin-right: 15px;
 }

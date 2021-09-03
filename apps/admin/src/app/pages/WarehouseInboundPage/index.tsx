@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Menu, Dropdown, Card, Divider, Button } from 'antd';
+import { Menu, Dropdown, Card, Divider, Button, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import styles from './index.module.css';
 import InlineProductForm from '../../components/inlineProductForm';
@@ -27,7 +27,7 @@ export default function WarehouseInboundPage(): ReactElement {
     <>
       <Card className={styles.card}>
         <div className={`${styles.flexContainer}`}>
-          <h2 className={styles.title}>WAREHOUSE INBOUND</h2>
+          <h2 className={styles.title}>INBOUND</h2>
           <Dropdown
             overlay={menu(warehouseList)}
             onVisibleChange={handleVisibleChange}
@@ -43,6 +43,15 @@ export default function WarehouseInboundPage(): ReactElement {
         <InlineProductForm />
         <Divider />
         <ProductListEditor />
+        <div className={`${styles.bottomAction}`}>
+          <Space size="middle">
+            <Button>Bulk Input</Button>
+            <Button>error log</Button>
+          </Space>
+          <Button size="large" type="primary">
+            Submit
+          </Button>
+        </div>
       </Card>
     </>
   );

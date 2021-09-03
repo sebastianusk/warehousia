@@ -2,9 +2,10 @@ import React, { Switch, Route } from 'react-router-dom';
 
 import MainLayout from './components/MainLayout';
 import LoginPage from './pages/LoginPage';
-import WarehouseInboundPage from './pages/WarehouseInboundPage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import WarehouseInboundPage from './pages/WarehouseInboundPage';
+import WarehouseTransferPage from './pages/WarehouseTransferPage';
 
 import GuardedRoute from './commons/guardedRoute';
 import checkAuth from './commons/checkAuth';
@@ -18,11 +19,6 @@ export default function App() {
       <MainLayout>
         <Switch>
           <GuardedRoute
-            path="/warehouse-inbound"
-            component={WarehouseInboundPage}
-            isAuthenticated={checkAuth()}
-          />
-          <GuardedRoute
             path="/products"
             component={ProductsPage}
             isAuthenticated={checkAuth()}
@@ -30,6 +26,16 @@ export default function App() {
           <GuardedRoute
             path="/product-detail/:id"
             component={ProductDetailPage}
+            isAuthenticated={checkAuth()}
+          />
+          <GuardedRoute
+            path="/warehouse-inbound"
+            component={WarehouseInboundPage}
+            isAuthenticated={checkAuth()}
+          />
+          <GuardedRoute
+            path="/warehouse-transfer"
+            component={WarehouseTransferPage}
             isAuthenticated={checkAuth()}
           />
           {/* <Route path="/warehouse-transfer" component={MainLayout} /> */}
