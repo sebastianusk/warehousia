@@ -44,6 +44,12 @@ export default function App() {
             component={WarehouseOutboundPage}
             isAuthenticated={checkAuth()}
           />
+          <GuardedRoute
+            path="/"
+            exact
+            component={ProductsPage}
+            isAuthenticated={checkAuth()}
+          />
           {/* <Route path="/warehouse-preparing" component={MainLayout} /> */}
           {/* <Route path="/admin-menu" component={MainLayout} /> */}
           {/* <Route path="/account" component={MainLayout} /> */}
