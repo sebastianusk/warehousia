@@ -5,17 +5,32 @@ const db = new DBService();
 
 const admin = new AdminService(db);
 
-async function seed() {
-  // await admin.addAdmin('bubur', 'bubur123', undefined, 'SUPER_ADMIN');
-  // await admin.addAdmin('ferdian', 'ferdian123', ['shopee'], 'ADMIN');
-  // await admin.addAdmin('sebo', 'sebo', ['lazada'], 'ADMIN');
-  await admin.createLog('bubur', 'createOrder', { orderId: 123 });
-  await admin.createLog('bubur', 'changePass', undefined);
-  await admin.createLog('bubur', 'changeRole', undefined);
-  await admin.createLog('bubur', 'createOrder', { orderId: 456 });
-  await admin.createLog('bubur', 'createWarehouse', { warehouseId: 555 });
-  await admin.createLog('bubur', 'createOutbound', { outboundId: 1255 });
-  await admin.createLog('bubur', 'createOrder', { orderId: 789 });
+async function createUser(
+  username: string,
+  password: string,
+  warehouse: string[],
+  role: string
+) {
+  await admin.addAdmin(username, password, warehouse, role).catch(console.log);
 }
 
-seed();
+async function createLog(username: string, action: string, remarks: any) {
+  await admin.createLog(username, action, remarks).catch(console.log);
+}
+
+async function seed() {
+  await createUser('bubur', 'bubur123', undefined, 'SUPER_ADMIN');
+  await createUser('ferdian', 'ferdian123', ['shopee'], 'ADMIN');
+  await createUser('sebo', 'sebo123', undefined, 'SUPER_ADMIN');
+  await createLog('bubur', 'createOrder', { orderId: 123 });
+  await createLog('bubur', 'changePass', undefined);
+  await createLog('bubur', 'changeRole', undefined);
+  await createLog('bubur', 'createWarehouse', { warehouseId: 555 });
+  await createLog('bubur', 'createOutbound', { outboundId: 1255 });
+  await createLog('bubur', 'createOrder', { orderId: 789 });
+}
+
+seed().finally(() => {
+  console.log('seed completed');
+  process.exit(0);
+});

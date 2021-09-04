@@ -21,11 +21,31 @@ An application using graphql to manage the data on the backend
 To run it:
 
 ```
-npm run nx serve api
+npm run gql
 ```
 
-To migrate the database:
+### Database management
 
-``````
-npm run db-up
-``````
+A lot of things need to be done in database side
+
+#### Setup First Time
+```
+npm run db:init
+```
+
+### Want to turn off your database
+because you have to run other databse on other project
+```
+npm run db:down
+```
+
+### Turn on again your database
+```
+npm run db:up
+```
+
+### Refresh schema
+Our database is controlled by prisma, prisma file is here: `prisma/schema.prisma`, after change the schema, we can reinitiate the database by
+```
+npm run db:refresh
+```
