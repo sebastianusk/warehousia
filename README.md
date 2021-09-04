@@ -44,8 +44,13 @@ npm run db:down
 npm run db:up
 ```
 
-### Refresh schema
-Our database is controlled by prisma, prisma file is here: `prisma/schema.prisma`, after change the schema, we can reinitiate the database by
+### Refresh database
 ```
 npm run db:refresh
+```
+
+### Reload Schema
+Our database is controlled by prisma, prisma file is here: `prisma/schema.prisma`, after change the schema, we can reinitiate the database by
+```
+npm run db:reload
 ```
