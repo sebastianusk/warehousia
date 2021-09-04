@@ -65,14 +65,44 @@ export default class AdminService {
     return data.map((item) => AdminModel.fromDB(item));
   }
 
-  async getLogs(username: string): Promise<AdminLogModel[]> {
+  async createLog(
+    username: string,
+    action: string,
+    remarks: any
+  ): Promise<string> {
+    const data = await this.db.adminlog.create({
+      data: {
+        username,
+        action,
+        remarks,
+      },
+    });
+    return data.id;
+  }
+
+  async getLogs(
+    username: string,
+    limit: number = 5,
+    offset: number = 0,
+    startDate: Date = new Date('2020-03-19T14:21:00+0200'),
+    endDate: Date = new Date()
+  ): Promise<AdminLogModel[]> {
+    console.log(username, limit, offset, startDate, endDate);
     const data = await this.db.adminlog.findMany({
+      take: limit,
+      skip: offset * limit,
       where: {
         username: {
           equals: username,
         },
+        createdAt: {
+          gte: startDate,
+          lt: endDate,
+        },
       },
-      take: 5,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
     return data.map((item) => AdminLogModel.fromDB(item));
   }

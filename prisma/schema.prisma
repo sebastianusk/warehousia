@@ -22,7 +22,7 @@ model admin {
 model adminlog {
   id String @id @default(uuid())
   username String
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @unique
   action String
   remarks Json?
 }

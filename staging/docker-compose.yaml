@@ -13,12 +13,12 @@ services:
     env_file:
       - ./nginx-certbot.env
   admin:
-    image: ghcr.io/sebastianusk/warehousia-admin
+    image: ghcr.io/sebastianusk/warehousia-admin:latest
     restart: always
     ports:
       - "8080:80"
   api:
-    image: ghcr.io/sebastianusk/warehousia-api
+    image: ghcr.io/sebastianusk/warehousia-api:latest
     restart: always
     environment:
       DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"

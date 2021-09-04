@@ -1,19 +1,12 @@
 import { UseGuards } from '@nestjs/common';
-import {
-  Args,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser, JwtAuthGuard } from '../auth/auth.guard';
 import {
   AddAdminInput,
   Admin,
   AdminList,
-  AdminLog,
-  OffsetPaginationInput,
+  AdminLogList,
+  PaginationInput,
 } from '../graphql';
 import { CheckPolicies } from './acl.decorator';
 import PoliciesGuard from './acl.guard';
@@ -56,7 +49,7 @@ export default class AdminResolver {
   )
   async admins(
     @Args('query') query: string,
-    @Args('pagination') pagination: OffsetPaginationInput
+    @Args('pagination') pagination: PaginationInput
   ): Promise<AdminList> {
     const list = await this.adminService.getList(
       query,
@@ -68,9 +61,16 @@ export default class AdminResolver {
     };
   }
 
-  @ResolveField()
-  async log(@Parent() admin: Admin): Promise<AdminLog[]> {
-    const data = await this.adminService.getLogs(admin.username);
-    return data.map((item) => item.toResponse());
+  @Query()
+  async adminLogs(
+    @Args('username') username: string,
+    @Args('pagination') pagination: PaginationInput
+  ): Promise<AdminLogList> {
+    const data = await this.adminService.getLogs(
+      username,
+      pagination.limit,
+      pagination.offset
+    );
+    return { data: data.map((item) => item.toResponse()) };
   }
 }

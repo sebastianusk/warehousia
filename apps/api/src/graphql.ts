@@ -19,11 +19,6 @@ export enum Features {
 }
 
 export class PaginationInput {
-    cursor?: Nullable<string>;
-    limit?: Nullable<number>;
-}
-
-export class OffsetPaginationInput {
     offset?: Nullable<number>;
     limit?: Nullable<number>;
 }
@@ -119,7 +114,9 @@ export class TransferInput {
 }
 
 export abstract class IQuery {
-    abstract admins(query?: Nullable<string>, pagination?: Nullable<OffsetPaginationInput>): Nullable<AdminList> | Promise<Nullable<AdminList>>;
+    abstract admins(query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<AdminList> | Promise<Nullable<AdminList>>;
+
+    abstract adminLogs(username?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<AdminLogList> | Promise<Nullable<AdminLogList>>;
 
     abstract me(): Nullable<Admin> | Promise<Nullable<Admin>>;
 
@@ -208,7 +205,10 @@ export class Admin {
     warehouses: Nullable<string>[];
     createdAt: string;
     updatedAt: string;
-    log?: Nullable<Nullable<AdminLog>[]>;
+}
+
+export class AdminLogList {
+    data?: Nullable<Nullable<AdminLog>[]>;
 }
 
 export class AdminLog {

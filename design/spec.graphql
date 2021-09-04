@@ -1,5 +1,6 @@
 type Query {
-  admins(query: String, pagination: OffsetPaginationInput): AdminList
+  admins(query: String, pagination: PaginationInput): AdminList
+  adminLogs(username: String, pagination: PaginationInput): AdminLogList
   me: Admin
   warehouses(query: String, pagination: PaginationInput): WarehouseList
   shops(query: String, pagination: PaginationInput): ShopList
@@ -46,11 +47,6 @@ type Mutation {
 
 # Generic Utils Object
 input PaginationInput {
-  cursor: String
-  limit: Int
-}
-
-input OffsetPaginationInput {
   offset: Int
   limit: Int
 }
@@ -109,12 +105,15 @@ type Admin {
   warehouses: [String]!
   createdAt: String!
   updatedAt: String!
-  log: [AdminLog]
 }
 
 enum Role {
   ADMIN
   SUPER_ADMIN
+}
+
+type AdminLogList {
+  data: [AdminLog]
 }
 
 type AdminLog {

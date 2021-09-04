@@ -20,3 +20,6 @@ CREATE TABLE "adminlog" (
 
     PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "adminlog.createdAt_unique" ON "adminlog"("createdAt");

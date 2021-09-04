@@ -12,15 +12,16 @@ import DBModule from '../db/db.module';
     AuthModule,
     AdminModule,
     GraphQLModule.forRoot({
-      mocks: true,
-      mockEntireSchema: false,
-      playground: true,
-      debug: true,
       typePaths: ['./design/spec.graphql'],
       definitions: {
         path: join(process.cwd(), 'apps/api/src/graphql.ts'),
         outputAs: 'class',
       },
+      mocks: true,
+      mockEntireSchema: false,
+      playground: true,
+      debug: true,
+
       context: ({ req }) => ({ request: req }),
     }),
   ],
