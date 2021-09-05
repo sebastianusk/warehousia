@@ -1,4 +1,6 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
+import { JwtAuthGuard } from '../auth/auth.guard';
 import { PaginationInput, WarehouseList } from '../graphql';
 import WarehouseService from './warehouse.service';
 
@@ -7,6 +9,7 @@ export default class WarehouseResolver {
   constructor(private warehouseService: WarehouseService) {}
 
   @Query()
+  @UseGuards(JwtAuthGuard)
   async warehouses(
     @Args('query') query: string,
     @Args('pagination') pagination: PaginationInput
