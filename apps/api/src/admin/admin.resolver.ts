@@ -72,8 +72,8 @@ export default class AdminResolver {
   ): Promise<AdminLogList> {
     const data = await this.adminService.getLogs(
       username,
-      pagination.limit,
-      pagination.offset
+      pagination ? pagination.limit : undefined,
+      pagination ? pagination.offset : undefined
     );
     return { data: data.map((item) => item.toResponse()) };
   }

@@ -116,17 +116,42 @@ export default class AdminService {
     const hashedPassword = await (password
       ? bcrypt.hash(password, saltRounds)
       : undefined);
-    const updated = await this.db.admin.update({
-      where: {
-        username,
-      },
-      data: {
-        role,
-        warehouses,
-        active,
-        password: hashedPassword,
-      },
-    });
-    return updated.username;
+
+    const changedFields = Object.entries({
+      role,
+      warehouses,
+      active,
+      password,
+    })
+      .filter((entry) => {
+        console.log(entry[1]);
+        return entry[1] !== undefined;
+      })
+      .map((entry) => entry[0]);
+    console.log(changedFields);
+
+    const result = await this.db.$transaction([
+      this.db.admin.update({
+        where: {
+          username,
+        },
+        data: {
+          role,
+          warehouses,
+          active,
+          password: hashedPassword,
+        },
+      }),
+      this.db.adminlog.create({
+        data: {
+          username,
+          action: 'updateUser',
+          remarks: {
+            changedFields,
+          },
+        },
+      }),
+    ]);
+    return result[0].username;
   }
 }

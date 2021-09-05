@@ -9,10 +9,14 @@ export enum RoleModel {
 
 export class AdminModel {
   static fromStringRole(role: string): RoleModel {
-    if (role === 'SUPER_ADMIN') {
-      return RoleModel.SUPER_ADMIN;
+    switch (role) {
+      case 'SUPER_ADMIN':
+        return RoleModel.SUPER_ADMIN;
+      case 'ADMIN':
+        return RoleModel.ADMIN;
+      default:
+        return undefined;
     }
-    return RoleModel.ADMIN;
   }
 
   constructor(
