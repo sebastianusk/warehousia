@@ -25,7 +25,9 @@ async function createLog(username: string, action: string, remarks: any) {
 }
 
 async function createWarehouse(name: string, features: Feature[]) {
-  await warehouseService.createWarehouse(name, features).catch(console.log);
+  await warehouseService
+    .createWarehouse('bubur', name, features)
+    .catch(console.log);
 }
 
 async function seed() {

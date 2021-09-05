@@ -4,7 +4,7 @@ import { CheckPolicies } from '../admin/acl.decorator';
 import PoliciesGuard from '../admin/acl.guard';
 import { AdminModel } from '../admin/admin.dto';
 import { AppAbility, Action } from '../admin/factory';
-import { JwtAuthGuard } from '../auth/auth.guard';
+import { CurrentUser, JwtAuthGuard } from '../auth/auth.guard';
 import {
   AddWarehouseInput,
   IdPayload,
@@ -40,9 +40,11 @@ export default class WarehouseResolver {
     ability.can(Action.Update, AdminModel)
   )
   async addWarehouse(
-    @Args('input') input: AddWarehouseInput
+    @Args('input') input: AddWarehouseInput,
+    @CurrentUser() user: any
   ): Promise<IdPayload> {
     const name = await this.warehouseService.createWarehouse(
+      user.username,
       input.name,
       input.features.map((item) => WarehouseModel.fromFeatureString(item))
     );

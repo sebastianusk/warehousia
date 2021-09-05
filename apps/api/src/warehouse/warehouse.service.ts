@@ -6,14 +6,23 @@ import WarehouseModel, { Feature } from './warehouse.dto';
 export default class WarehouseService {
   constructor(private db: DBService) {}
 
-  async createWarehouse(name: string, features: Feature[]): Promise<string> {
-    const warehouse = await this.db.warehouse.create({
-      data: {
-        name,
-        features: features.map((item) => item.toString()),
-      },
-    });
-    return warehouse.name;
+  async createWarehouse(username: string, name: string, features: Feature[]): Promise<string> {
+    const result = await this.db.$transaction([
+      this.db.warehouse.create({
+        data: {
+          name,
+          features: features.map((item) => item.toString()),
+        },
+      }),
+      this.db.adminlog.create({
+        data: {
+          username,
+          action: 'createWarehouse',
+          remarks: { warehouseName: name },
+        },
+      }),
+    ]);
+    return result[0].name;
   }
 
   async getList(
