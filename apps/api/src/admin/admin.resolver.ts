@@ -1,12 +1,14 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser, JwtAuthGuard } from '../auth/auth.guard';
+import { LoginError } from '../common/errors';
 import {
   AddAdminInput,
   Admin,
   AdminList,
   AdminLogList,
   AdminPayload,
+  ChangeMyPasswordInput,
   EditAdminInput,
   PaginationInput,
 } from '../graphql';
@@ -92,5 +94,28 @@ export default class AdminResolver {
     return {
       username,
     };
+  }
+
+  @Mutation()
+  @UseGuards(JwtAuthGuard)
+  async changeMyPassword(
+    @Args('input') input: ChangeMyPasswordInput,
+    @CurrentUser() user: any
+  ): Promise<AdminPayload> {
+    const userData = await this.adminService.validateUser(
+      user.username,
+      input.oldPassword
+    );
+    if (!userData) {
+      throw new LoginError();
+    }
+    const username = await this.adminService.editAdmin(
+      user.username,
+      undefined,
+      undefined,
+      undefined,
+      input.newPassword
+    );
+    return { username };
   }
 }
