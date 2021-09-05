@@ -22,5 +22,16 @@ CREATE TABLE "adminlog" (
     PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "warehouse" (
+    "name" TEXT NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "features" TEXT[],
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    PRIMARY KEY ("name")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "adminlog.createdAt_unique" ON "adminlog"("createdAt");

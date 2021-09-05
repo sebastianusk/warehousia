@@ -117,7 +117,6 @@ type AdminLog {
 
 # Product Objects
 type ProductList {
-  cursor: String
   data: [Product]
 }
 
@@ -172,7 +171,6 @@ type ProductLog {
 
 # Shop Object
 type ShopList {
-  cursor: String!
   data: [Shop]
 }
 
@@ -191,28 +189,21 @@ input ShopInput {
 
 # Warehouse Object
 type WarehouseList {
-  cursor: String!
   data: [Warehouse]
 }
 
 type Warehouse {
-  id: String!
   name: String!
-  features: [Features]
+  active: Boolean!
+  features: [String]
   createdAt: String!
   updatedAt: String!
-}
-
-enum Features {
-  INBOUND
-  OUTBOUND
-  TRANSFER
 }
 
 input WarehouseInput {
   id: String!
   name: String!
-  features: [Features]
+  features: [String]
 }
 
 
@@ -238,7 +229,6 @@ type OutboundResponse {
 }
 
 type DemandList {
-  cursor: String!
   data: [Demand]!
 }
 
@@ -281,7 +271,6 @@ input AddTransactionInput {
 }
 
 type TransactionList {
-  cursor: String!
   data: [Transaction]
 }
 

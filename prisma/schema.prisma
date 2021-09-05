@@ -27,3 +27,11 @@ model adminlog {
   action String
   remarks Json?
 }
+
+model warehouse {
+  name String @id
+  active Boolean @default(true)
+  features String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

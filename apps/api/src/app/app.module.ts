@@ -5,12 +5,14 @@ import { join } from 'path';
 import AdminModule from '../admin/admin.module';
 import AuthModule from '../auth/auth.module';
 import DBModule from '../db/db.module';
+import WarehouseModule from '../warehouse/warehouse.module';
 
 @Module({
   imports: [
     DBModule,
     AuthModule,
     AdminModule,
+    WarehouseModule,
     GraphQLModule.forRoot({
       typePaths: ['./design/spec.graphql'],
       definitions: {

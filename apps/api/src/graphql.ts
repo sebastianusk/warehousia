@@ -12,12 +12,6 @@ export enum Role {
     SUPER_ADMIN = "SUPER_ADMIN"
 }
 
-export enum Features {
-    INBOUND = "INBOUND",
-    OUTBOUND = "OUTBOUND",
-    TRANSFER = "TRANSFER"
-}
-
 export class PaginationInput {
     offset?: Nullable<number>;
     limit?: Nullable<number>;
@@ -71,7 +65,7 @@ export class ShopInput {
 export class WarehouseInput {
     id: string;
     name: string;
-    features?: Nullable<Nullable<Features>[]>;
+    features?: Nullable<Nullable<string>[]>;
 }
 
 export class OutboundInput {
@@ -208,7 +202,6 @@ export class AdminLog {
 }
 
 export class ProductList {
-    cursor?: Nullable<string>;
     data?: Nullable<Nullable<Product>[]>;
 }
 
@@ -245,7 +238,6 @@ export class ProductLog {
 }
 
 export class ShopList {
-    cursor: string;
     data?: Nullable<Nullable<Shop>[]>;
 }
 
@@ -257,14 +249,13 @@ export class Shop {
 }
 
 export class WarehouseList {
-    cursor: string;
     data?: Nullable<Nullable<Warehouse>[]>;
 }
 
 export class Warehouse {
-    id: string;
     name: string;
-    features?: Nullable<Nullable<Features>[]>;
+    active: boolean;
+    features?: Nullable<Nullable<string>[]>;
     createdAt: string;
     updatedAt: string;
 }
@@ -284,7 +275,6 @@ export class OutboundResponse {
 }
 
 export class DemandList {
-    cursor: string;
     data: Nullable<Demand>[];
 }
 
@@ -312,7 +302,6 @@ export class PreparationItem {
 }
 
 export class TransactionList {
-    cursor: string;
     data?: Nullable<Nullable<Transaction>[]>;
 }
 
