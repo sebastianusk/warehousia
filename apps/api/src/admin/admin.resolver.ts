@@ -6,6 +6,8 @@ import {
   Admin,
   AdminList,
   AdminLogList,
+  AdminPayload,
+  EditAdminInput,
   PaginationInput,
 } from '../graphql';
 import { CheckPolicies } from './acl.decorator';
@@ -72,5 +74,17 @@ export default class AdminResolver {
       pagination.offset
     );
     return { data: data.map((item) => item.toResponse()) };
+  }
+
+  @Mutation()
+  async editAdmin(@Args('input') input: EditAdminInput): Promise<AdminPayload> {
+    const username = await this.adminService.editAdmin(
+      input.username,
+      AdminModel.fromStringRole(input.role),
+      input.warehouses
+    );
+    return {
+      username,
+    };
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import DBService from '../db/db.service';
 import { CreateUserError } from '../common/errors';
-import { AdminLogModel, AdminModel } from './admin.dto';
+import { AdminLogModel, AdminModel, RoleModel } from './admin.dto';
 
 const saltRounds = 10;
 
@@ -28,7 +28,6 @@ export default class AdminService {
       });
       return data.username;
     } catch (error) {
-      console.log(error);
       throw new CreateUserError();
     }
   }
@@ -87,7 +86,6 @@ export default class AdminService {
     startDate: Date = new Date('2020-03-19T14:21:00+0200'),
     endDate: Date = new Date()
   ): Promise<AdminLogModel[]> {
-    console.log(username, limit, offset, startDate, endDate);
     const data = await this.db.adminlog.findMany({
       take: limit,
       skip: offset * limit,
@@ -105,5 +103,22 @@ export default class AdminService {
       },
     });
     return data.map((item) => AdminLogModel.fromDB(item));
+  }
+
+  async editAdmin(
+    username: string,
+    role: RoleModel,
+    warehouses: string[]
+  ): Promise<string> {
+    const updated = await this.db.admin.update({
+      where: {
+        username,
+      },
+      data: {
+        role,
+        warehouses,
+      },
+    });
+    return updated.username;
   }
 }

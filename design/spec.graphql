@@ -70,7 +70,7 @@ input AddAdminInput {
 input EditAdminInput {
   username: String!
   role: Role!
-  warehouse: [String]
+  warehouses: [String]
 }
 
 input DeactivateAdminInput {

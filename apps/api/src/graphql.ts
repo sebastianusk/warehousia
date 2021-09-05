@@ -37,7 +37,7 @@ export class AddAdminInput {
 export class EditAdminInput {
     username: string;
     role: Role;
-    warehouse?: Nullable<Nullable<string>[]>;
+    warehouses?: Nullable<Nullable<string>[]>;
 }
 
 export class DeactivateAdminInput {

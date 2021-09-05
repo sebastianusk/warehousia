@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { adminlog } from '.prisma/client';
-import { admin } from '.prisma/client';
+import { adminlog, admin } from '.prisma/client';
 import { Admin, AdminLog, Role } from '../graphql';
 
 export enum RoleModel {
@@ -9,7 +8,7 @@ export enum RoleModel {
 }
 
 export class AdminModel {
-  static fromDBRole(role: string): RoleModel {
+  static fromStringRole(role: string): RoleModel {
     if (role === 'SUPER_ADMIN') {
       return RoleModel.SUPER_ADMIN;
     }
@@ -27,7 +26,7 @@ export class AdminModel {
   static fromDB(data: admin): AdminModel {
     return new AdminModel(
       data.username,
-      AdminModel.fromDBRole(data.role),
+      AdminModel.fromStringRole(data.role),
       data.warehouses,
       data.createdAt,
       data.updatedAt
