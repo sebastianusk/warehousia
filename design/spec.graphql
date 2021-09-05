@@ -21,8 +21,8 @@ type Mutation {
   editAdmin(input: EditAdminInput): AdminPayload
   changeMyPassword(input: ChangeMyPasswordInput): AdminPayload
 
-  addWarehouse(input: WarehouseInput): IdPayload
-  editWarehouse(input: WarehouseInput): IdPayload
+  addWarehouse(input: AddWarehouseInput): IdPayload
+  editWarehouse(input: EditWarehouseInput): IdPayload
   deativeWarehouse(input: IdInput): IdPayload
 
   addShop(input: ShopInput): IdPayload
@@ -200,12 +200,16 @@ type Warehouse {
   updatedAt: String!
 }
 
-input WarehouseInput {
-  id: String!
+input AddWarehouseInput {
   name: String!
   features: [String]
 }
 
+input EditWarehouseInput {
+  name: String!
+  features: [String]
+  active: Boolean!
+}
 
 # Outbound Objects
 type Outbound {

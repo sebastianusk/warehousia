@@ -1,7 +1,17 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CheckPolicies } from '../admin/acl.decorator';
+import PoliciesGuard from '../admin/acl.guard';
+import { AdminModel } from '../admin/admin.dto';
+import { AppAbility, Action } from '../admin/factory';
 import { JwtAuthGuard } from '../auth/auth.guard';
-import { PaginationInput, WarehouseList } from '../graphql';
+import {
+  AddWarehouseInput,
+  IdPayload,
+  PaginationInput,
+  WarehouseList,
+} from '../graphql';
+import WarehouseModel from './warehouse.dto';
 import WarehouseService from './warehouse.service';
 
 @Resolver('Warehouse')
@@ -21,6 +31,23 @@ export default class WarehouseResolver {
     );
     return {
       data: data.map((item) => item.toResponse()),
+    };
+  }
+
+  @Mutation()
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Update, AdminModel)
+  )
+  async addWarehouse(
+    @Args('input') input: AddWarehouseInput
+  ): Promise<IdPayload> {
+    const name = await this.warehouseService.createWarehouse(
+      input.name,
+      input.features.map((item) => WarehouseModel.fromFeatureString(item))
+    );
+    return {
+      id: name,
     };
   }
 }
