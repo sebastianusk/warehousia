@@ -77,6 +77,10 @@ export default class AdminResolver {
   }
 
   @Mutation()
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Update, AdminModel)
+  )
   async editAdmin(@Args('input') input: EditAdminInput): Promise<AdminPayload> {
     const username = await this.adminService.editAdmin(
       input.username,
