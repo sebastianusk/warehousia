@@ -7,7 +7,6 @@ import {
   AdminList,
   AdminLogList,
   AdminPayload,
-  DeactivateAdminInput,
   EditAdminInput,
   PaginationInput,
 } from '../graphql';

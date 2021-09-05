@@ -41,10 +41,6 @@ export class EditAdminInput {
     active?: Nullable<boolean>;
 }
 
-export class DeactivateAdminInput {
-    username: string;
-}
-
 export class ChangeMyPasswordInput {
     oldPassword: string;
     newPassword: string;
@@ -146,8 +142,6 @@ export abstract class IMutation {
     abstract addAdmin(input?: Nullable<AddAdminInput>): Nullable<AdminPayload> | Promise<Nullable<AdminPayload>>;
 
     abstract editAdmin(input?: Nullable<EditAdminInput>): Nullable<AdminPayload> | Promise<Nullable<AdminPayload>>;
-
-    abstract deactiveAdmin(input?: Nullable<DeactivateAdminInput>): Nullable<AdminPayload> | Promise<Nullable<AdminPayload>>;
 
     abstract changeAdminPassword(input?: Nullable<ChangeAdminPasswordInput>): Nullable<AdminPayload> | Promise<Nullable<AdminPayload>>;
 
