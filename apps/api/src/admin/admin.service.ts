@@ -34,6 +34,7 @@ export default class AdminService {
 
   async validateUser(username: string, password: string): Promise<AdminModel> {
     const user = await this.db.admin.findFirst({ where: { username } });
+    if (!user) return null;
     const result = await bcrypt.compare(password, user.password);
     if (result) {
       return AdminModel.fromDB(user);
@@ -112,7 +113,9 @@ export default class AdminService {
     active: boolean,
     password: string
   ): Promise<string> {
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await (password
+      ? bcrypt.hash(password, saltRounds)
+      : undefined);
     const updated = await this.db.admin.update({
       where: {
         username,
@@ -121,7 +124,7 @@ export default class AdminService {
         role,
         warehouses,
         active,
-        password: hashedPassword
+        password: hashedPassword,
       },
     });
     return updated.username;

@@ -13,7 +13,7 @@ export default class AuthService {
 
   async login(username: string, password: string): Promise<string> {
     const user = await this.adminService.validateUser(username, password);
-    if (!user) {
+    if (!user || !user.active) {
       throw new LoginError();
     }
     return this.jwtService.sign({
