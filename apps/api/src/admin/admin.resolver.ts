@@ -86,7 +86,8 @@ export default class AdminResolver {
       input.username,
       AdminModel.fromStringRole(input.role),
       input.warehouses,
-      input.active
+      input.active,
+      input.password
     );
     return {
       username,

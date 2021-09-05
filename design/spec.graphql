@@ -19,7 +19,6 @@ type Mutation {
   login(username: String, password: String): SessionPayload
   addAdmin(input: AddAdminInput): AdminPayload
   editAdmin(input: EditAdminInput): AdminPayload
-  changeAdminPassword(input: ChangeAdminPasswordInput): AdminPayload
   changeMyPassword(input: ChangeMyPasswordInput): AdminPayload
 
   addWarehouse(input: WarehouseInput): IdPayload
@@ -71,16 +70,12 @@ input EditAdminInput {
   role: Role
   warehouses: [String]
   active: Boolean
+  password: String
 }
 
 input ChangeMyPasswordInput {
   oldPassword: String!
   newPassword: String!
-}
-
-input ChangeAdminPasswordInput {
-  adminId: String!
-  password: String!
 }
 
 type AdminList {

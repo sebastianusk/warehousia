@@ -39,16 +39,12 @@ export class EditAdminInput {
     role?: Nullable<Role>;
     warehouses?: Nullable<Nullable<string>[]>;
     active?: Nullable<boolean>;
+    password?: Nullable<string>;
 }
 
 export class ChangeMyPasswordInput {
     oldPassword: string;
     newPassword: string;
-}
-
-export class ChangeAdminPasswordInput {
-    adminId: string;
-    password: string;
 }
 
 export class ProductInput {
@@ -142,8 +138,6 @@ export abstract class IMutation {
     abstract addAdmin(input?: Nullable<AddAdminInput>): Nullable<AdminPayload> | Promise<Nullable<AdminPayload>>;
 
     abstract editAdmin(input?: Nullable<EditAdminInput>): Nullable<AdminPayload> | Promise<Nullable<AdminPayload>>;
-
-    abstract changeAdminPassword(input?: Nullable<ChangeAdminPasswordInput>): Nullable<AdminPayload> | Promise<Nullable<AdminPayload>>;
 
     abstract changeMyPassword(input?: Nullable<ChangeMyPasswordInput>): Nullable<AdminPayload> | Promise<Nullable<AdminPayload>>;
 

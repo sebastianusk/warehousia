@@ -109,8 +109,10 @@ export default class AdminService {
     username: string,
     role: RoleModel,
     warehouses: string[],
-    active: boolean
+    active: boolean,
+    password: string
   ): Promise<string> {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
     const updated = await this.db.admin.update({
       where: {
         username,
@@ -119,6 +121,7 @@ export default class AdminService {
         role,
         warehouses,
         active,
+        password: hashedPassword
       },
     });
     return updated.username;
