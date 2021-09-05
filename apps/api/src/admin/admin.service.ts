@@ -108,7 +108,8 @@ export default class AdminService {
   async editAdmin(
     username: string,
     role: RoleModel,
-    warehouses: string[]
+    warehouses: string[],
+    active: boolean
   ): Promise<string> {
     const updated = await this.db.admin.update({
       where: {
@@ -117,6 +118,7 @@ export default class AdminService {
       data: {
         role,
         warehouses,
+        active,
       },
     });
     return updated.username;

@@ -13,6 +13,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const ctx = GqlExecutionContext.create(context);
     return ctx.getContext().request;
   }
+
+  async canActivate(context: ExecutionContext): Promise<any> {
+    return super.canActivate(context);
+  }
 }
 
 export const CurrentUser = createParamDecorator(

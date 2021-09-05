@@ -7,6 +7,7 @@ import {
   AdminList,
   AdminLogList,
   AdminPayload,
+  DeactivateAdminInput,
   EditAdminInput,
   PaginationInput,
 } from '../graphql';
@@ -85,7 +86,8 @@ export default class AdminResolver {
     const username = await this.adminService.editAdmin(
       input.username,
       AdminModel.fromStringRole(input.role),
-      input.warehouses
+      input.warehouses,
+      input.active
     );
     return {
       username,

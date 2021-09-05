@@ -69,8 +69,9 @@ input AddAdminInput {
 
 input EditAdminInput {
   username: String!
-  role: Role!
+  role: Role
   warehouses: [String]
+  active: Boolean
 }
 
 input DeactivateAdminInput {
@@ -103,6 +104,7 @@ type Admin {
   username: String!
   role: Role!
   warehouses: [String]!
+  active: Boolean!
   createdAt: String!
   updatedAt: String!
 }

@@ -36,8 +36,9 @@ export class AddAdminInput {
 
 export class EditAdminInput {
     username: string;
-    role: Role;
+    role?: Nullable<Role>;
     warehouses?: Nullable<Nullable<string>[]>;
+    active?: Nullable<boolean>;
 }
 
 export class DeactivateAdminInput {
@@ -203,6 +204,7 @@ export class Admin {
     username: string;
     role: Role;
     warehouses: Nullable<string>[];
+    active: boolean;
     createdAt: string;
     updatedAt: string;
 }

@@ -19,6 +19,7 @@ export class AdminModel {
     public username: string,
     public role: RoleModel,
     public warehouse: string[],
+    public active: boolean,
     public createdAt: Date,
     public updatedAt: Date
   ) {}
@@ -28,6 +29,7 @@ export class AdminModel {
       data.username,
       AdminModel.fromStringRole(data.role),
       data.warehouses,
+      data.active,
       data.createdAt,
       data.updatedAt
     );
@@ -44,6 +46,7 @@ export class AdminModel {
     return {
       username: this.username,
       role: AdminModel.toResponseRole(this.role),
+      active: this.active,
       updatedAt: this.updatedAt.toISOString(),
       createdAt: this.createdAt.toISOString(),
       warehouses: this.warehouse,
