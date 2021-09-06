@@ -201,11 +201,13 @@ type Warehouse {
 }
 
 input AddWarehouseInput {
+  id: String!
   name: String!
   features: [String]
 }
 
 input EditWarehouseInput {
+  id: String!
   name: String!
   features: [String]
   active: Boolean!

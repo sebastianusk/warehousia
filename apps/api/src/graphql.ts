@@ -63,11 +63,13 @@ export class ShopInput {
 }
 
 export class AddWarehouseInput {
+    id: string;
     name: string;
     features?: Nullable<Nullable<string>[]>;
 }
 
 export class EditWarehouseInput {
+    id: string;
     name: string;
     features?: Nullable<Nullable<string>[]>;
     active: boolean;

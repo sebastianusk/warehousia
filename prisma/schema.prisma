@@ -29,7 +29,8 @@ model adminlog {
 }
 
 model warehouse {
-  name String @id
+  id String @id
+  name String
   active Boolean @default(true)
   features String[]
   createdAt DateTime @default(now())

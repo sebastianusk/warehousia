@@ -24,13 +24,14 @@ CREATE TABLE "adminlog" (
 
 -- CreateTable
 CREATE TABLE "warehouse" (
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT true,
     "features" TEXT[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    PRIMARY KEY ("name")
+    PRIMARY KEY ("id")
 );
 
 -- CreateIndex

@@ -24,9 +24,9 @@ async function createLog(username: string, action: string, remarks: any) {
   await adminService.createLog(username, action, remarks).catch(console.log);
 }
 
-async function createWarehouse(name: string, features: Feature[]) {
+async function createWarehouse(id: string, name: string, features: Feature[]) {
   await warehouseService
-    .createWarehouse('bubur', name, features)
+    .createWarehouse('bubur', id, name, features)
     .catch(console.log);
 }
 
@@ -40,12 +40,15 @@ async function seed() {
   await createLog('bubur', 'createWarehouse', { warehouseId: 555 });
   await createLog('bubur', 'createOutbound', { outboundId: 1255 });
   await createLog('bubur', 'createOrder', { orderId: 789 });
-  await createWarehouse('shopee', [
+  await createWarehouse('tangerang', 'Konter Tangerang', [
     Feature.INBOUND,
     Feature.OUTBOUND,
     Feature.TRANSFER,
   ]);
-  await createWarehouse('tokopedia', [Feature.INBOUND, Feature.OUTBOUND]);
+  await createWarehouse('serpong', 'Konter Serpong', [
+    Feature.INBOUND,
+    Feature.OUTBOUND,
+  ]);
 }
 
 seed().finally(() => {

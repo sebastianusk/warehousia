@@ -43,13 +43,14 @@ export default class WarehouseResolver {
     @Args('input') input: AddWarehouseInput,
     @CurrentUser() user: any
   ): Promise<IdPayload> {
-    const name = await this.warehouseService.createWarehouse(
+    const id = await this.warehouseService.createWarehouse(
       user.username,
+      input.id,
       input.name,
       input.features.map((item) => WarehouseModel.fromFeatureString(item))
     );
     return {
-      id: name,
+      id,
     };
   }
 }
