@@ -15,47 +15,47 @@ export default function App() {
   return (
     <>
       <Switch>
-        <Route path="/login" component={LoginPage} />
+        <Route path="/login" exact component={LoginPage} />
+        <MainLayout>
+          <Switch>
+            <GuardedRoute
+              path="/products"
+              component={ProductsPage}
+              isAuthenticated={checkAuth()}
+            />
+            <GuardedRoute
+              path="/product-detail/:id"
+              component={ProductDetailPage}
+              isAuthenticated={checkAuth()}
+            />
+            <GuardedRoute
+              path="/warehouse-inbound"
+              component={WarehouseInboundPage}
+              isAuthenticated={checkAuth()}
+            />
+            <GuardedRoute
+              path="/warehouse-transfer"
+              component={WarehouseTransferPage}
+              isAuthenticated={checkAuth()}
+            />
+            <GuardedRoute
+              path="/warehouse-outbound"
+              component={WarehouseOutboundPage}
+              isAuthenticated={checkAuth()}
+            />
+            <GuardedRoute
+              path="/"
+              exact
+              component={ProductsPage}
+              isAuthenticated={checkAuth()}
+            />
+            {/* <Route path="/warehouse-preparing" component={MainLayout} /> */}
+            {/* <Route path="/admin-menu" component={MainLayout} /> */}
+            {/* <Route path="/account" component={MainLayout} /> */}
+            {/* <Route path="/" component={MainLayout} /> */}
+          </Switch>
+        </MainLayout>
       </Switch>
-      <MainLayout>
-        <Switch>
-          <GuardedRoute
-            path="/products"
-            component={ProductsPage}
-            isAuthenticated={checkAuth()}
-          />
-          <GuardedRoute
-            path="/product-detail/:id"
-            component={ProductDetailPage}
-            isAuthenticated={checkAuth()}
-          />
-          <GuardedRoute
-            path="/warehouse-inbound"
-            component={WarehouseInboundPage}
-            isAuthenticated={checkAuth()}
-          />
-          <GuardedRoute
-            path="/warehouse-transfer"
-            component={WarehouseTransferPage}
-            isAuthenticated={checkAuth()}
-          />
-          <GuardedRoute
-            path="/warehouse-outbound"
-            component={WarehouseOutboundPage}
-            isAuthenticated={checkAuth()}
-          />
-          <GuardedRoute
-            path="/"
-            exact
-            component={ProductsPage}
-            isAuthenticated={checkAuth()}
-          />
-          {/* <Route path="/warehouse-preparing" component={MainLayout} /> */}
-          {/* <Route path="/admin-menu" component={MainLayout} /> */}
-          {/* <Route path="/account" component={MainLayout} /> */}
-          {/* <Route path="/" component={MainLayout} /> */}
-        </Switch>
-      </MainLayout>
     </>
   );
 }

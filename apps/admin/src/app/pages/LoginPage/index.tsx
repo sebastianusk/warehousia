@@ -11,66 +11,59 @@ function LoginPage(): ReactElement {
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
-        {loading ? (
-          <Spin />
-        ) : (
-          <>
-            <h3>WAREHOUSIA</h3>
-            <Form
-              name="loginForm"
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              className={styles.formContainer}
-            >
-              <Form.Item
-                label="Username"
-                name="username"
-                rules={[
-                  { required: true, message: 'Please input your username!' },
-                ]}
-                className={styles.formItem}
+        <h3>WAREHOUSIA</h3>
+        <Form
+          name="loginForm"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          className={styles.formContainer}
+        >
+          <Form.Item
+            label="Username"
+            name="username"
+            rules={[{ required: true, message: 'Please input your username!' }]}
+            className={styles.formItem}
+          >
+            <Input
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setUsername(e.currentTarget.value)
+              }
+            />
+          </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: 'Please input your password!' }]}
+          >
+            <Input.Password
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setPassword(e.currentTarget.value)
+              }
+            />
+          </Form.Item>
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            {loading ? (
+              <Spin />
+            ) : (
+              <Button
+                type="primary"
+                htmlType="submit"
+                onClick={handleSubmit}
+                className={styles.submitButton}
               >
-                <Input
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-                    setUsername(e.currentTarget.value)
-                  }
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[
-                  { required: true, message: 'Please input your password!' },
-                ]}
-              >
-                <Input.Password
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-                    setPassword(e.currentTarget.value)
-                  }
-                />
-              </Form.Item>
-              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={handleSubmit}
-                  className={styles.submitButton}
-                >
-                  Login
-                </Button>
-              </Form.Item>
-              {error && (
-                <Row>
-                  <Col span="24" />
-                  <Col span="24">
-                    <Alert message="invalid email/password" type="warning" />
-                  </Col>
-                </Row>
-              )}
-            </Form>
-          </>
-        )}
+                Login
+              </Button>
+            )}
+          </Form.Item>
+          {error && (
+            <Row>
+              <Col span="24" />
+              <Col span="24">
+                <Alert message="invalid email/password" type="warning" />
+              </Col>
+            </Row>
+          )}
+        </Form>
       </div>
     </div>
   );
