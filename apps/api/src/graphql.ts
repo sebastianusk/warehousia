@@ -70,9 +70,9 @@ export class AddWarehouseInput {
 
 export class EditWarehouseInput {
     id: string;
-    name: string;
+    name?: Nullable<string>;
     features?: Nullable<Nullable<string>[]>;
-    active: boolean;
+    active?: Nullable<boolean>;
 }
 
 export class OutboundInput {
@@ -145,8 +145,6 @@ export abstract class IMutation {
     abstract addWarehouse(input?: Nullable<AddWarehouseInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
     abstract editWarehouse(input?: Nullable<EditWarehouseInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
-
-    abstract deativeWarehouse(input?: Nullable<IdInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
     abstract addShop(input?: Nullable<ShopInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 

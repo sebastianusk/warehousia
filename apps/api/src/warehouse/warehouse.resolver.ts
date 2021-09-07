@@ -7,6 +7,7 @@ import { AppAbility, Action } from '../admin/factory';
 import { CurrentUser, JwtAuthGuard } from '../auth/auth.guard';
 import {
   AddWarehouseInput,
+  EditWarehouseInput,
   IdPayload,
   PaginationInput,
   WarehouseList,
@@ -48,6 +49,27 @@ export default class WarehouseResolver {
       input.id,
       input.name,
       input.features.map((item) => WarehouseModel.fromFeatureString(item))
+    );
+    return {
+      id,
+    };
+  }
+
+  @Mutation()
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Update, AdminModel)
+  )
+  async editWarehouse(
+    @Args('input') input: EditWarehouseInput,
+    @CurrentUser() user: any
+  ): Promise<IdPayload> {
+    const id = await this.warehouseService.editWarehouse(
+      user.username,
+      input.id,
+      input.name,
+      input.features?.map((item) => WarehouseModel.fromFeatureString(item)),
+      input.active
     );
     return {
       id,

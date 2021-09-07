@@ -23,7 +23,6 @@ type Mutation {
 
   addWarehouse(input: AddWarehouseInput): IdPayload
   editWarehouse(input: EditWarehouseInput): IdPayload
-  deativeWarehouse(input: IdInput): IdPayload
 
   addShop(input: ShopInput): IdPayload
   editShop(input: ShopInput): IdPayload
@@ -208,9 +207,9 @@ input AddWarehouseInput {
 
 input EditWarehouseInput {
   id: String!
-  name: String!
+  name: String
   features: [String]
-  active: Boolean!
+  active: Boolean
 }
 
 # Outbound Objects

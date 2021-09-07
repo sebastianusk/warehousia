@@ -124,11 +124,9 @@ export default class AdminService {
       password,
     })
       .filter((entry) => {
-        console.log(entry[1]);
         return entry[1] !== undefined;
       })
       .map((entry) => entry[0]);
-    console.log(changedFields);
 
     const result = await this.db.$transaction([
       this.db.admin.update({

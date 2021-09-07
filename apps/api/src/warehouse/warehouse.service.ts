@@ -47,4 +47,31 @@ export default class WarehouseService {
     });
     return data.map((item) => WarehouseModel.fromDB(item));
   }
+
+  async editWarehouse(
+    username: string,
+    id: string,
+    name: string,
+    features: Feature[],
+    active: boolean
+  ): Promise<string> {
+    const result = await this.db.$transaction([
+      this.db.warehouse.update({
+        where: { id },
+        data: { name, features, active },
+      }),
+      this.db.adminlog.create({
+        data: {
+          username,
+          action: 'updateWarehouse',
+          remarks: {
+            changedFields: Object.entries({ name, features, active })
+              .filter((entry) => entry[1] !== undefined)
+              .map((entry) => entry[0]),
+          },
+        },
+      }),
+    ]);
+    return result[0].id;
+  }
 }
