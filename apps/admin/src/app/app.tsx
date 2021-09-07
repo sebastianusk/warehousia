@@ -1,4 +1,5 @@
-import React, { Switch, Route } from 'react-router-dom';
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 
 import MainLayout from './components/MainLayout';
 import LoginPage from './pages/LoginPage';
@@ -44,7 +45,7 @@ export default function App() {
               isAuthenticated={checkAuth()}
             />
             <GuardedRoute
-              path="/"
+              path={['/home', '/']}
               exact
               component={ProductsPage}
               isAuthenticated={checkAuth()}

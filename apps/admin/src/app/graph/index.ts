@@ -9,12 +9,6 @@ export const POST_LOGIN = gql`
   }
 `;
 
-export const IS_LOGGED_IN = gql`
-  query IsUserLoggedIn {
-    isLoggedIn @client
-  }
-`;
-
 export const ADD_ADMIN = gql`
   mutation AddAdmin($input: AddAdminInput) {
     addAdmin(input: $input) {
