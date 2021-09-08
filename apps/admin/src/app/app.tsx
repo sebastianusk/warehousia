@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import MainLayout from './components/MainLayout';
 import LoginPage from './pages/LoginPage';
@@ -9,46 +9,84 @@ import WarehouseInboundPage from './pages/WarehouseInboundPage';
 import WarehouseTransferPage from './pages/WarehouseTransferPage';
 import WarehouseOutboundPage from './pages/WarehouseOutboundPage';
 
-import GuardedRoute from './commons/guardedRoute';
-import checkAuth from './commons/checkAuth';
-
 export default function App() {
   return (
     <>
       <Switch>
-        <Route path="/login" exact component={LoginPage} />
+        <Route exact path="/">
+          {localStorage.access_token ? (
+            <Redirect to="/home" />
+          ) : (
+            <Redirect to="/login" />
+          )}
+        </Route>
+        <Route
+          path="/login"
+          render={() =>
+            localStorage.access_token ? <Redirect to="/home" /> : <LoginPage />
+          }
+        />
         <MainLayout>
           <Switch>
-            <GuardedRoute
+            <Route
+              path="/home"
+              render={() =>
+                localStorage.access_token ? (
+                  <ProductsPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
               path="/products"
-              component={ProductsPage}
-              isAuthenticated={checkAuth()}
+              render={() =>
+                localStorage.access_token ? (
+                  <ProductsPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
             />
-            <GuardedRoute
+            <Route
               path="/product-detail/:id"
-              component={ProductDetailPage}
-              isAuthenticated={checkAuth()}
+              render={() =>
+                localStorage.access_token ? (
+                  <ProductDetailPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
             />
-            <GuardedRoute
+            <Route
               path="/warehouse-inbound"
-              component={WarehouseInboundPage}
-              isAuthenticated={checkAuth()}
+              render={() =>
+                localStorage.access_token ? (
+                  <WarehouseInboundPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
             />
-            <GuardedRoute
+            <Route
               path="/warehouse-transfer"
-              component={WarehouseTransferPage}
-              isAuthenticated={checkAuth()}
+              render={() =>
+                localStorage.access_token ? (
+                  <WarehouseTransferPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
             />
-            <GuardedRoute
+            <Route
               path="/warehouse-outbound"
-              component={WarehouseOutboundPage}
-              isAuthenticated={checkAuth()}
-            />
-            <GuardedRoute
-              path={['/home', '/']}
-              exact
-              component={ProductsPage}
-              isAuthenticated={checkAuth()}
+              render={() =>
+                localStorage.access_token ? (
+                  <WarehouseOutboundPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
             />
             {/* <Route path="/warehouse-preparing" component={MainLayout} /> */}
             {/* <Route path="/admin-menu" component={MainLayout} /> */}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu } from 'antd';
 import {
   InboxOutlined,
   GroupOutlined,
@@ -17,7 +17,7 @@ const { SubMenu } = Menu;
 const MainLayout: React.FC = ({ children }) => {
   const { collapsed, onCollapse, currentDir, changeDir } = useLayoutHooks();
   return (
-    <Layout style={{ minHeight: '100vh'}}>
+    <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
         <div className={styles.logo}>
           <h3>WAREHOUSIA</h3>
