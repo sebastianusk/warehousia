@@ -18,12 +18,14 @@ export const ADD_ADMIN = gql`
 `;
 
 export const GET_ME = gql`
-  query me {
-    username
-    role
-    warehouses
-    createdAt
-    updatedAt
+  query Me {
+    me {
+      username
+      role
+      warehouses
+      createdAt
+      updatedAt
+    }
   }
 `;
 

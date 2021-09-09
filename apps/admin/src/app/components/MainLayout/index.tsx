@@ -15,7 +15,9 @@ const { SubMenu } = Menu;
 
 // eslint-disable-next-line react/prop-types
 const MainLayout: React.FC = ({ children }) => {
-  const { collapsed, onCollapse, currentDir, changeDir } = useLayoutHooks();
+  const { userData, collapsed, onCollapse, currentDir, changeDir } =
+    useLayoutHooks();
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
@@ -25,9 +27,9 @@ const MainLayout: React.FC = ({ children }) => {
         <div className={styles.userInfo}>
           <div className={styles.userAvatar} />
           <div>
-            <h4 className={styles.avatarText}>Bubur</h4>
+            <h4 className={styles.avatarText}>{userData?.username}</h4>
           </div>
-          <h5 className={styles.avatarText}>Super Admin</h5>
+          <h5 className={styles.avatarText}>{userData?.role}</h5>
         </div>
         <Menu
           theme="dark"

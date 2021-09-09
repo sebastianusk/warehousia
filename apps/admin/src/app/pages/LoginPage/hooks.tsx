@@ -27,13 +27,14 @@ export default function useCheckLogin(): LoginState {
   });
 
   const handleSubmit = () => {
-    postLogin({
-      variables: { username, password },
-      // refetchQueries: [{ query: GET_ME }],
-    }).catch((err) => {
-      // eslint-disable-next-line no-console
-      console.warn(err);
-    });
+    if (username && password) {
+      postLogin({
+        variables: { username, password },
+      }).catch((err) => {
+        // eslint-disable-next-line no-console
+        console.warn(err);
+      });
+    }
   };
 
   return {

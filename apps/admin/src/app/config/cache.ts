@@ -1,24 +1,17 @@
-import { InMemoryCache, makeVar } from '@apollo/client';
+import { InMemoryCache } from '@apollo/client';
 
-type DataMe =
-  | {
-      username: string;
-      role: string;
-      warehouses: string[];
-    }
-  | {};
+// export const dataMeVar = makeVar<>({});
 
-export const dataMeVar = makeVar<DataMe>({});
-
+// eslint-disable-next-line import/prefer-default-export
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        dataMe: {
-          read() {
-            return dataMeVar();
-          },
-        },
+        // dataMe: {
+        //   read() {
+        //     return dataMeVar();
+        //   },
+        // },
       },
     },
   },

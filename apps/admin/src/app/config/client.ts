@@ -1,24 +1,30 @@
-import { ApolloClient, NormalizedCacheObject, gql } from '@apollo/client';
+import {
+  ApolloClient,
+  NormalizedCacheObject,
+  createHttpLink,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { cache } from './cache';
 
-export const typeDefs = gql`
-  type DataMe {
-    username: String
-    role: String
-    warehouses: [String]
-  }
-  extend type Query {
-    isLoggedIn: Boolean!
-    me: DataMe
-  }
-`;
+const httpLink = createHttpLink({
+  uri: 'http://localhost:3333/graphql',
+});
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem('access_token');
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  uri: 'http://localhost:3333/graphql',
+  link: authLink.concat(httpLink),
   cache,
-  headers: {
-    authorization: localStorage.getItem('token') || '',
-  },
-  typeDefs,
+  // typeDefs,
 });
 export default client;
