@@ -36,8 +36,13 @@ export default function useLayoutHooks(): LayoutState {
   };
 
   const changeDir = (targetDir: string) => {
-    setCurrentDir(targetDir);
-    history.push(`/${targetDir.toLowerCase()}`);
+    if (targetDir === 'Logout') {
+      localStorage.clear();
+      history.push('/login');
+    } else {
+      setCurrentDir(targetDir);
+      history.push(`/${targetDir.toLowerCase()}`);
+    }
   };
 
   return {
