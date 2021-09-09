@@ -55,12 +55,15 @@ function LoginPage(): ReactElement {
               </Button>
             )}
           </Form.Item>
-          {error && (
+          {error ? (
             <Row>
-              <Col span="24" />
               <Col span="24">
                 <Alert message="invalid email/password" type="warning" />
               </Col>
+            </Row>
+          ) : (
+            <Row>
+              <Col span="24" style={{ height: '39px' }} />
             </Row>
           )}
         </Form>
