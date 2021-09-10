@@ -41,29 +41,32 @@ const MainLayout: React.FC = ({ children }) => {
             Products
           </Menu.Item>
           <SubMenu
-            key="Home-Warehouse"
+            key="home-warehouse"
             icon={<HomeOutlined />}
             title="Warehouse"
           >
-            <Menu.Item key="Warehouse-Inbound">Inbound</Menu.Item>
-            <Menu.Item key="Warehouse-Transfer">Transfer</Menu.Item>
-            <Menu.Item key="Warehouse-Outbound">Outbound</Menu.Item>
-            <Menu.Item key="Warehouse-Preparing">Preparing</Menu.Item>
-            <Menu.Item key="Warehouse-Transaction">Transaction</Menu.Item>
+            <Menu.Item key="warehouse-inbound">Inbound</Menu.Item>
+            <Menu.Item key="warehouse-transfer">Transfer</Menu.Item>
+            <Menu.Item key="warehouse-outbound">Outbound</Menu.Item>
+            <Menu.Item key="warehouse-preparing">Preparing</Menu.Item>
+            <Menu.Item key="warehouse-transaction">Transaction</Menu.Item>
           </SubMenu>
-          <Menu.Item key="Admin-menu" icon={<GroupOutlined />}>
-            Admin Menu
-          </Menu.Item>
-          <Menu.Item key="Account" icon={<UserOutlined />}>
+          {userData?.role === 'SUPER_ADMIN' ? (
+            <Menu.Item key="super-admin-menu" icon={<GroupOutlined />}>
+              Admin Menu
+            </Menu.Item>
+          ) : (
+            <></>
+          )}
+          <Menu.Item key="account" icon={<UserOutlined />}>
             Account
           </Menu.Item>
-          <Menu.Item key="Logout" icon={<LogoutOutlined />}>
+          <Menu.Item key="logout" icon={<LogoutOutlined />}>
             Log out
           </Menu.Item>
         </Menu>
       </Sider>
       <Layout>
-        {/* <Header className={styles.header} /> */}
         <Content className={styles.contentLayout}>
           <div className={styles.pageContainer}>{children}</div>
         </Content>

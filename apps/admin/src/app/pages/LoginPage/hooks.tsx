@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation, ApolloError } from '@apollo/client';
 
-import { POST_LOGIN } from '../../graph';
+import { POST_LOGIN, GET_ME } from '../../graph';
 
 interface LoginState {
   loading: boolean;
@@ -30,6 +30,7 @@ export default function useCheckLogin(): LoginState {
     if (username && password) {
       postLogin({
         variables: { username, password },
+        // refetchQueries: [{ query: GET_ME }],
       }).catch((err) => {
         // eslint-disable-next-line no-console
         console.warn(err);

@@ -8,6 +8,9 @@
 .logo h3 {
   color: white;
   line-height: 32px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .header {
   padding: 0;

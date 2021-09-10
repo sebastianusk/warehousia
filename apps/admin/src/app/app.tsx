@@ -88,6 +88,16 @@ export default function App() {
                 )
               }
             />
+            <Route
+              path="/super-admin-menu"
+              render={() =>
+                localStorage.access_token ? (
+                  <WarehouseOutboundPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
             {/* <Route path="/warehouse-preparing" component={MainLayout} /> */}
             {/* <Route path="/admin-menu" component={MainLayout} /> */}
             {/* <Route path="/account" component={MainLayout} /> */}

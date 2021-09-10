@@ -51,3 +51,20 @@ export const GET_ADMIN_LOG = gql`
     }
   }
 `;
+
+export const GET_WAREHOUSES = gql`
+  query Warehouses($query: String, $pagination: PaginationInput) {
+    warehouses(query: $query, pagination: $pagination) {
+      data {
+        name
+        active
+        features
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+// export const ADD_WAREHOUSE = gql``;
+// export const EDIT_WAREHOUSE = gql``;

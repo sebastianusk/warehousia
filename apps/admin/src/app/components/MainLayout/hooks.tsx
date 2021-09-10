@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useQuery, useApolloClient } from '@apollo/client';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { GET_ME } from '../../graph';
@@ -28,6 +28,7 @@ export default function useLayoutHooks(): LayoutState {
   const [collapsed, setCollapsed] = useState(false);
   const [currentDir, setCurrentDir] = useState('');
   const { data, loading } = useQuery<GetMeType>(GET_ME);
+  const client = useApolloClient();
 
   const history = useHistory();
 
@@ -36,12 +37,14 @@ export default function useLayoutHooks(): LayoutState {
   };
 
   const changeDir = (targetDir: string) => {
-    if (targetDir === 'Logout') {
+    if (targetDir === 'logout') {
+      client.clearStore();
+      client.cache.gc();
       localStorage.clear();
       history.push('/login');
     } else {
       setCurrentDir(targetDir);
-      history.push(`/${targetDir.toLowerCase()}`);
+      history.push(`/${targetDir}`);
     }
   };
 
