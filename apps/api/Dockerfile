@@ -9,5 +9,4 @@ EXPOSE ${PORT}
 RUN npm install --production
 # dependencies that apps needs
 RUN npm install @prisma/client reflect-metadata tslib ts-morph apollo-server-express@2.25.2
-RUN npm run prisma generate
 CMD node ./main.js
