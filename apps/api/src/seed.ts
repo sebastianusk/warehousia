@@ -1,4 +1,5 @@
 import AdminService from './admin/admin.service';
+import AuthWrapper from './auth/auth.wrapper';
 import DBService from './db/db.service';
 import { Feature } from './warehouse/warehouse.dto';
 import WarehouseService from './warehouse/warehouse.service';
@@ -26,7 +27,7 @@ async function createLog(username: string, action: string, remarks: any) {
 
 async function createWarehouse(id: string, name: string, features: Feature[]) {
   await warehouseService
-    .createWarehouse('bubur', id, name, features)
+    .createWarehouse(new AuthWrapper('bubur'), id, name, features)
     .catch(console.log);
 }
 

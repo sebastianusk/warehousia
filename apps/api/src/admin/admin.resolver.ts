@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CurrentUser, JwtAuthGuard } from '../auth/auth.guard';
+import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
+import AuthWrapper from '../auth/auth.wrapper';
 import { LoginError } from '../common/errors';
 import {
   AddAdminInput,
@@ -41,7 +42,7 @@ export default class AdminResolver {
 
   @Query()
   @UseGuards(JwtAuthGuard)
-  async me(@CurrentUser() user: any): Promise<Admin> {
+  async me(@CurrentAuth() user: AuthWrapper): Promise<Admin> {
     const data = await this.adminService.findOne(user.username);
     return data.toResponse();
   }
@@ -100,7 +101,7 @@ export default class AdminResolver {
   @UseGuards(JwtAuthGuard)
   async changeMyPassword(
     @Args('input') input: ChangeMyPasswordInput,
-    @CurrentUser() user: any
+    @CurrentAuth() user: AuthWrapper
   ): Promise<AdminPayload> {
     const userData = await this.adminService.validateUser(
       user.username,

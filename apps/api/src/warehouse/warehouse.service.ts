@@ -8,7 +8,7 @@ export default class WarehouseService {
   constructor(private db: DBService) {}
 
   async createWarehouse(
-    username: string,
+    auth: AuthWrapper,
     id: string,
     name: string,
     features: Feature[]
@@ -21,13 +21,7 @@ export default class WarehouseService {
           features: features.map((item) => item.toString()),
         },
       }),
-      this.db.adminlog.create({
-        data: {
-          username,
-          action: 'createWarehouse',
-          remarks: { warehouseName: name },
-        },
-      }),
+      auth.log(this.db, 'createWarehouse', { id }),
     ]);
     return result[0].id;
   }
