@@ -8,6 +8,7 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import WarehouseInboundPage from './pages/WarehouseInboundPage';
 import WarehouseTransferPage from './pages/WarehouseTransferPage';
 import WarehouseOutboundPage from './pages/WarehouseOutboundPage';
+import SuperAdminMenuPage from './pages/SuperAdminMenuPage';
 
 export default function App() {
   return (
@@ -92,7 +93,7 @@ export default function App() {
               path="/super-admin-menu"
               render={() =>
                 localStorage.access_token ? (
-                  <WarehouseOutboundPage />
+                  <SuperAdminMenuPage />
                 ) : (
                   <Redirect to="/login" />
                 )

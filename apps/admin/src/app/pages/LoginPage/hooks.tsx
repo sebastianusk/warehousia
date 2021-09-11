@@ -30,7 +30,7 @@ export default function useCheckLogin(): LoginState {
     if (username && password) {
       postLogin({
         variables: { username, password },
-        // refetchQueries: [{ query: GET_ME }],
+        // refetchQueries: [{ query: GET_ME }],   d 
       }).catch((err) => {
         // eslint-disable-next-line no-console
         console.warn(err);
