@@ -24,9 +24,8 @@ type Mutation {
   addWarehouse(input: AddWarehouseInput): IdPayload
   editWarehouse(input: EditWarehouseInput): IdPayload
 
-  addShop(input: ShopInput): IdPayload
-  editShop(input: ShopInput): IdPayload
-  deactiveShop(input: IdInput): IdPayload
+  addShop(input: AddShopInput): IdPayload
+  editShop(input: EditShopInput): IdPayload
 
   addProduct(input: ProductInput): IdPayload
   editProduct(input: ProductInput): IdPayload
@@ -180,9 +179,15 @@ type Shop {
   updatedAt: String!
 }
 
-input ShopInput {
+input AddShopInput {
   id: String!
   name: String
+}
+
+input EditShopInput {
+  id: String!
+  name: String
+  active: Boolean
 }
 
 

@@ -36,3 +36,11 @@ model warehouse {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model shop {
+  id String @id
+  name String
+  acive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

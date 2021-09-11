@@ -34,5 +34,16 @@ CREATE TABLE "warehouse" (
     PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "shop" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "acive" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "adminlog.createdAt_unique" ON "adminlog"("createdAt");

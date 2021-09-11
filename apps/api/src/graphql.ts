@@ -57,9 +57,15 @@ export class ProductAmountInput {
     amount: number;
 }
 
-export class ShopInput {
+export class AddShopInput {
     id: string;
     name?: Nullable<string>;
+}
+
+export class EditShopInput {
+    id: string;
+    name?: Nullable<string>;
+    active?: Nullable<boolean>;
 }
 
 export class AddWarehouseInput {
@@ -146,11 +152,9 @@ export abstract class IMutation {
 
     abstract editWarehouse(input?: Nullable<EditWarehouseInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
-    abstract addShop(input?: Nullable<ShopInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
+    abstract addShop(input?: Nullable<AddShopInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
-    abstract editShop(input?: Nullable<ShopInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
-
-    abstract deactiveShop(input?: Nullable<IdInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
+    abstract editShop(input?: Nullable<EditShopInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
     abstract addProduct(input?: Nullable<ProductInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
