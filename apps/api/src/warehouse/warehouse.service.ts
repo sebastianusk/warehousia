@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import AuthWrapper from '../auth/auth.wrapper';
 import DBService from '../db/db.service';
 import WarehouseModel, { Feature } from './warehouse.dto';
 
@@ -49,7 +50,7 @@ export default class WarehouseService {
   }
 
   async editWarehouse(
-    username: string,
+    auth: AuthWrapper,
     id: string,
     name: string,
     features: Feature[],
@@ -60,17 +61,11 @@ export default class WarehouseService {
         where: { id },
         data: { name, features, active },
       }),
-      this.db.adminlog.create({
-        data: {
-          username,
-          action: 'updateWarehouse',
-          remarks: {
-            changedFields: Object.entries({ name, features, active })
-              .filter((entry) => entry[1] !== undefined)
-              .map((entry) => entry[0]),
-          },
-        },
-      }),
+      auth.log(
+        this.db,
+        'updateWarehouse',
+        AuthWrapper.structRemarks(id, { name, features, active })
+      ),
     ]);
     return result[0].id;
   }

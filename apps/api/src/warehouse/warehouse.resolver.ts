@@ -4,7 +4,8 @@ import { CheckPolicies } from '../admin/acl.decorator';
 import PoliciesGuard from '../admin/acl.guard';
 import { AdminModel } from '../admin/admin.dto';
 import { AppAbility, Action } from '../admin/factory';
-import { CurrentUser, JwtAuthGuard } from '../auth/auth.guard';
+import { CurrentAuth, CurrentUser, JwtAuthGuard } from '../auth/auth.guard';
+import AuthWrapper from '../auth/auth.wrapper';
 import {
   AddWarehouseInput,
   EditWarehouseInput,
@@ -62,10 +63,10 @@ export default class WarehouseResolver {
   )
   async editWarehouse(
     @Args('input') input: EditWarehouseInput,
-    @CurrentUser() user: any
+    @CurrentAuth() auth: AuthWrapper
   ): Promise<IdPayload> {
     const id = await this.warehouseService.editWarehouse(
-      user.username,
+      auth,
       input.id,
       input.name,
       input.features?.map((item) => WarehouseModel.fromFeatureString(item)),
