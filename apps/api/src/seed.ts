@@ -33,8 +33,8 @@ async function createWarehouse(id: string, name: string, features: Feature[]) {
 
 async function seed() {
   await createUser('bubur', 'bubur123', undefined, 'SUPER_ADMIN');
-  await createUser('ferdian', 'ferdian123', ['shopee'], 'ADMIN');
-  await createUser('sebo', 'sebo123', ['tokopedia'], 'ADMIN');
+  await createUser('ferdian', 'ferdian123', ['tangerang'], 'ADMIN');
+  await createUser('sebo', 'sebo123', ['serpong'], 'ADMIN');
   await createLog('bubur', 'createOrder', { orderId: 123 });
   await createLog('bubur', 'changePass', undefined);
   await createLog('bubur', 'changeRole', undefined);
