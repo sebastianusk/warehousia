@@ -25,7 +25,7 @@ import WarehouseModule from '../warehouse/warehouse.module';
       mockEntireSchema: false,
       playground: true,
       debug: true,
-
+      cors: true,
       context: ({ req }) => ({ request: req }),
     }),
   ],
