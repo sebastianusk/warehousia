@@ -52,7 +52,7 @@ async function seed() {
   ]);
 }
 
-seed().finally(() => {
+seed().finally(async () => {
   console.log('seed completed');
-  process.exit(0);
+  await db.$disconnect();
 });
