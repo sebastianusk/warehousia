@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import { Table, Space, Button, Tag } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import useWarehouseTable from './hooks';
+import ModalEditWarehouse from '../ModalEditWarehouse';
 
 const { Column } = Table;
 
@@ -9,7 +10,7 @@ export default function WarehouseTable(): ReactElement {
   const {
     data,
     loading,
-    // handleEdit,
+    handleEdit,
     handleDelete,
     handleRowClick,
     showModalEdit,
@@ -23,11 +24,11 @@ export default function WarehouseTable(): ReactElement {
 
   return (
     <>
-      {/* <ModalEditProduct
+      <ModalEditWarehouse
         visible={showModalEdit}
         setVisible={setShowModalEdit}
         initialData={dataToBeEdited}
-      /> */}
+      />
       <Table
         size="middle"
         dataSource={data}
@@ -81,7 +82,7 @@ export default function WarehouseTable(): ReactElement {
                 icon={<EditOutlined />}
                 onClick={(e) => {
                   e.stopPropagation();
-                  // handleEdit(e);
+                  handleEdit(e);
                 }}
               >
                 Edit

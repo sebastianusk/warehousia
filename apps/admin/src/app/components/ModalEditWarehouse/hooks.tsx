@@ -1,0 +1,82 @@
+import { useState, Dispatch, SetStateAction } from 'react';
+import { useMutation } from '@apollo/client';
+import { EDIT_WAREHOUSE, GET_WAREHOUSES } from '../../graph';
+
+interface ModalEditWarehouseState {
+  confirmLoading: boolean;
+  handleOk: () => void;
+  handleCancel: () => void;
+  onInputName: (e: any) => void;
+  onChangeActive: (e: any) => void;
+  featureOptions: {
+    label: string;
+    value: string;
+  }[];
+  onChangeFeatures: (e: any) => void;
+}
+
+type ModalEditWarehouseProps = {
+  setVisible: Dispatch<SetStateAction<boolean>>;
+  initialData: {
+    id: string;
+    name: string;
+    active: boolean;
+    features: string[];
+  };
+};
+export default function useModalEditWarehouseHooks({
+  setVisible,
+  initialData,
+}: ModalEditWarehouseProps): ModalEditWarehouseState {
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [name, setName] = useState('');
+  const [active, setActive] = useState<Boolean>(initialData.active);
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [editWarehouse, payloadId] = useMutation(EDIT_WAREHOUSE);
+
+  const handleOk = () => {
+    setConfirmLoading(true);
+    const formData = {
+      id: initialData.id,
+      name,
+      features: selectedFeatures,
+      active,
+    };
+    editWarehouse({
+      variables: { input: formData },
+      refetchQueries: [{ query: GET_WAREHOUSES }],
+    });
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const featureOptions = [
+    { label: 'Outbound', value: 'OUTBOUND' },
+    { label: 'Inbound', value: 'INBOUND' },
+    { label: 'Transfer', value: 'TRANSFER' },
+  ];
+
+  const onChangeFeatures = (e: any) => {
+    setSelectedFeatures(e);
+  };
+
+  const onChangeActive = (e: any) => {
+    setActive(e);
+  };
+
+  const onInputName = (e: any) => {
+    setName(e.target.value);
+  };
+
+  return {
+    confirmLoading,
+    handleOk,
+    handleCancel,
+    onInputName,
+    featureOptions,
+    onChangeFeatures,
+    onChangeActive,
+  };
+}

@@ -74,10 +74,10 @@ export const ADD_WAREHOUSE = gql`
   }
 `;
 
-// export const ADD_WAREHOUSE = gql`
-//   mutation addWarehouse($input: AddWarehouseInput) {
-//     addWarehouse(input: $input) {
-//       id
-//     }
-//   }
-// `;
+export const EDIT_WAREHOUSE = gql`
+  mutation editWarehouse($input: EditWarehouseInput) {
+    editWarehouse(input: $input) {
+      id
+    }
+  }
+`;

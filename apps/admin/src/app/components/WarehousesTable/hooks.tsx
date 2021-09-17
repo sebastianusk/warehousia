@@ -5,7 +5,7 @@ import { GET_WAREHOUSES } from '../../graph';
 interface WarehouseListState {
   loading: boolean;
   data: WarehouseListType;
-  // handleEdit(data: any): void;
+  handleEdit(data: any): void;
   handleDelete(): boolean;
   handleRowClick(
     e: React.MouseEvent<HTMLElement>,
@@ -37,10 +37,10 @@ export default function useWarehouseTable(): WarehouseListState {
     },
   });
 
-  // const handleEdit = (data: any) => {
-  //   setDataToBeEdited(data);
-  //   setShowModalEdit(true);
-  // };
+  const handleEdit = (data: any) => {
+    setDataToBeEdited(data);
+    setShowModalEdit(true);
+  };
 
   const handleDelete = () => true;
 
@@ -57,7 +57,7 @@ export default function useWarehouseTable(): WarehouseListState {
   return {
     loading,
     data: data?.warehouses?.data,
-    // handleEdit,
+    handleEdit,
     handleDelete,
     handleRowClick,
     showModalEdit,
