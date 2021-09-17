@@ -66,5 +66,18 @@ export const GET_WAREHOUSES = gql`
   }
 `;
 
-// export const ADD_WAREHOUSE = gql``;
-// export const EDIT_WAREHOUSE = gql``;
+export const ADD_WAREHOUSE = gql`
+  mutation addWarehouse($input: AddWarehouseInput) {
+    addWarehouse(input: $input) {
+      id
+    }
+  }
+`;
+
+// export const ADD_WAREHOUSE = gql`
+//   mutation addWarehouse($input: AddWarehouseInput) {
+//     addWarehouse(input: $input) {
+//       id
+//     }
+//   }
+// `;

@@ -2,29 +2,19 @@ import React, { ReactElement } from 'react';
 import { Button, Input, Card } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import styles from './index.module.css';
-import ProductListEditor from '../../components/ProductListEditor';
-import ModalAddProduct from '../../components/ModalAddProduct';
+import ModalAddWarehouse from '../../components/ModalAddWarehouse';
 import useSuperAdminMenuHooks from './hooks';
 import WarehouseTable from '../../components/WarehousesTable';
 
 export default function SuperAdminMenuPage(): ReactElement {
-  const {
-    showModalAdd,
-    setShowModalAdd,
-    showModalEdit,
-    setShowModalEdit,
-    loading,
-    error,
-    data,
-    onSearch,
-  } = useSuperAdminMenuHooks();
+  const { showModalAdd, setShowModalAdd, loading, error, data, onSearch } =
+    useSuperAdminMenuHooks();
 
   return (
     <>
       <Card className={styles.card}>
         <div className={`${styles.flexContainer}`}>
           <h2>WAREHOUSE LIST</h2>
-
           <div>
             <Button
               className={styles.buttonAddOne}
@@ -34,7 +24,7 @@ export default function SuperAdminMenuPage(): ReactElement {
               Add New
             </Button>
             <Input.Search
-              placeholder="search by warehouse name"
+              placeholder="search by name"
               onSearch={onSearch}
               style={{ width: 200 }}
             />
@@ -44,7 +34,7 @@ export default function SuperAdminMenuPage(): ReactElement {
       <Card className={styles.card}>
         <WarehouseTable />
       </Card>
-      <ModalAddProduct visible={showModalAdd} setVisible={setShowModalAdd} />
+      <ModalAddWarehouse visible={showModalAdd} setVisible={setShowModalAdd} />
     </>
   );
 }
