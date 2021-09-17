@@ -1,10 +1,6 @@
-import { useQuery } from '@apollo/client';
 import React, { useState, Dispatch, SetStateAction } from 'react';
-import { GET_WAREHOUSES } from '../../graph';
 
 interface WarehouseListState {
-  loading: boolean;
-  data: WarehouseListType;
   handleEdit(dataToEdit: any): void;
   handleDelete(): boolean;
   handleRowClick(
@@ -17,25 +13,9 @@ interface WarehouseListState {
   dataToBeEdited: any;
 }
 
-type WarehouseListType = {
-  id: string;
-  name: string;
-  active: boolean;
-  features: string[];
-}[];
-
 export default function useWarehouseTable(): WarehouseListState {
   const [showModalEdit, setShowModalEdit] = useState<boolean>(false);
   const [dataToBeEdited, setDataToBeEdited] = useState<any>({});
-  const { loading, error, data } = useQuery(GET_WAREHOUSES, {
-    variables: {
-      query: '',
-      pagination: {
-        offset: 0,
-        limit: 10,
-      },
-    },
-  });
 
   const handleEdit = (dataToEdit: any) => {
     setDataToBeEdited(dataToEdit);
@@ -55,8 +35,6 @@ export default function useWarehouseTable(): WarehouseListState {
   };
 
   return {
-    loading,
-    data: data?.warehouses?.data,
     handleEdit,
     handleDelete,
     handleRowClick,

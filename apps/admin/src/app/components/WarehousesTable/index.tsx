@@ -6,10 +6,21 @@ import ModalEditWarehouse from '../ModalEditWarehouse';
 
 const { Column } = Table;
 
-export default function WarehouseTable(): ReactElement {
+type WarehouseTableProps = {
+  data: WarehouseListType;
+};
+
+type WarehouseListType = {
+  id?: string;
+  name: string;
+  active: boolean;
+  features: string[];
+}[];
+
+export default function WarehouseTable({
+  data,
+}: WarehouseTableProps): ReactElement {
   const {
-    data,
-    loading,
     handleEdit,
     handleDelete,
     handleRowClick,
@@ -17,10 +28,6 @@ export default function WarehouseTable(): ReactElement {
     setShowModalEdit,
     dataToBeEdited,
   } = useWarehouseTable();
-
-  if (loading) return <></>;
-  // eslint-disable-next-line no-console
-  if (data) console.log(data);
 
   return (
     <>

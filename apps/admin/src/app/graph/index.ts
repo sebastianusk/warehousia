@@ -30,12 +30,22 @@ export const GET_ME = gql`
 `;
 
 export const GET_ADMINS = gql`
-  query Admins($query: String, $pagination: OffsetPaginationInput) {
+  query Admins($query: String, $pagination: PaginationInput) {
     admins(query: $query, pagination: $pagination) {
       data {
         username
         role
+        warehouses
+        active
       }
+    }
+  }
+`;
+
+export const EDIT_ADMIN = gql`
+  mutation editAdmin($input: AddAdminInput) {
+    editAdmin(input: $input) {
+      username
     }
   }
 `;

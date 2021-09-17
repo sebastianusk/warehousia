@@ -5,10 +5,13 @@ import styles from './index.module.css';
 import ModalAddWarehouse from '../../components/ModalAddWarehouse';
 import useSuperAdminMenuHooks from './hooks';
 import WarehouseTable from '../../components/WarehousesTable';
+import UsersManager from '../../components/UsersManager';
 
 export default function SuperAdminMenuPage(): ReactElement {
   const { showModalAdd, setShowModalAdd, loading, error, data, onSearch } =
     useSuperAdminMenuHooks();
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <>
@@ -32,9 +35,10 @@ export default function SuperAdminMenuPage(): ReactElement {
         </div>
       </Card>
       <Card className={styles.card}>
-        <WarehouseTable />
+        {data && <WarehouseTable data={data} />}
       </Card>
       <ModalAddWarehouse visible={showModalAdd} setVisible={setShowModalAdd} />
+      <UsersManager />
     </>
   );
 }
