@@ -17,4 +17,21 @@ export default class ShopService {
     ]);
     return result[0].id;
   }
+
+  async editShop(
+    auth: AuthWrapper,
+    id: string,
+    name: string,
+    active: boolean
+  ): Promise<string> {
+    const result = await this.db.$transaction([
+      this.db.shop.update({ where: { id }, data: { name, active } }),
+      auth.log(
+        this.db,
+        'updateShop',
+        AuthWrapper.structRemarks(id, { name, active })
+      ),
+    ]);
+    return result[0].id;
+  }
 }
