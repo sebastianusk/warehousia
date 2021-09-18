@@ -27,7 +27,7 @@ jobs:
         with:
           push: true
           tags: ghcr.io/sebastianusk/warehousia-admin:latest
-          file: ./apps/admin/Dockerfile
+          file: ./apps/admin/docker/Dockerfile
           context: ./
       - name: build-api
         uses: docker/build-push-action@v2
