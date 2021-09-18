@@ -197,6 +197,7 @@ type WarehouseList {
 }
 
 type Warehouse {
+  id: String!
   name: String!
   active: Boolean!
   features: [String]

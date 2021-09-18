@@ -9,6 +9,7 @@ export enum Feature {
 
 export default class WarehouseModel {
   constructor(
+    public id: string,
     public name: string,
     public active: boolean,
     public features: Feature[],
@@ -18,6 +19,7 @@ export default class WarehouseModel {
 
   static fromDB(data: warehouse): WarehouseModel {
     return new WarehouseModel(
+      data.id,
       data.name,
       data.active,
       data.features.map((item) => WarehouseModel.fromFeatureString(item)),
@@ -28,6 +30,7 @@ export default class WarehouseModel {
 
   toResponse(): Warehouse {
     return {
+      id: this.id,
       name: this.name,
       active: this.active,
       features: this.features.map((item) => item.toString()),

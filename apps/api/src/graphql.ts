@@ -262,6 +262,7 @@ export class WarehouseList {
 }
 
 export class Warehouse {
+    id: string;
     name: string;
     active: boolean;
     features?: Nullable<Nullable<string>[]>;
