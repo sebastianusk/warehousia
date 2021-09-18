@@ -181,7 +181,7 @@ type Shop {
 
 input AddShopInput {
   id: String!
-  name: String
+  name: String!
 }
 
 input EditShopInput {

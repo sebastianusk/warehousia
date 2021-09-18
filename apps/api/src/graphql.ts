@@ -59,7 +59,7 @@ export class ProductAmountInput {
 
 export class AddShopInput {
     id: string;
-    name?: Nullable<string>;
+    name: string;
 }
 
 export class EditShopInput {
