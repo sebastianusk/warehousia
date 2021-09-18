@@ -253,6 +253,7 @@ export class ShopList {
 export class Shop {
     id: string;
     name: string;
+    active: boolean;
     createdAt: string;
     updatedAt: string;
 }

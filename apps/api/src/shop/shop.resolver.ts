@@ -1,8 +1,14 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
 import AuthWrapper from '../auth/auth.wrapper';
-import { AddShopInput, EditShopInput, IdPayload } from '../graphql';
+import {
+  AddShopInput,
+  EditShopInput,
+  IdPayload,
+  PaginationInput,
+  ShopList,
+} from '../graphql';
 import ShopService from './shop.service';
 
 @Resolver('Shop')
@@ -32,5 +38,21 @@ export default class ShopResolver {
       input.active
     );
     return { id };
+  }
+
+  @Query()
+  @UseGuards(JwtAuthGuard)
+  async shops(
+    @Args('query') query: string,
+    @Args('pagination') pagination: PaginationInput
+  ): Promise<ShopList> {
+    const data = await this.shopService.getList(
+      query,
+      pagination?.limit,
+      pagination?.offset
+    );
+    return {
+      data: data.map((item) => item.toResponse()),
+    };
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
 import DBService from '../db/db.service';
+import ShopModel from './shop.dto';
 
 @Injectable()
 export default class ShopService {
@@ -33,5 +34,22 @@ export default class ShopService {
       ),
     ]);
     return result[0].id;
+  }
+
+  async getList(
+    query: string,
+    limit: number,
+    offset: number
+  ): Promise<ShopModel[]> {
+    const result = await this.db.shop.findMany({
+      skip: offset * limit,
+      take: limit,
+      where: {
+        name: {
+          startsWith: query,
+        },
+      },
+    });
+    return result.map((item) => ShopModel.fromDb(item));
   }
 }

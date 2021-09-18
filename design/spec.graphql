@@ -175,6 +175,7 @@ type ShopList {
 type Shop {
   id: String!
   name: String!
+  active: Boolean!
   createdAt: String!
   updatedAt: String!
 }
