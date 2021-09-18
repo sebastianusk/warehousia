@@ -6,6 +6,8 @@ import {
   InferSubjects,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
+import ShopModel from '../shop/shop.dto';
+import WarehouseModel from '../warehouse/warehouse.dto';
 import { AdminModel, RoleModel } from './admin.dto';
 
 export enum Action {
@@ -16,7 +18,11 @@ export enum Action {
   Delete = 'delete',
 }
 
-type Subjects = InferSubjects<typeof AdminModel> | 'all';
+type Subjects =
+  | InferSubjects<typeof AdminModel>
+  | InferSubjects<typeof WarehouseModel>
+  | InferSubjects<typeof ShopModel>
+  | 'all';
 
 export type AppAbility = Ability<[Action, Subjects]>;
 

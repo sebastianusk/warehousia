@@ -1,5 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CheckPolicies } from '../admin/acl.decorator';
+import PoliciesGuard from '../admin/acl.guard';
+import { AppAbility, Action } from '../admin/factory';
 import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
 import AuthWrapper from '../auth/auth.wrapper';
 import {
@@ -9,6 +12,7 @@ import {
   PaginationInput,
   ShopList,
 } from '../graphql';
+import ShopModel from './shop.dto';
 import ShopService from './shop.service';
 
 @Resolver('Shop')
@@ -16,7 +20,8 @@ export default class ShopResolver {
   constructor(private shopService: ShopService) {}
 
   @Mutation()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Create, ShopModel))
   async addShop(
     @Args('input') input: AddShopInput,
     @CurrentAuth() auth: AuthWrapper
@@ -26,7 +31,8 @@ export default class ShopResolver {
   }
 
   @Mutation()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Update, ShopModel))
   async editShop(
     @Args('input') input: EditShopInput,
     @CurrentAuth() auth: AuthWrapper
