@@ -24,8 +24,10 @@ export default function ModalEditWarehouse({
     handleOk,
     handleCancel,
     onInputName,
+    onChangeActive,
     featureOptions,
     onChangeFeatures,
+    formData,
   } = useModalEditWarehouseHooks({ setVisible, initialData });
   return (
     <>
@@ -46,31 +48,28 @@ export default function ModalEditWarehouse({
               wrapperCol={{ span: 14 }}
             >
               <Form.Item label="Warehouse ID">
-                <Input
-                  placeholder={initialData.id}
-                  disabled
-                  value={initialData.id}
-                />
+                <Input placeholder={formData.id} disabled value={formData.id} />
               </Form.Item>
               <Form.Item label="Warehouse Name">
                 <Input
                   placeholder="input warehouse name"
                   onChange={onInputName}
-                  defaultValue={initialData.name}
+                  value={formData.name}
                 />
               </Form.Item>
               <Form.Item label="Features">
                 <Checkbox.Group
                   options={featureOptions}
                   onChange={onChangeFeatures}
-                  defaultValue={initialData.features}
+                  value={formData.features}
                 />
               </Form.Item>
               <Form.Item label="Status">
                 <Switch
                   checkedChildren={<CheckOutlined />}
                   unCheckedChildren={<CloseOutlined />}
-                  defaultChecked={initialData.active}
+                  checked={formData.active}
+                  onChange={onChangeActive}
                 />
               </Form.Item>
             </Form>

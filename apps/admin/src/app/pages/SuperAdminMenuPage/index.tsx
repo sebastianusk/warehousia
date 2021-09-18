@@ -15,7 +15,7 @@ export default function SuperAdminMenuPage(): ReactElement {
 
   return (
     <>
-      <Card className={styles.card}>
+      <Card className={styles.cardTitle}>
         <div className={`${styles.flexContainer}`}>
           <h2>WAREHOUSE LIST</h2>
           <div>
@@ -24,7 +24,7 @@ export default function SuperAdminMenuPage(): ReactElement {
               onClick={() => setShowModalAdd(true)}
             >
               <PlusOutlined />
-              Add New
+              Add New Warehouse
             </Button>
             <Input.Search
               placeholder="search by name"

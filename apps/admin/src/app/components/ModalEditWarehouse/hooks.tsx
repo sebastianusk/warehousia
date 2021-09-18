@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState, Dispatch, SetStateAction, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { EDIT_WAREHOUSE, GET_WAREHOUSES } from '../../graph';
 
@@ -13,6 +13,12 @@ interface ModalEditWarehouseState {
     value: string;
   }[];
   onChangeFeatures: (e: any) => void;
+  formData: {
+    id: string;
+    name: string;
+    active: boolean;
+    features: string[];
+  };
 }
 
 type ModalEditWarehouseProps = {
@@ -30,9 +36,21 @@ export default function useModalEditWarehouseHooks({
 }: ModalEditWarehouseProps): ModalEditWarehouseState {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [name, setName] = useState('');
-  const [active, setActive] = useState<Boolean>(initialData.active);
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
-  const [editWarehouse, payloadId] = useMutation(EDIT_WAREHOUSE);
+  const [active, setActive] = useState(false);
+  const [selectedFeatures, setSelectedFeatures] = useState(['']);
+  const [editWarehouse, payloadId] = useMutation(EDIT_WAREHOUSE, {
+    onCompleted(payload) {
+      setConfirmLoading(false);
+      setVisible(false);
+    },
+  });
+
+  useEffect(() => {
+    console.log(initialData, 'ini di useEffect hook modal edit');
+    setName(initialData.name);
+    setActive(initialData.active);
+    setSelectedFeatures(initialData.features);
+  }, [initialData]);
 
   const handleOk = () => {
     setConfirmLoading(true);
@@ -42,9 +60,21 @@ export default function useModalEditWarehouseHooks({
       features: selectedFeatures,
       active,
     };
+    console.log(formData);
     editWarehouse({
       variables: { input: formData },
-      refetchQueries: [{ query: GET_WAREHOUSES }],
+      refetchQueries: [
+        {
+          query: GET_WAREHOUSES,
+          variables: {
+            query: '',
+            pagination: {
+              offset: 0,
+              limit: 10,
+            },
+          },
+        },
+      ],
     });
   };
 
@@ -63,6 +93,13 @@ export default function useModalEditWarehouseHooks({
   };
 
   const onChangeActive = (e: any) => {
+    console.log(e, 'ini value switch');
+    console.log({
+      id: initialData.id,
+      name,
+      features: selectedFeatures,
+      active,
+    }, 'ini distate')
     setActive(e);
   };
 
@@ -78,5 +115,11 @@ export default function useModalEditWarehouseHooks({
     featureOptions,
     onChangeFeatures,
     onChangeActive,
+    formData: {
+      id: initialData.id,
+      name,
+      features: selectedFeatures,
+      active,
+    },
   };
 }

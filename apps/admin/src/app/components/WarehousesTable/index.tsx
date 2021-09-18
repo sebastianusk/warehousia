@@ -23,7 +23,6 @@ export default function WarehouseTable({
   const {
     handleEdit,
     handleDelete,
-    handleRowClick,
     showModalEdit,
     setShowModalEdit,
     dataToBeEdited,
@@ -36,15 +35,7 @@ export default function WarehouseTable({
         setVisible={setShowModalEdit}
         initialData={dataToBeEdited}
       />
-      <Table
-        size="middle"
-        dataSource={data}
-        onRow={(record, rowIndex) => ({
-          onClick: (e) => {
-            handleRowClick(e, rowIndex, record);
-          },
-        })}
-      >
+      <Table size="middle" dataSource={data}>
         <Column title="ID" dataIndex="id" key="id" />
         <Column title="Warehouse Name" dataIndex="name" key="name" />
         <Column
@@ -89,7 +80,7 @@ export default function WarehouseTable({
                 icon={<EditOutlined />}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleEdit(e);
+                  handleEdit(record);
                 }}
               >
                 Edit

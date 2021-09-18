@@ -2,5 +2,6 @@
   /* background-color: rgb(219, 219, 219); */
   border-radius: 10px;
   height: 125px;
-  box-shadow: 4px 4px 6px 0 rgba(49,53,59,0.12);
+  box-shadow: 0 1px 6px 0 rgba(49,53,59,0.12);
+  border: 1px solid rgba(49,53,59,0.12);
 }

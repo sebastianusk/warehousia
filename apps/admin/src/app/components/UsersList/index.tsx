@@ -20,15 +20,13 @@ export default function UsersList({ data }: UsersListProps): ReactElement {
   return (
     <Row gutter={16}>
       {data.map((user) => (
-        <Col span={8}>
+        <Col span={8} key={user.username}>
           <Card className={styles.cardUser}>
             <h4>{user.username}</h4>
             <h5>{user.role}</h5>
             <div>
               {user.warehouses.map((warehouse) => (
-                <Tag key={warehouse}>
-                  {warehouse}
-                </Tag>
+                <Tag key={warehouse}>{warehouse}</Tag>
               ))}
             </div>
           </Card>
