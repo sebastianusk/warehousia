@@ -22,7 +22,12 @@ export default function useModalAddWarehouseHooks(
   const [id, setId] = useState('');
   const [name, setName] = useState('');
   const [selectedFeatures, setSelectedFeatures] = useState([]);
-  const [addWarehouse, payloadId] = useMutation(ADD_WAREHOUSE);
+  const [addWarehouse, payloadId] = useMutation(ADD_WAREHOUSE, {
+    onCompleted(data) {
+      setConfirmLoading(false);
+      setVisible(false);
+    },
+  });
 
   const handleOk = () => {
     setConfirmLoading(true);
@@ -33,7 +38,18 @@ export default function useModalAddWarehouseHooks(
     };
     addWarehouse({
       variables: { input: formData },
-      refetchQueries: [{ query: GET_WAREHOUSES }],
+      refetchQueries: [
+        {
+          query: GET_WAREHOUSES,
+          variables: {
+            query: '',
+            pagination: {
+              offset: 0,
+              limit: 10,
+            },
+          },
+        },
+      ],
     });
   };
 

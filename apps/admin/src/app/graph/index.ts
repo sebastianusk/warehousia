@@ -66,6 +66,7 @@ export const GET_WAREHOUSES = gql`
   query Warehouses($query: String, $pagination: PaginationInput) {
     warehouses(query: $query, pagination: $pagination) {
       data {
+        id
         name
         active
         features
