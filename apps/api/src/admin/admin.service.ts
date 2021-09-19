@@ -123,9 +123,7 @@ export default class AdminService {
       active,
       password,
     })
-      .filter((entry) => {
-        return entry[1] !== undefined;
-      })
+      .filter((entry) => entry[1] !== undefined)
       .map((entry) => entry[0]);
 
     const result = await this.db.$transaction([
