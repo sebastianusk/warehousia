@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import { Prisma, warehouse } from '@prisma/client';
 import { adminlog, admin } from '.prisma/client';
 import { Admin, AdminLog, Role } from '../graphql';
 
@@ -22,17 +23,17 @@ export class AdminModel {
   constructor(
     public username: string,
     public role: RoleModel,
-    public warehouse: string[],
+    public warehouses: string[],
     public active: boolean,
     public createdAt: Date,
     public updatedAt: Date
   ) {}
 
-  static fromDB(data: admin): AdminModel {
+  static fromDB(data: AdminWithWarehouse): AdminModel {
     return new AdminModel(
       data.username,
       AdminModel.fromStringRole(data.role),
-      data.warehouses,
+      data.warehouses.map((item) => item.id),
       data.active,
       data.created_at,
       data.updated_at
@@ -53,7 +54,7 @@ export class AdminModel {
       active: this.active,
       updatedAt: this.updatedAt.toISOString(),
       createdAt: this.createdAt.toISOString(),
-      warehouses: this.warehouse,
+      warehouses: this.warehouses,
     };
   }
 }
@@ -77,3 +78,11 @@ export class AdminLogModel {
     return new AdminLogModel(data.action, data.created_at, data.remarks);
   }
 }
+
+const adminWithWarehouse = Prisma.validator<Prisma.adminArgs>()({
+  include: { warehouses: true },
+});
+
+export type AdminWithWarehouse = Prisma.adminGetPayload<
+  typeof adminWithWarehouse
+>;

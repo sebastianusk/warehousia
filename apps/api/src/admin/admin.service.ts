@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { Prisma } from '@prisma/client';
 import DBService from '../db/db.service';
 import { CreateUserError } from '../common/errors';
 import { AdminLogModel, AdminModel, RoleModel } from './admin.dto';
@@ -13,7 +14,7 @@ export default class AdminService {
   async addAdmin(
     username: string,
     password: string,
-    warehouse: string[],
+    warehouses: string[],
     role: string
   ): Promise<string> {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -22,7 +23,11 @@ export default class AdminService {
         data: {
           username,
           password: hashedPassword,
-          warehouses: warehouse,
+          warehouses: {
+            connect: warehouses.map((item) => ({
+              id: item,
+            })),
+          },
           role,
         },
       });
@@ -33,7 +38,10 @@ export default class AdminService {
   }
 
   async validateUser(username: string, password: string): Promise<AdminModel> {
-    const user = await this.db.admin.findFirst({ where: { username } });
+    const user = await this.db.admin.findFirst({
+      where: { username },
+      include: { warehouses: true },
+    });
     if (!user) return null;
     const result = await bcrypt.compare(password, user.password);
     if (result) {
@@ -43,7 +51,10 @@ export default class AdminService {
   }
 
   async findOne(username: string): Promise<AdminModel> {
-    const data = await this.db.admin.findFirst({ where: { username } });
+    const data = await this.db.admin.findFirst({
+      where: { username },
+      include: { warehouses: true },
+    });
     const model = AdminModel.fromDB(data);
     return model;
   }
@@ -60,6 +71,9 @@ export default class AdminService {
         username: {
           startsWith: query,
         },
+      },
+      include: {
+        warehouses: true,
       },
     });
     return data.map((item) => AdminModel.fromDB(item));
@@ -133,7 +147,13 @@ export default class AdminService {
         },
         data: {
           role,
-          warehouses,
+          warehouses: warehouses
+            ? {
+                set: warehouses.map((item) => ({
+                  id: item,
+                })),
+              }
+            : undefined,
           active,
           password: hashedPassword,
         },

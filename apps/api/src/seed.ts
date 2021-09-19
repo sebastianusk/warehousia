@@ -34,8 +34,6 @@ async function createShop(id: string, name: string) {
 
 async function seed() {
   await createUser('bubur', 'bubur123', undefined, 'SUPER_ADMIN');
-  await createUser('ferdian', 'ferdian123', ['tangerang'], 'ADMIN');
-  await createUser('sebo', 'sebo123', ['serpong'], 'ADMIN');
   await createWarehouse('tangerang', 'Konter Tangerang', [
     Feature.INBOUND,
     Feature.OUTBOUND,
@@ -45,6 +43,8 @@ async function seed() {
     Feature.INBOUND,
     Feature.OUTBOUND,
   ]);
+  await createUser('ferdian', 'ferdian123', ['tangerang'], 'ADMIN');
+  await createUser('sebo', 'sebo123', ['serpong', 'tangerang'], 'ADMIN');
   await createShop('tokopedia', 'Tokopedia utama');
   await createShop('shopee1', 'Shopee Tas');
   await createShop('shopee2', 'Shopee Gelang');

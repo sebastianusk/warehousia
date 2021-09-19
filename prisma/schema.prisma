@@ -11,23 +11,23 @@ generator client {
 }
 
 model admin {
-  username   String     @id
+  username   String      @id
   password   String
   role       String
-  warehouses String[]
-  active     Boolean    @default(true)
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
+  warehouses warehouse[] @relation("admin_access")
+  active     Boolean     @default(true)
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
   logs       adminlog[]
 }
 
 model adminlog {
   id            String   @id @default(uuid())
+  username      String
   adminUsername admin    @relation(fields: [username], references: [username])
   created_at    DateTime @default(now())
   action        String
   remarks       Json?
-  username      String
 }
 
 model warehouse {
@@ -37,6 +37,7 @@ model warehouse {
   features   String[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  admin      admin[]  @relation("admin_access")
 }
 
 model shop {
