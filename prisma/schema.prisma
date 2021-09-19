@@ -16,31 +16,31 @@ model admin {
   role       String
   warehouses String[]
   active     Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model adminlog {
-  id        String   @id @default(uuid())
-  username  String
-  createdAt DateTime @unique @default(now())
-  action    String
-  remarks   Json?
+  id         String   @id @default(uuid())
+  username   String
+  created_at DateTime @unique @default(now())
+  action     String
+  remarks    Json?
 }
 
 model warehouse {
-  id        String   @id
-  name      String
-  active    Boolean  @default(true)
-  features  String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id
+  name       String
+  active     Boolean  @default(true)
+  features   String[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model shop {
-  id        String   @id
-  name      String
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id
+  name       String
+  active     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }

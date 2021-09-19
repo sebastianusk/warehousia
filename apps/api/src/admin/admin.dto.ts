@@ -34,8 +34,8 @@ export class AdminModel {
       AdminModel.fromStringRole(data.role),
       data.warehouses,
       data.active,
-      data.createdAt,
-      data.updatedAt
+      data.created_at,
+      data.updated_at
     );
   }
 
@@ -74,6 +74,6 @@ export class AdminLogModel {
   }
 
   static fromDB(data: adminlog): AdminLogModel {
-    return new AdminLogModel(data.action, data.createdAt, data.remarks);
+    return new AdminLogModel(data.action, data.created_at, data.remarks);
   }
 }

@@ -15,8 +15,8 @@ export default class ShopModel {
       data.id,
       data.name,
       data.active,
-      data.createdAt,
-      data.updatedAt
+      data.created_at,
+      data.updated_at
     );
   }
 

@@ -23,8 +23,8 @@ export default class WarehouseModel {
       data.name,
       data.active,
       data.features.map((item) => WarehouseModel.fromFeatureString(item)),
-      data.createdAt,
-      data.updatedAt
+      data.created_at,
+      data.updated_at
     );
   }
 

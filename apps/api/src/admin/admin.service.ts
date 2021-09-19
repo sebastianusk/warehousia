@@ -94,13 +94,13 @@ export default class AdminService {
         username: {
           equals: username,
         },
-        createdAt: {
+        created_at: {
           gte: startDate,
           lt: endDate,
         },
       },
       orderBy: {
-        createdAt: 'desc',
+        created_at: 'desc',
       },
     });
     return data.map((item) => AdminLogModel.fromDB(item));
