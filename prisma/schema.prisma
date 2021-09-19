@@ -11,36 +11,36 @@ generator client {
 }
 
 model admin {
-  username String @id
-  password String
-  role String
+  username   String   @id
+  password   String
+  role       String
   warehouses String[]
-  active Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model adminlog {
-  id String @id @default(uuid())
-  username String
-  createdAt DateTime @default(now()) @unique
-  action String
-  remarks Json?
+  id        String   @id @default(uuid())
+  username  String
+  createdAt DateTime @unique @default(now())
+  action    String
+  remarks   Json?
 }
 
 model warehouse {
-  id String @id
-  name String
-  active Boolean @default(true)
-  features String[]
+  id        String   @id
+  name      String
+  active    Boolean  @default(true)
+  features  String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model shop {
-  id String @id
-  name String
-  active Boolean @default(true)
+  id        String   @id
+  name      String
+  active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
