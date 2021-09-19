@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import { Button, Card } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import UsersList from '../UsersList';
+import ModalAddUser from '../ModalAddUser';
 import styles from './index.module.css';
 import useUsersManagerHooks from './hooks';
 
@@ -26,7 +27,7 @@ export default function UsersManager(): ReactElement {
         </div>
       </Card>
       <Card className={styles.card}>{data && <UsersList data={data} />}</Card>
-      {/* <ModalAddUser visible={showModalAdd} setVisible={setShowModalAdd} /> */}
+      <ModalAddUser visible={showModalAdd} setVisible={setShowModalAdd} />
     </>
   );
 }

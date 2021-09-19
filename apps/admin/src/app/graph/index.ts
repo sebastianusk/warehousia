@@ -9,14 +9,6 @@ export const POST_LOGIN = gql`
   }
 `;
 
-export const ADD_ADMIN = gql`
-  mutation AddAdmin($input: AddAdminInput) {
-    addAdmin(input: $input) {
-      username
-    }
-  }
-`;
-
 export const GET_ME = gql`
   query Me {
     me {
@@ -38,6 +30,14 @@ export const GET_ADMINS = gql`
         warehouses
         active
       }
+    }
+  }
+`;
+
+export const ADD_ADMIN = gql`
+  mutation AddAdmin($input: AddAdminInput) {
+    addAdmin(input: $input) {
+      username
     }
   }
 `;

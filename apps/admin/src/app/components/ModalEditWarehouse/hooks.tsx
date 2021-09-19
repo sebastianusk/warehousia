@@ -93,13 +93,6 @@ export default function useModalEditWarehouseHooks({
   };
 
   const onChangeActive = (e: any) => {
-    console.log(e, 'ini value switch');
-    console.log({
-      id: initialData.id,
-      name,
-      features: selectedFeatures,
-      active,
-    }, 'ini distate')
     setActive(e);
   };
 
