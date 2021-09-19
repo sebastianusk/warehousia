@@ -1,4 +1,4 @@
-name: GitHub Actions Warehousia
+name: GitHub Actions Admin Warehousia
 on: [push]
 env:
   REGISTRY: ghcr.io
