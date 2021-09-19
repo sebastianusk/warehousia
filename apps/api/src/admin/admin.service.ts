@@ -23,16 +23,19 @@ export default class AdminService {
         data: {
           username,
           password: hashedPassword,
-          warehouses: {
-            connect: warehouses.map((item) => ({
-              id: item,
-            })),
-          },
+          warehouses: warehouses
+            ? {
+                connect: warehouses.map((item) => ({
+                  id: item,
+                })),
+              }
+            : undefined,
           role,
         },
       });
       return data.username;
     } catch (error) {
+      console.log(error);
       throw new CreateUserError();
     }
   }
