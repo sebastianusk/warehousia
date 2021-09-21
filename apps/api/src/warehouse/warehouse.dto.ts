@@ -1,4 +1,5 @@
 import { warehouse } from '.prisma/client';
+import { EnumNotValid } from '../common/errors';
 import { Warehouse } from '../graphql';
 
 export enum Feature {
@@ -48,7 +49,7 @@ export default class WarehouseModel {
       case 'TRANSFER':
         return Feature.TRANSFER;
       default:
-        return undefined;
+        throw new EnumNotValid('feature', feature);
     }
   }
 }

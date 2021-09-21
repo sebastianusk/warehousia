@@ -18,7 +18,9 @@ export default class WarehouseService {
         data: {
           id,
           name,
-          features: features.map((item) => item.toString()),
+          features: features
+            .filter((item) => item)
+            .map((item) => item.toString()),
         },
       }),
       auth.log(this.db, 'createWarehouse', { id }),

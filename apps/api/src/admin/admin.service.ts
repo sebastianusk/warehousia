@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { Prisma } from '@prisma/client';
-import DBService from '../db/db.service';
-import { CreateUserError } from '../common/errors';
+import DBService, * as dbService from '../db/db.service';
+import { ObjectAlreadyExist, ObjectNotFound } from '../common/errors';
 import { AdminLogModel, AdminModel, RoleModel } from './admin.dto';
 
 const saltRounds = 10;
@@ -35,8 +34,21 @@ export default class AdminService {
       });
       return data.username;
     } catch (error) {
-      console.log(error);
-      throw new CreateUserError();
+      DBService.handleError(error, [
+        {
+          code: dbService.DBError.UNIQUE_CONSTRAINT,
+          func: () => {
+            throw new ObjectAlreadyExist(username);
+          },
+        },
+        {
+          code: dbService.DBError.DEPENDENT_NOT_FOUND,
+          func: () => {
+            throw new ObjectNotFound('warehouses');
+          },
+        },
+      ]);
+      throw error;
     }
   }
 
@@ -64,8 +76,8 @@ export default class AdminService {
 
   async getList(
     query: string,
-    limit: number,
-    offset: number
+    limit: number = 10,
+    offset: number = 0
   ): Promise<AdminModel[]> {
     const data = await this.db.admin.findMany({
       skip: offset * limit,
@@ -143,34 +155,46 @@ export default class AdminService {
       .filter((entry) => entry[1] !== undefined)
       .map((entry) => entry[0]);
 
-    const result = await this.db.$transaction([
-      this.db.admin.update({
-        where: {
-          username,
-        },
-        data: {
-          role,
-          warehouses: warehouses
-            ? {
-                set: warehouses.map((item) => ({
-                  id: item,
-                })),
-              }
-            : undefined,
-          active,
-          password: hashedPassword,
-        },
-      }),
-      this.db.adminlog.create({
-        data: {
-          username,
-          action: 'updateUser',
-          remarks: {
-            changedFields,
+    try {
+      const result = await this.db.$transaction([
+        this.db.admin.update({
+          where: {
+            username,
+          },
+          data: {
+            role,
+            warehouses: warehouses
+              ? {
+                  set: warehouses.map((item) => ({
+                    id: item,
+                  })),
+                }
+              : undefined,
+            active,
+            password: hashedPassword,
+          },
+        }),
+        this.db.adminlog.create({
+          data: {
+            username,
+            action: 'updateUser',
+            remarks: {
+              changedFields,
+            },
+          },
+        }),
+      ]);
+      return result[0].username;
+    } catch (err) {
+      DBService.handleError(err, [
+        {
+          code: dbService.DBError.DEPENDENT_NOT_FOUND,
+          func: () => {
+            throw new ObjectNotFound('username or warehouse');
           },
         },
-      }),
-    ]);
-    return result[0].username;
+      ]);
+      throw err;
+    }
   }
 }

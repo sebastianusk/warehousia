@@ -140,7 +140,7 @@ export abstract class IQuery {
 }
 
 export abstract class IMutation {
-    abstract login(username?: Nullable<string>, password?: Nullable<string>): Nullable<SessionPayload> | Promise<Nullable<SessionPayload>>;
+    abstract login(username: string, password: string): Nullable<SessionPayload> | Promise<Nullable<SessionPayload>>;
 
     abstract addAdmin(input?: Nullable<AddAdminInput>): Nullable<AdminPayload> | Promise<Nullable<AdminPayload>>;
 

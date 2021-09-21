@@ -58,8 +58,8 @@ export default class AdminResolver {
   ): Promise<AdminList> {
     const list = await this.adminService.getList(
       query,
-      pagination.limit,
-      pagination.offset
+      pagination?.limit,
+      pagination?.offset
     );
     return {
       data: list.map((item) => item.toResponse()),

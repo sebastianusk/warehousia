@@ -16,7 +16,7 @@ type Query {
 
 # Mutation
 type Mutation {
-  login(username: String, password: String): SessionPayload
+  login(username: String!, password: String!): SessionPayload
   addAdmin(input: AddAdminInput): AdminPayload
   editAdmin(input: EditAdminInput): AdminPayload
   changeMyPassword(input: ChangeMyPasswordInput): AdminPayload

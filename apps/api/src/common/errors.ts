@@ -7,8 +7,20 @@ export class LoginError extends AuthenticationError {
   }
 }
 
-export class CreateUserError extends UserInputError {
-  constructor() {
-    super('user already exists');
+export class EnumNotValid extends UserInputError {
+  constructor(field: string, got: string) {
+    super(`enum ${field} don't have value ${got}`);
+  }
+}
+
+export class ObjectAlreadyExist extends UserInputError {
+  constructor(got: string) {
+    super(`${got} already exists`);
+  }
+}
+
+export class ObjectNotFound extends UserInputError {
+  constructor(field: string) {
+    super(`one of ${field} not exist`);
   }
 }
