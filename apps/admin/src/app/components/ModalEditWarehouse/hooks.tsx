@@ -46,7 +46,6 @@ export default function useModalEditWarehouseHooks({
   });
 
   useEffect(() => {
-    console.log(initialData, 'ini di useEffect hook modal edit');
     setName(initialData.name);
     setActive(initialData.active);
     setSelectedFeatures(initialData.features);
@@ -60,7 +59,6 @@ export default function useModalEditWarehouseHooks({
       features: selectedFeatures,
       active,
     };
-    console.log(formData);
     editWarehouse({
       variables: { input: formData },
       refetchQueries: [

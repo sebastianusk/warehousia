@@ -43,7 +43,7 @@ export const ADD_ADMIN = gql`
 `;
 
 export const EDIT_ADMIN = gql`
-  mutation editAdmin($input: AddAdminInput) {
+  mutation editAdmin($input: EditAdminInput) {
     editAdmin(input: $input) {
       username
     }
