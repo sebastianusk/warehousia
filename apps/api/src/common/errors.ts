@@ -24,3 +24,9 @@ export class ObjectNotFound extends UserInputError {
     super(`one of ${field} not exist`);
   }
 }
+
+export class FieldEmpty extends UserInputError {
+  constructor(field: string) {
+    super(`${field} cannot be empty`);
+  }
+}

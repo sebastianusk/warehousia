@@ -2,7 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
 import AuthWrapper from '../auth/auth.wrapper';
-import { LoginError } from '../common/errors';
+import { FieldEmpty, LoginError } from '../common/errors';
 import {
   AddAdminInput,
   Admin,
@@ -109,6 +109,9 @@ export default class AdminResolver {
     );
     if (!userData) {
       throw new LoginError();
+    }
+    if (!input.newPassword) {
+      throw new FieldEmpty('newPassword');
     }
     const username = await this.adminService.editAdmin(
       user.username,
