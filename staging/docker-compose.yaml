@@ -17,6 +17,8 @@ services:
     restart: always
     ports:
       - "8080:80"
+    depends_on:
+      - "api"
   api:
     image: ghcr.io/sebastianusk/warehousia-api:latest
     restart: always
@@ -24,6 +26,8 @@ services:
       DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
     ports:
       - "3333:3333"
+    depends_on:
+      - "postgres"
   postgres:
     image: postgres
     restart: always
