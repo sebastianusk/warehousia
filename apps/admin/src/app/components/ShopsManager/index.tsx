@@ -1,14 +1,14 @@
 import React, { ReactElement } from 'react';
 import { Button, Card } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import UsersList from '../UsersList';
-import ModalAddUser from '../ModalAddUser';
+import ShopsList from '../ShopsList';
+import ModalAddShop from '../ModalAddShop';
 import styles from './index.module.css';
-import useUsersManagerHooks from './hooks';
+import useShopsManagerHooks from './hooks';
 
-export default function UsersManager(): ReactElement {
+export default function ShopsManager(): ReactElement {
   const { showModalAdd, setShowModalAdd, loading, error, data } =
-    useUsersManagerHooks();
+    useShopsManagerHooks();
 
   if (loading) return <p>Loading,,,</p>;
   if (error) console.log(error);
@@ -17,20 +17,20 @@ export default function UsersManager(): ReactElement {
     <>
       <Card className={styles.container}>
         <div className={`${styles.flexContainer}`}>
-          <h2>USER LIST</h2>
+          <h2>SHOP LIST</h2>
           <div>
             <Button
               className={styles.buttonAddOne}
               onClick={() => setShowModalAdd(true)}
             >
               <PlusOutlined />
-              Add New User
+              Add New Shop
             </Button>
           </div>
         </div>
       </Card>
-      <Card className={styles.card}>{data && <UsersList data={data} />}</Card>
-      <ModalAddUser visible={showModalAdd} setVisible={setShowModalAdd} />
+      <Card className={styles.card}>{data && <ShopsList data={data} />}</Card>
+      <ModalAddShop visible={showModalAdd} setVisible={setShowModalAdd} />
     </>
   );
 }

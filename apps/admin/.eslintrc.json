@@ -19,6 +19,7 @@
     "project": ["apps/admin/tsconfig.*?.json"]
   },
   "rules": {
-    "object-curly-newline": "off"
+    "object-curly-newline": "off",
+    "no-console":"off"
   }
 }

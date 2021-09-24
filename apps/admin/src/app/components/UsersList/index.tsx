@@ -45,7 +45,7 @@ export default function UsersList({ data }: UsersListProps): ReactElement {
               <h5>{user.role}</h5>
               <div>
                 {user.warehouses.map((warehouse) => (
-                  <Tag key={warehouse}>{warehouse}</Tag>
+                  <Tag key={warehouse} className={styles.tag}>{warehouse}</Tag>
                 ))}
               </div>
             </Card>

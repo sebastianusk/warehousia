@@ -1,6 +1,7 @@
 import { useState, Dispatch, SetStateAction, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { EDIT_ADMIN, GET_ADMINS, GET_WAREHOUSES } from '../../graph';
+
 type UserData = {
   username: string;
   role: 'ADMIN' | 'SUPER_ADMIN';
@@ -67,8 +68,8 @@ export default function useModalEditUserHooks(
     },
   });
 
-  const [editAdmin, editedUsername] = useMutation(EDIT_ADMIN, {
-    onCompleted(data) {
+  const [editAdmin] = useMutation(EDIT_ADMIN, {
+    onCompleted() {
       setConfirmLoading(false);
       setVisible(false);
     },
@@ -100,10 +101,6 @@ export default function useModalEditUserHooks(
   const onChangeUsername = (e: any) => {
     setFormData({ ...formData, username: e.target.value });
   };
-
-  // const onChangePassword = (e: any) => {
-  //   setFormData({ ...formData, password: e.target.value });
-  // };
 
   const onChangeRole = (e: any) => {
     setFormData({ ...formData, role: e.target.value });

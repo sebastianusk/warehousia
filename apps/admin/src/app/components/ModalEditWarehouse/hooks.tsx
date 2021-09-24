@@ -38,8 +38,8 @@ export default function useModalEditWarehouseHooks({
   const [name, setName] = useState('');
   const [active, setActive] = useState(false);
   const [selectedFeatures, setSelectedFeatures] = useState(['']);
-  const [editWarehouse, payloadId] = useMutation(EDIT_WAREHOUSE, {
-    onCompleted(payload) {
+  const [editWarehouse] = useMutation(EDIT_WAREHOUSE, {
+    onCompleted() {
       setConfirmLoading(false);
       setVisible(false);
     },

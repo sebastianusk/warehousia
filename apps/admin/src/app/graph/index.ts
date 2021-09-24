@@ -2,7 +2,7 @@
 import { gql } from '@apollo/client';
 
 export const POST_LOGIN = gql`
-  mutation Login($username: String!, $password: String!) {
+  mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
       session
     }
@@ -10,7 +10,7 @@ export const POST_LOGIN = gql`
 `;
 
 export const GET_ME = gql`
-  query Me {
+  query me {
     me {
       username
       role
@@ -22,7 +22,7 @@ export const GET_ME = gql`
 `;
 
 export const GET_ADMINS = gql`
-  query Admins($query: String, $pagination: PaginationInput) {
+  query admins($query: String, $pagination: PaginationInput) {
     admins(query: $query, pagination: $pagination) {
       data {
         username
@@ -35,7 +35,7 @@ export const GET_ADMINS = gql`
 `;
 
 export const ADD_ADMIN = gql`
-  mutation AddAdmin($input: AddAdminInput) {
+  mutation addAdmin($input: AddAdminInput) {
     addAdmin(input: $input) {
       username
     }
@@ -51,7 +51,7 @@ export const EDIT_ADMIN = gql`
 `;
 
 export const GET_ADMIN_LOG = gql`
-  query AdminLog($username: String, $pagination: PaginationInput) {
+  query adminLog($username: String, $pagination: PaginationInput) {
     adminLogs(username: $username, pagination: $pagination) {
       data {
         action
@@ -63,7 +63,7 @@ export const GET_ADMIN_LOG = gql`
 `;
 
 export const GET_WAREHOUSES = gql`
-  query Warehouses($query: String, $pagination: PaginationInput) {
+  query warehouses($query: String, $pagination: PaginationInput) {
     warehouses(query: $query, pagination: $pagination) {
       data {
         id
@@ -88,6 +88,34 @@ export const ADD_WAREHOUSE = gql`
 export const EDIT_WAREHOUSE = gql`
   mutation editWarehouse($input: EditWarehouseInput) {
     editWarehouse(input: $input) {
+      id
+    }
+  }
+`;
+
+export const GET_SHOPS = gql`
+  query shops($query: String, $pagination: PaginationInput) {
+    shops(query: $query, pagination: $pagination) {
+      data {
+        id
+        name
+        active
+      }
+    }
+  }
+`;
+
+export const ADD_SHOP = gql`
+  mutation addShop($input: AddShopInput) {
+    addShop(input: $input) {
+      id
+    }
+  }
+`;
+
+export const EDIT_SHOP = gql`
+  mutation editShop($input: EditShopInput) {
+    editShop(input: $input) {
       id
     }
   }

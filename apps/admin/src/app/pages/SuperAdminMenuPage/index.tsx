@@ -6,12 +6,14 @@ import ModalAddWarehouse from '../../components/ModalAddWarehouse';
 import useSuperAdminMenuHooks from './hooks';
 import WarehouseTable from '../../components/WarehousesTable';
 import UsersManager from '../../components/UsersManager';
+import ShopsManager from '../../components/ShopsManager';
 
 export default function SuperAdminMenuPage(): ReactElement {
   const { showModalAdd, setShowModalAdd, loading, error, data, onSearch } =
     useSuperAdminMenuHooks();
 
   if (loading) return <p>Loading...</p>;
+  if (error) console.log(error);
 
   return (
     <>
@@ -39,6 +41,7 @@ export default function SuperAdminMenuPage(): ReactElement {
       </Card>
       <ModalAddWarehouse visible={showModalAdd} setVisible={setShowModalAdd} />
       <UsersManager />
+      <ShopsManager />
     </>
   );
 }

@@ -1,4 +1,4 @@
-.cardUser {
+.cardShop {
   border-radius: 10px;
   min-height: 125px;
   box-shadow: 0 1px 6px 0 rgba(49,53,59,0.12);
@@ -18,7 +18,4 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-}
-.tag {
-  margin-bottom: 5px;
 }
