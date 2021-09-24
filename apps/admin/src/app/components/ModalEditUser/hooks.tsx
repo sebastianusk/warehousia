@@ -3,7 +3,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { EDIT_ADMIN, GET_ADMINS, GET_WAREHOUSES } from '../../graph';
 type UserData = {
   username: string;
-  password?: string;
   role: 'ADMIN' | 'SUPER_ADMIN';
   warehouses: string[];
   active: boolean;
@@ -15,7 +14,6 @@ interface ModalEditUserState {
   handleCancel: () => void;
   formData: UserData;
   onChangeUsername: (e: any) => void;
-  onChangePassword: (e: any) => void;
   onChangeRole: (e: any) => void;
   onChangeWarehouses: (e: any) => void;
   loadingDataWarehouses: boolean;
@@ -103,9 +101,9 @@ export default function useModalEditUserHooks(
     setFormData({ ...formData, username: e.target.value });
   };
 
-  const onChangePassword = (e: any) => {
-    setFormData({ ...formData, password: e.target.value });
-  };
+  // const onChangePassword = (e: any) => {
+  //   setFormData({ ...formData, password: e.target.value });
+  // };
 
   const onChangeRole = (e: any) => {
     setFormData({ ...formData, role: e.target.value });
@@ -121,7 +119,6 @@ export default function useModalEditUserHooks(
     handleCancel,
     formData,
     onChangeUsername,
-    onChangePassword,
     onChangeRole,
     onChangeWarehouses,
     loadingDataWarehouses,

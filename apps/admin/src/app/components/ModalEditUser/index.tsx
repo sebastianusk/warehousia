@@ -7,7 +7,6 @@ type ModalProps = {
   setVisible: Dispatch<SetStateAction<boolean>>;
   userData: {
     username: string;
-    password?: string;
     role: 'ADMIN' | 'SUPER_ADMIN';
     warehouses: string[];
     active: boolean;
@@ -25,7 +24,6 @@ export default function ModalEditUser({
     handleCancel,
     formData,
     onChangeUsername,
-    onChangePassword,
     onChangeRole,
     onChangeWarehouses,
     loadingDataWarehouses,
@@ -54,13 +52,6 @@ export default function ModalEditUser({
                   placeholder="input username"
                   value={formData.username}
                   onChange={onChangeUsername}
-                />
-              </Form.Item>
-              <Form.Item label="Password for the user">
-                <Input
-                  placeholder="input password"
-                  value={formData.password}
-                  onChange={onChangePassword}
                 />
               </Form.Item>
               <Form.Item label="Role">

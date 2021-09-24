@@ -25,7 +25,12 @@ export default function useUsersListHook(): UsersListState {
   const [showModalEdit, setShowModalEdit] = useState(false);
 
   const onClickEdit = (props: UserData) => {
-    setDataToEdit(props);
+    setDataToEdit({
+      username: props.username,
+      role: props.role,
+      warehouses: props.warehouses,
+      active: props.active,
+    });
     setShowModalEdit(true);
   };
 

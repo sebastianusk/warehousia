@@ -1,5 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Card, Col, Row, Tag } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
+
 import useUserListHook from './hooks';
 import styles from './index.module.css';
 import ModalEditUser from '../ModalEditUser';
@@ -28,7 +30,16 @@ export default function UsersList({ data }: UsersListProps): ReactElement {
       />
       <Row gutter={16}>
         {data.map((user) => (
-          <Col span={8} key={user.username} onClick={() => onClickEdit(user)}>
+          <Col span={8} key={user.username}>
+            <div
+              onClick={() => onClickEdit(user)}
+              onKeyUp={() => onClickEdit(user)}
+              role="button"
+              tabIndex={0}
+              className={styles.editButton}
+            >
+              <EditOutlined style={{ color: '#000' }}/>
+            </div>
             <Card className={styles.cardUser}>
               <h4>{user.username}</h4>
               <h5>{user.role}</h5>
