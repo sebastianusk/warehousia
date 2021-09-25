@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
 import DBService from '../db/db.service';
+import { ProductLogModel } from './product.dto';
 
 @Injectable()
 export default class ProductService {
@@ -42,8 +43,8 @@ export default class ProductService {
   ): Promise<string> {
     const log = {
       amount,
-      admin: auth.username,
-      type: 'adminUpdate',
+      created_by: auth.username,
+      action: 'adminUpdate',
       remarks: {
         notes: 'super admin edit',
       },
@@ -70,6 +71,25 @@ export default class ProductService {
       }),
       auth.log(this.db, 'editStock', { id, warehouse, amount }),
     ]);
-    return result[0].id;
+    return result[0].product_id;
+  }
+
+  async getProductLog(
+    id: string,
+    limit: number,
+    offset: number
+  ): Promise<ProductLogModel[]> {
+    const data = await this.db.stocklog.findMany({
+      skip: offset * limit,
+      take: limit,
+      where: { stock: { product_id: id } },
+      orderBy: {
+        created_at: 'desc',
+      },
+      include: {
+        stock: true,
+      },
+    });
+    return data.map((item) => ProductLogModel.fromDB(item));
   }
 }

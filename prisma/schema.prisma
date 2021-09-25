@@ -72,11 +72,11 @@ model stock {
 
 model stocklog {
   id         String   @id @default(uuid())
-  admin      String
+  action     String
   amount     Int
   stock      stock    @relation(fields: [stock_id], references: [id])
   stock_id   String
   created_at DateTime @default(now())
-  type       String
+  created_by String
   remarks    Json?
 }

@@ -5,6 +5,7 @@ type Query {
   warehouses(query: String, pagination: PaginationInput): WarehouseList
   shops(query: String, pagination: PaginationInput): ShopList
   products(warehouseId: String!, query: String, pagination: PaginationInput): ProductList
+  productLog(productId: String, pagination: PaginationInput): ProductLogList
   outbounds(warehouseId: String!, shopId: String!, pagination: PaginationInput): Outbound
   demands(warehouseId: String, shopId: String, pagination: PaginationInput): DemandList
   preparations(preparationId: String): Preparation
@@ -128,7 +129,6 @@ type Product {
   stock: Stock!
   createdAt: String!
   updatedAt: String!
-  log: [ProductLog]
 }
 
 type Stock {
@@ -137,6 +137,21 @@ type Stock {
   all:Int!
   topWarehouse: Warehouse!
   topAmount: Int!
+  updatedAt: String!
+}
+
+type ProductLogList {
+  data: [ProductLog]
+}
+
+type ProductLog {
+  id: String!
+  warehouse: String!
+  amount: Int!
+  createdAt: String!
+  createdBy: String!
+  action: String!
+  remarks: String
 }
 
 input ProductInput {
@@ -160,16 +175,6 @@ input ProductAmountInput {
   productId: String
   amount: Int!
 }
-
-type ProductLog {
-  id: String!
-  action: String!
-  amount: Int!
-  after: Int!
-  createdBy: Admin!
-  createdAt: String!
-}
-
 
 # Shop Object
 type ShopList {

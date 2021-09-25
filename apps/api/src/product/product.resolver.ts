@@ -1,11 +1,13 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
 import AuthWrapper from '../auth/auth.wrapper';
 import {
   CountPayload,
   IdPayload,
+  PaginationInput,
   ProductInput,
+  ProductLogList,
   StockProductInput,
 } from '../graphql';
 import ProductService from './product.service';
@@ -13,6 +15,22 @@ import ProductService from './product.service';
 @Resolver('Products')
 export default class ProductResolver {
   constructor(private productService: ProductService) {}
+
+  @Query()
+  @UseGuards(JwtAuthGuard)
+  async productLog(
+    @Args('productId') productId: string,
+    @Args('pagination') pagination: PaginationInput
+  ): Promise<ProductLogList> {
+    const data = await this.productService.getProductLog(
+      productId,
+      pagination.limit,
+      pagination.offset
+    );
+    return {
+      data: data.map((item) => item.toResponse()),
+    };
+  }
 
   @Mutation()
   @UseGuards(JwtAuthGuard)

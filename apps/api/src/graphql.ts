@@ -126,6 +126,8 @@ export abstract class IQuery {
 
     abstract products(warehouseId: string, query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<ProductList> | Promise<Nullable<ProductList>>;
 
+    abstract productLog(productId?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<ProductLogList> | Promise<Nullable<ProductLogList>>;
+
     abstract outbounds(warehouseId: string, shopId: string, pagination?: Nullable<PaginationInput>): Nullable<Outbound> | Promise<Nullable<Outbound>>;
 
     abstract demands(warehouseId?: Nullable<string>, shopId?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<DemandList> | Promise<Nullable<DemandList>>;
@@ -224,7 +226,6 @@ export class Product {
     stock: Stock;
     createdAt: string;
     updatedAt: string;
-    log?: Nullable<Nullable<ProductLog>[]>;
 }
 
 export class Stock {
@@ -233,21 +234,27 @@ export class Stock {
     all: number;
     topWarehouse: Warehouse;
     topAmount: number;
+    updatedAt: string;
+}
+
+export class ProductLogList {
+    data?: Nullable<Nullable<ProductLog>[]>;
+}
+
+export class ProductLog {
+    id: string;
+    warehouse: string;
+    amount: number;
+    createdAt: string;
+    createdBy: string;
+    action: string;
+    remarks?: Nullable<string>;
 }
 
 export class ProductAmount {
     id: string;
     product: Product;
     amount: number;
-}
-
-export class ProductLog {
-    id: string;
-    action: string;
-    amount: number;
-    after: number;
-    createdBy: Admin;
-    createdAt: string;
 }
 
 export class ShopList {
