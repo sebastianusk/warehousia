@@ -2,7 +2,12 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
 import AuthWrapper from '../auth/auth.wrapper';
-import { CountPayload, IdPayload, ProductInput } from '../graphql';
+import {
+  CountPayload,
+  IdPayload,
+  ProductInput,
+  StockProductInput,
+} from '../graphql';
 import ProductService from './product.service';
 
 @Resolver('Products')
@@ -31,5 +36,20 @@ export default class ProductResolver {
       input.name
     );
     return { id };
+  }
+
+  @Mutation()
+  @UseGuards(JwtAuthGuard)
+  async editProductStock(
+    @Args('input') input: StockProductInput,
+    @CurrentAuth() auth: AuthWrapper
+  ): Promise<string> {
+    const id = await this.productService.editStockProduct(
+      auth,
+      input.id,
+      input.warehouse,
+      input.stock
+    );
+    return id;
   }
 }

@@ -77,5 +77,6 @@ model stocklog {
   stock      stock    @relation(fields: [stock_id], references: [id])
   stock_id   String
   created_at DateTime @default(now())
+  type       String
   remarks    Json?
 }
