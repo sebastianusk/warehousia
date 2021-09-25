@@ -5,6 +5,7 @@ import { join } from 'path';
 import AdminModule from '../admin/admin.module';
 import AuthModule from '../auth/auth.module';
 import DBModule from '../db/db.module';
+import ProductModule from '../product/product.module';
 import ShopModule from '../shop/shop.module';
 import WarehouseModule from '../warehouse/warehouse.module';
 
@@ -15,6 +16,7 @@ import WarehouseModule from '../warehouse/warehouse.module';
     AdminModule,
     WarehouseModule,
     ShopModule,
+    ProductModule,
     GraphQLModule.forRoot({
       typePaths: ['./design/spec.graphql'],
       definitions: {

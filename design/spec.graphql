@@ -27,7 +27,7 @@ type Mutation {
   addShop(input: AddShopInput): IdPayload
   editShop(input: EditShopInput): IdPayload
 
-  addProduct(input: ProductInput): IdPayload
+  addProduct(input: [ProductInput]): IdPayload
   editProduct(input: ProductInput): IdPayload
   editProductStock(input: StockProductInput): IdPayload
 

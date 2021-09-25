@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 import AdminService from './admin/admin.service';
 import AuthWrapper from './auth/auth.wrapper';
 import DBService from './db/db.service';
+import ProductService from './product/product.service';
 import ShopService from './shop/shop.service';
 import { Feature } from './warehouse/warehouse.dto';
 import WarehouseService from './warehouse/warehouse.service';
@@ -9,6 +11,7 @@ const db = new DBService();
 const adminService = new AdminService(db);
 const warehouseService = new WarehouseService(db);
 const shopService = new ShopService(db);
+const productService = new ProductService(db);
 const auth = new AuthWrapper('bubur');
 
 async function createUser(
@@ -32,6 +35,10 @@ async function createShop(id: string, name: string) {
   await shopService.createShop(auth, id, name).catch(console.log);
 }
 
+async function createProducts(products: { id: string; name: string }[]) {
+  await productService.createProducts(auth, products).catch(console.log);
+}
+
 async function seed() {
   await createUser('bubur', 'bubur123', undefined, 'SUPER_ADMIN');
   await createWarehouse('tangerang', 'Konter Tangerang', [
@@ -48,6 +55,20 @@ async function seed() {
   await createShop('tokopedia', 'Tokopedia utama');
   await createShop('shopee1', 'Shopee Tas');
   await createShop('shopee2', 'Shopee Gelang');
+  await createProducts([
+    {
+      id: 'WA01',
+      name: 'Dompet Wanita Baru',
+    },
+    {
+      id: 'WA02',
+      name: 'Dompet Pria Coklat',
+    },
+    {
+      id: 'TA01',
+      name: 'Tas Wanita',
+    },
+  ]);
 }
 
 seed().finally(async () => {

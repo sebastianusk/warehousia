@@ -38,6 +38,7 @@ model warehouse {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   admin      admin[]  @relation("admin_access")
+  stock      stock[]
 }
 
 model shop {
@@ -46,4 +47,35 @@ model shop {
   active     Boolean  @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+}
+
+model product {
+  id         String   @id
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  stock      stock[]
+}
+
+model stock {
+  id           String     @id @default(uuid())
+  product      product    @relation(fields: [product_id], references: [id])
+  product_id   String
+  warehouse    warehouse  @relation(fields: [warehouse_id], references: [id])
+  warehouse_id String
+  stock        Int
+  updated_at   DateTime   @updatedAt
+  logs         stocklog[]
+
+  @@unique([product_id, warehouse_id])
+}
+
+model stocklog {
+  id         String   @id @default(uuid())
+  admin      String
+  amount     Int
+  stock      stock    @relation(fields: [stock_id], references: [id])
+  stock_id   String
+  created_at DateTime @default(now())
+  remarks    Json?
 }
