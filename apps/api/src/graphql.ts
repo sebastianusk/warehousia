@@ -229,10 +229,9 @@ export class Product {
 }
 
 export class Stock {
-    warehouse: Warehouse;
     amount: number;
     all: number;
-    topWarehouse: Warehouse;
+    topWarehouse: string;
     topAmount: number;
     updatedAt: string;
 }

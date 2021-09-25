@@ -132,10 +132,9 @@ type Product {
 }
 
 type Stock {
-  warehouse: Warehouse!
   amount: Int!
   all:Int!
-  topWarehouse: Warehouse!
+  topWarehouse: String!
   topAmount: Int!
   updatedAt: String!
 }

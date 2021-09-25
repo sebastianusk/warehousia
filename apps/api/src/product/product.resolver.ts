@@ -7,6 +7,7 @@ import {
   IdPayload,
   PaginationInput,
   ProductInput,
+  ProductList,
   ProductLogList,
   StockProductInput,
 } from '../graphql';
@@ -24,6 +25,24 @@ export default class ProductResolver {
   ): Promise<ProductLogList> {
     const data = await this.productService.getProductLog(
       productId,
+      pagination.limit,
+      pagination.offset
+    );
+    return {
+      data: data.map((item) => item.toResponse()),
+    };
+  }
+
+  @Query()
+  @UseGuards(JwtAuthGuard)
+  async products(
+    @Args('query') query: string,
+    @Args('warehouseId') warehouseId: string,
+    @Args('pagination') pagination: PaginationInput
+  ): Promise<ProductList> {
+    const data = await this.productService.getProducts(
+      query,
+      warehouseId,
       pagination.limit,
       pagination.offset
     );

@@ -1,7 +1,6 @@
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaClient } from '.prisma/client';
-import {ObjectAlreadyExist} from '../common/errors';
 
 export enum DBError {
   UNIQUE_CONSTRAINT = 'P2002',

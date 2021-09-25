@@ -39,6 +39,12 @@ async function createProducts(products: { id: string; name: string }[]) {
   await productService.addProducts(auth, products).catch(console.log);
 }
 
+async function editStock(product: string, warehouse: string, amount: number) {
+  await productService
+    .editStockProduct(auth, product, warehouse, amount)
+    .catch(console.log);
+}
+
 async function seed() {
   await createUser('bubur', 'bubur123', undefined, 'SUPER_ADMIN');
   await createWarehouse('tangerang', 'Konter Tangerang', [
@@ -69,6 +75,10 @@ async function seed() {
       name: 'Tas Wanita',
     },
   ]);
+  await editStock('WA01', 'serpong', 5);
+  await editStock('WA01', 'tangerang', 15);
+  await editStock('WA02', 'serpong', 5);
+  await editStock('WA02', 'tangerang', 5);
 }
 
 seed().finally(async () => {
