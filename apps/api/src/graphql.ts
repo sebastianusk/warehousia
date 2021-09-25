@@ -43,7 +43,7 @@ export class ChangeMyPasswordInput {
 
 export class ProductInput {
     id: string;
-    name?: Nullable<string>;
+    name: string;
 }
 
 export class StockProductInput {
@@ -156,7 +156,7 @@ export abstract class IMutation {
 
     abstract editShop(input?: Nullable<EditShopInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
-    abstract addProduct(input?: Nullable<ProductInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
+    abstract addProducts(input?: Nullable<Nullable<ProductInput>[]>): Nullable<CountPayload> | Promise<Nullable<CountPayload>>;
 
     abstract editProduct(input?: Nullable<ProductInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
@@ -177,6 +177,10 @@ export abstract class IMutation {
 
 export class IdPayload {
     id: string;
+}
+
+export class CountPayload {
+    count: number;
 }
 
 export class AdminList {

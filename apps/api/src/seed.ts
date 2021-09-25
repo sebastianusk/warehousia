@@ -36,7 +36,7 @@ async function createShop(id: string, name: string) {
 }
 
 async function createProducts(products: { id: string; name: string }[]) {
-  await productService.createProducts(auth, products).catch(console.log);
+  await productService.addProducts(auth, products).catch(console.log);
 }
 
 async function seed() {

@@ -27,7 +27,7 @@ type Mutation {
   addShop(input: AddShopInput): IdPayload
   editShop(input: EditShopInput): IdPayload
 
-  addProduct(input: [ProductInput]): IdPayload
+  addProducts(input: [ProductInput]): CountPayload
   editProduct(input: ProductInput): IdPayload
   editProductStock(input: StockProductInput): IdPayload
 
@@ -49,6 +49,10 @@ input PaginationInput {
 
 type IdPayload {
   id: String!
+}
+
+type CountPayload {
+  count: Int!
 }
 
 input IdInput {
@@ -137,7 +141,7 @@ type Stock {
 
 input ProductInput {
   id: String!
-  name: String
+  name: String!
 }
 
 input StockProductInput {
