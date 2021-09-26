@@ -110,4 +110,24 @@ export default class WarehouseResolver {
     );
     return { data: data.map((item) => item.toResponse()) };
   }
+
+  @Mutation()
+  @UseGuards(JwtAuthGuard, WarehouseGuard, PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Create, Feature.INBOUND)
+  )
+  async addTransfer(
+    @Args('warehouseId') warehouseId: string,
+    @Args('destinationId') destinationId: string,
+    @Args('items') items: ProductAmountInput[],
+    @CurrentAuth() auth: AuthWrapper
+  ): Promise<IdPayload> {
+    const id = await this.warehouseService.addTransfer(
+      auth,
+      warehouseId,
+      destinationId,
+      items
+    );
+    return { id };
+  }
 }

@@ -102,12 +102,6 @@ export class AddTransactionInput {
     preparationId: string;
 }
 
-export class TransferInput {
-    sourceId: string;
-    destId: string;
-    items: Nullable<ProductAmountInput>[];
-}
-
 export abstract class IQuery {
     abstract admins(query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<AdminList> | Promise<Nullable<AdminList>>;
 
@@ -169,7 +163,7 @@ export abstract class IMutation {
 
     abstract addInbound(warehouseId: string, items?: Nullable<Nullable<ProductAmountInput>[]>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
-    abstract addTransfer(input?: Nullable<TransferInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
+    abstract addTransfer(warehouseId: string, destinationId: string, items: Nullable<ProductAmountInput>[]): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 }
 
 export class IdPayload {

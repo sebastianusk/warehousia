@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
+import { NotEnoughItem } from '../common/errors';
 import DBService from '../db/db.service';
 import { InboundModel } from './stock.dto';
 import WarehouseModel, { Feature } from './warehouse.dto';
@@ -89,6 +90,7 @@ export default class WarehouseService {
         },
       },
     });
+    const log = auth.log(this.db, 'inbound', { id });
     const stocks = items.map((item) =>
       this.db.stock.upsert({
         create: {
@@ -121,7 +123,7 @@ export default class WarehouseService {
         },
       })
     );
-    const result = await this.db.$transaction([inbound, ...stocks]);
+    const result = await this.db.$transaction([inbound, log, ...stocks]);
     return result[0].id;
   }
 
@@ -138,5 +140,114 @@ export default class WarehouseService {
       orderBy: { created_at: 'desc' },
     });
     return data.map((item) => InboundModel.fromDB(item));
+  }
+
+  async addTransfer(
+    auth: AuthWrapper,
+    warehouseId: string,
+    destinationId: string,
+    items: { productId: string; amount: number }[]
+  ): Promise<string> {
+    const transactions = items.map(async (item) => {
+      const check = await this.db.stock.findUnique({
+        where: {
+          product_id_warehouse_id: {
+            warehouse_id: warehouseId,
+            product_id: item.productId,
+          },
+        },
+      });
+      if (check.stock < item.amount) {
+        throw new NotEnoughItem(item.productId, item.amount, check.stock);
+      }
+      const source = this.db.stock.update({
+        data: {
+          stock: {
+            decrement: item.amount,
+          },
+        },
+        where: {
+          product_id_warehouse_id: {
+            warehouse_id: warehouseId,
+            product_id: item.productId,
+          },
+        },
+      });
+      const sourceLog = this.db.stocklog.create({
+        data: {
+          action: 'transfer-out',
+          amount: item.amount,
+          created_by: auth.username,
+          stock: {
+            connect: {
+              product_id_warehouse_id: {
+                product_id: item.productId,
+                warehouse_id: warehouseId,
+              },
+            },
+          },
+        },
+      });
+      const destination = this.db.stock.upsert({
+        where: {
+          product_id_warehouse_id: {
+            product_id: item.productId,
+            warehouse_id: destinationId,
+          },
+        },
+        create: {
+          warehouse_id: destinationId,
+          product_id: item.productId,
+          stock: item.amount,
+          logs: {
+            create: {
+              action: 'transfer-in',
+              amount: item.amount,
+              created_by: auth.username,
+            },
+          },
+        },
+        update: {
+          stock: { increment: item.amount },
+          logs: {
+            create: {
+              action: 'transfer-in',
+              amount: item.amount,
+              created_by: auth.username,
+            },
+          },
+        },
+      });
+      return [source, sourceLog, destination];
+    });
+    const transfer = this.db.transfer.create({
+      data: {
+        warehouse: warehouseId,
+        destination: destinationId,
+        created_by: auth.username,
+        transfer_item: {
+          create: items.map((item) => ({
+            productId: item.productId,
+            amount: item.amount,
+          })),
+        },
+      },
+    });
+    const log = auth.log(
+      this.db,
+      'transfer',
+      AuthWrapper.structRemarks(warehouseId, { destinationId })
+    );
+
+    const listTransaction = (await Promise.all(transactions)).flatMap(
+      (item) => item
+    );
+
+    const data = await this.db.$transaction([
+      transfer,
+      log,
+      ...listTransaction,
+    ]);
+    return data[0].id;
   }
 }

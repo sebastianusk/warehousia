@@ -30,3 +30,9 @@ export class FieldEmpty extends UserInputError {
     super(`${field} cannot be empty`);
   }
 }
+
+export class NotEnoughItem extends UserInputError {
+  constructor(item: string, expected: number, actual: number) {
+    super(`${item} not enough, need ${expected}, got ${actual}`);
+  }
+}

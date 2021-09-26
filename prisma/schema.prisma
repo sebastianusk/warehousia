@@ -50,12 +50,13 @@ model shop {
 }
 
 model product {
-  id           String         @id
-  name         String
-  created_at   DateTime       @default(now())
-  updated_at   DateTime       @updatedAt
-  stock        stock[]
-  inbound_item inbound_item[]
+  id            String          @id
+  name          String
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+  stock         stock[]
+  inbound_item  inbound_item[]
+  transfer_item transfer_item[]
 }
 
 model stock {
@@ -97,4 +98,22 @@ model inbound_item {
   amount     Int
   inbound_id String
   product_id String
+}
+
+model transfer {
+  id            String          @id @default(uuid())
+  warehouse     String
+  destination   String
+  created_by    String
+  created_at    DateTime        @default(now())
+  transfer_item transfer_item[]
+}
+
+model transfer_item {
+  id         String   @id @default(uuid())
+  transfer   transfer @relation(fields: [transferId], references: [id])
+  product    product  @relation(fields: [productId], references: [id])
+  amount     Int
+  transferId String
+  productId  String
 }
