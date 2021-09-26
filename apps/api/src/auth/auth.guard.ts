@@ -28,6 +28,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const ctx = GqlExecutionContext.create(context);
     const { username } = ctx.getContext().req.user;
     const user = await this.adminService.findOne(username);
+    ctx.getContext().user = user;
     if (!user.active) {
       return false;
     }
@@ -38,6 +39,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 export const CurrentAuth = createParamDecorator(
   (data: unknown, context: ExecutionContext): AuthWrapper => {
     const ctx = GqlExecutionContext.create(context);
-    return new AuthWrapper(ctx.getContext().req.user.username);
+    const { user } = ctx.getContext();
+    return new AuthWrapper(user.username, user.warehouses);
   }
 );

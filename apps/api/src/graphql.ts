@@ -53,7 +53,7 @@ export class StockProductInput {
 }
 
 export class ProductAmountInput {
-    productId?: Nullable<string>;
+    productId: string;
     amount: number;
 }
 
@@ -100,11 +100,6 @@ export class AddMissingInput {
 
 export class AddTransactionInput {
     preparationId: string;
-}
-
-export class InboundInput {
-    warehouseId: string;
-    items?: Nullable<Nullable<ProductAmountInput>[]>;
 }
 
 export class TransferInput {
@@ -172,7 +167,7 @@ export abstract class IMutation {
 
     abstract addTransaction(input?: Nullable<AddTransactionInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
-    abstract addInbound(input?: Nullable<InboundInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
+    abstract addInbound(warehouseId: string, items?: Nullable<Nullable<ProductAmountInput>[]>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
     abstract addTransfer(input?: Nullable<TransferInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 }

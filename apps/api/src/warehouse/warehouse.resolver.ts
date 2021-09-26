@@ -10,9 +10,11 @@ import {
   EditWarehouseInput,
   IdPayload,
   PaginationInput,
+  ProductAmountInput,
   WarehouseList,
 } from '../graphql';
-import WarehouseModel from './warehouse.dto';
+import WarehouseModel, { Feature } from './warehouse.dto';
+import WarehouseGuard from './warehouse.guard';
 import WarehouseService from './warehouse.service';
 
 @Resolver('Warehouse')
@@ -36,9 +38,9 @@ export default class WarehouseResolver {
   }
 
   @Mutation()
-  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @UseGuards(JwtAuthGuard, WarehouseGuard, PoliciesGuard)
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Create, WarehouseModel)
+    ability.can(Action.Operate, Feature.INBOUND)
   )
   async addWarehouse(
     @Args('input') input: AddWarehouseInput,
@@ -74,5 +76,19 @@ export default class WarehouseResolver {
     return {
       id,
     };
+  }
+
+  @Mutation()
+  @UseGuards(JwtAuthGuard, WarehouseGuard, PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Create, Feature.INBOUND)
+  )
+  // eslint-disable-next-line class-methods-use-this
+  async addInbound(
+    @Args('warehouseId') warehouseId: string,
+    @Args('items') items: ProductAmountInput[],
+    @CurrentAuth() auth: AuthWrapper
+  ): Promise<IdPayload> {
+    return { id: '' };
   }
 }

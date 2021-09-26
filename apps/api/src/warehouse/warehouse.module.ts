@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import AdminModule from '../admin/admin.module';
+import AuthModule from '../auth/auth.module';
 import DBModule from '../db/db.module';
 import WarehouseResolver from './warehouse.resolver';
-import WarehouseService from './warehouse.service';
 
 @Module({
-  imports: [DBModule, AdminModule],
-  providers: [WarehouseResolver, WarehouseService],
+  imports: [DBModule, AuthModule],
+  providers: [WarehouseResolver],
 })
 export default class WarehouseModule {}

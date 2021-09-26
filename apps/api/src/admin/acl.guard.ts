@@ -1,7 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import AdminService from '../admin/admin.service';
 import { CHECK_POLICIES_KEY } from './acl.decorator';
 import { AbilityFactory, AppAbility } from './factory';
 import { PolicyHandler } from './policy-handler';
@@ -10,8 +9,7 @@ import { PolicyHandler } from './policy-handler';
 export default class PoliciesGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private abilityFactory: AbilityFactory,
-    private adminService: AdminService
+    private abilityFactory: AbilityFactory
   ) {}
 
   async canActivate(context: ExecutionContext) {
@@ -23,12 +21,11 @@ export default class PoliciesGuard implements CanActivate {
       return true;
     }
     const ctx = GqlExecutionContext.create(context);
-    const { username } = ctx.getContext().req.user;
-    if (!username) {
+    const { user, warehouse } = ctx.getContext();
+    if (!user) {
       return false;
     }
-    const user = await this.adminService.findOne(username);
-    const ability = this.abilityFactory.createForUser(user);
+    const ability = this.abilityFactory.createForUser(user, warehouse);
     return policyHandlers.every((handler) =>
       PoliciesGuard.execPolicyHandler(handler, ability)
     );

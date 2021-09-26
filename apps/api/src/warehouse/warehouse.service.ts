@@ -65,4 +65,9 @@ export default class WarehouseService {
     ]);
     return result[0].id;
   }
+
+  async getWarehouse(id: string): Promise<WarehouseModel> {
+    const data = await this.db.warehouse.findFirst({ where: { id } });
+    return WarehouseModel.fromDB(data);
+  }
 }

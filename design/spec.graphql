@@ -37,7 +37,7 @@ type Mutation {
   addMissing(input: AddMissingInput): IdPayload
   addTransaction(input: AddTransactionInput): IdPayload
 
-  addInbound(input: InboundInput): IdPayload
+  addInbound(warehouseId: String!, items: [ProductAmountInput]): IdPayload
   addTransfer(input: TransferInput): IdPayload
 }
 
@@ -171,7 +171,7 @@ type ProductAmount {
 }
 
 input ProductAmountInput {
-  productId: String
+  productId: String!
   amount: Int!
 }
 
@@ -313,12 +313,6 @@ type Inbounds {
   createdAt: String!
   createdBy: String!
 }
-
-input InboundInput {
-  warehouseId: String!
-  items: [ProductAmountInput]
-}
-
 
 # Transfers Objects
 type Transfers {
