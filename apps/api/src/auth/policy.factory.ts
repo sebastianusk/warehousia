@@ -6,10 +6,10 @@ import {
   InferSubjects,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
+import { AdminModel, RoleModel } from '../admin/admin.dto';
 import { ProductModel } from '../product/product.dto';
 import ShopModel from '../shop/shop.dto';
 import WarehouseModel, { Feature } from '../warehouse/warehouse.dto';
-import { AdminModel, RoleModel } from './admin.dto';
 
 export enum Action {
   Manage = 'manage',

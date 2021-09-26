@@ -2,6 +2,9 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
 import AuthWrapper from '../auth/auth.wrapper';
+import { CheckPolicies } from '../auth/policy.decorator';
+import { Action, AppAbility } from '../auth/policy.factory';
+import PoliciesGuard from '../auth/policy.guard';
 import { FieldEmpty, LoginError } from '../common/errors';
 import {
   AddAdminInput,
@@ -13,11 +16,8 @@ import {
   EditAdminInput,
   PaginationInput,
 } from '../graphql';
-import { CheckPolicies } from './acl.decorator';
-import PoliciesGuard from './acl.guard';
 import { AdminModel } from './admin.dto';
 import AdminService from './admin.service';
-import { Action, AppAbility } from './factory';
 
 @Resolver('Admin')
 export default class AdminResolver {

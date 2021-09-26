@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { CHECK_POLICIES_KEY } from './acl.decorator';
-import { AbilityFactory, AppAbility } from './factory';
 import { PolicyHandler } from './policy-handler';
+import { CHECK_POLICIES_KEY } from './policy.decorator';
+import { AbilityFactory, AppAbility } from './policy.factory';
 
 @Injectable()
 export default class PoliciesGuard implements CanActivate {

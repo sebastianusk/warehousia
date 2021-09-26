@@ -1,10 +1,10 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CheckPolicies } from '../admin/acl.decorator';
-import PoliciesGuard from '../admin/acl.guard';
-import { AppAbility, Action } from '../admin/factory';
 import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
 import AuthWrapper from '../auth/auth.wrapper';
+import { CheckPolicies } from '../auth/policy.decorator';
+import { AppAbility, Action } from '../auth/policy.factory';
+import PoliciesGuard from '../auth/policy.guard';
 import {
   AddWarehouseInput,
   EditWarehouseInput,
@@ -40,7 +40,7 @@ export default class WarehouseResolver {
   @Mutation()
   @UseGuards(JwtAuthGuard, WarehouseGuard, PoliciesGuard)
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Operate, Feature.INBOUND)
+    ability.can(Action.Create, WarehouseModel)
   )
   async addWarehouse(
     @Args('input') input: AddWarehouseInput,
