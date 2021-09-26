@@ -40,6 +40,6 @@ export const CurrentAuth = createParamDecorator(
   (data: unknown, context: ExecutionContext): AuthWrapper => {
     const ctx = GqlExecutionContext.create(context);
     const { user } = ctx.getContext();
-    return new AuthWrapper(user.username, user.warehouses);
+    return new AuthWrapper(user.username);
   }
 );

@@ -1,7 +1,7 @@
 import DBService from '../db/db.service';
 
 export default class AuthWrapper {
-  constructor(public username: string, public warehouse: string[]) {}
+  constructor(public username: string) {}
 
   log(db: DBService, action: string, remarks: any) {
     return db.adminlog.create({
