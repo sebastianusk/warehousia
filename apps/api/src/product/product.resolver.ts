@@ -1,5 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CheckPolicies } from '../admin/acl.decorator';
+import PoliciesGuard from '../admin/acl.guard';
+import { Action, AppAbility } from '../admin/factory';
 import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
 import AuthWrapper from '../auth/auth.wrapper';
 import {
@@ -11,6 +14,7 @@ import {
   ProductLogList,
   StockProductInput,
 } from '../graphql';
+import { ProductModel } from './product.dto';
 import ProductService from './product.service';
 
 @Resolver('Products')
@@ -52,7 +56,10 @@ export default class ProductResolver {
   }
 
   @Mutation()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Create, ProductModel)
+  )
   async addProducts(
     @Args('input') input: ProductInput[],
     @CurrentAuth() auth: AuthWrapper
@@ -62,7 +69,10 @@ export default class ProductResolver {
   }
 
   @Mutation()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Create, ProductModel)
+  )
   async editProduct(
     @Args('input') input: ProductInput,
     @CurrentAuth() auth: AuthWrapper
@@ -76,7 +86,10 @@ export default class ProductResolver {
   }
 
   @Mutation()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Update, ProductModel)
+  )
   async editProductStock(
     @Args('input') input: StockProductInput,
     @CurrentAuth() auth: AuthWrapper

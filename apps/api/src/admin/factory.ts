@@ -6,6 +6,7 @@ import {
   InferSubjects,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
+import { ProductModel } from '../product/product.dto';
 import ShopModel from '../shop/shop.dto';
 import WarehouseModel from '../warehouse/warehouse.dto';
 import { AdminModel, RoleModel } from './admin.dto';
@@ -22,6 +23,7 @@ type Subjects =
   | InferSubjects<typeof AdminModel>
   | InferSubjects<typeof WarehouseModel>
   | InferSubjects<typeof ShopModel>
+  | InferSubjects<typeof ProductModel>
   | 'all';
 
 export type AppAbility = Ability<[Action, Subjects]>;
