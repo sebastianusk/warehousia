@@ -9,6 +9,7 @@ import {
   AddWarehouseInput,
   EditWarehouseInput,
   IdPayload,
+  InboundList,
   PaginationInput,
   ProductAmountInput,
   WarehouseList,
@@ -94,5 +95,19 @@ export default class WarehouseResolver {
       items.map((item) => ({ amount: item.amount, productid: item.productId }))
     );
     return { id };
+  }
+
+  @Query()
+  @UseGuards(JwtAuthGuard)
+  async inbounds(
+    @Args('warehouseId') warehouseId: string,
+    @Args('pagination') pagination: PaginationInput
+  ): Promise<InboundList> {
+    const data = await this.warehouseService.getInbounds(
+      warehouseId,
+      pagination.offset,
+      pagination.limit
+    );
+    return { data: data.map((item) => item.toResponse()) };
   }
 }

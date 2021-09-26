@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
 import DBService from '../db/db.service';
+import { InboundModel } from './stock.dto';
 import WarehouseModel, { Feature } from './warehouse.dto';
 
 @Injectable()
@@ -122,5 +123,20 @@ export default class WarehouseService {
     );
     const result = await this.db.$transaction([inbound, ...stocks]);
     return result[0].id;
+  }
+
+  async getInbounds(
+    warehouseId: string,
+    offset: number = 0,
+    limit: number = 10
+  ): Promise<InboundModel[]> {
+    const data = await this.db.inbound.findMany({
+      skip: offset * limit,
+      take: limit,
+      where: { warehouse: warehouseId },
+      include: { inbound_item: true },
+      orderBy: { created_at: 'desc' },
+    });
+    return data.map((item) => InboundModel.fromDB(item));
   }
 }

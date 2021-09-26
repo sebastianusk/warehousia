@@ -131,7 +131,7 @@ export abstract class IQuery {
 
     abstract transactions(productId?: Nullable<string>, warehouseId?: Nullable<string>, shopId?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<TransactionList> | Promise<Nullable<TransactionList>>;
 
-    abstract inbounds(warehouseId: string, pagination?: Nullable<PaginationInput>): Nullable<Inbounds> | Promise<Nullable<Inbounds>>;
+    abstract inbounds(warehouseId: string, pagination?: Nullable<PaginationInput>): Nullable<InboundList> | Promise<Nullable<InboundList>>;
 
     abstract transfers(sourceId: string, destId: string, pagination?: Nullable<PaginationInput>): Nullable<Transfers> | Promise<Nullable<Transfers>>;
 }
@@ -247,7 +247,7 @@ export class ProductLog {
 
 export class ProductAmount {
     id: string;
-    product: Product;
+    product: string;
     amount: number;
 }
 
@@ -331,9 +331,13 @@ export class Transaction {
     createdBy: string;
 }
 
-export class Inbounds {
+export class InboundList {
+    data?: Nullable<Nullable<Inbound>[]>;
+}
+
+export class Inbound {
     id: string;
-    warehouse: Warehouse;
+    warehouse: string;
     items?: Nullable<Nullable<ProductAmount>[]>;
     createdAt: string;
     createdBy: string;

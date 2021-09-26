@@ -10,7 +10,7 @@ type Query {
   demands(warehouseId: String, shopId: String, pagination: PaginationInput): DemandList
   preparations(preparationId: String): Preparation
   transactions(productId: String, warehouseId: String, shopId: String, pagination: PaginationInput): TransactionList
-  inbounds(warehouseId: String!, pagination: PaginationInput): Inbounds
+  inbounds(warehouseId: String!, pagination: PaginationInput): InboundList
   transfers(sourceId: String!, destId: String!, pagination: PaginationInput): Transfers
 }
 
@@ -166,7 +166,7 @@ input StockProductInput {
 
 type ProductAmount {
   id: String!
-  product: Product!
+  product: String!
   amount: Int!
 }
 
@@ -306,9 +306,13 @@ type Transaction {
 
 
 # Inbound Objects
-type Inbounds {
+type InboundList {
+  data: [Inbound]
+}
+
+type Inbound {
   id: String!
-  warehouse: Warehouse!
+  warehouse: String!
   items: [ProductAmount]
   createdAt: String!
   createdBy: String!
