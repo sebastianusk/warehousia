@@ -12,6 +12,7 @@ import {
   InboundList,
   PaginationInput,
   ProductAmountInput,
+  TransferList,
   WarehouseList,
 } from '../graphql';
 import WarehouseModel, { Feature } from './warehouse.dto';
@@ -129,5 +130,21 @@ export default class WarehouseResolver {
       items
     );
     return { id };
+  }
+
+  @Query()
+  @UseGuards(JwtAuthGuard)
+  async transfers(
+    @Args('warehouseId') warehouseId: string,
+    @Args('destinationId') destinationId: string,
+    @Args('pagination') pagination: PaginationInput
+  ): Promise<TransferList> {
+    const data = await this.warehouseService.getTransfers(
+      warehouseId,
+      destinationId,
+      pagination.offset,
+      pagination.limit
+    );
+    return { data: data.map((item) => item.toResponse()) };
   }
 }

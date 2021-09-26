@@ -11,7 +11,7 @@ type Query {
   preparations(preparationId: String): Preparation
   transactions(productId: String, warehouseId: String, shopId: String, pagination: PaginationInput): TransactionList
   inbounds(warehouseId: String!, pagination: PaginationInput): InboundList
-  transfers(sourceId: String!, destId: String!, pagination: PaginationInput): Transfers
+  transfers(warehouseId: String!, destinationId: String!, pagination: PaginationInput): TransferList
 }
 
 
@@ -313,10 +313,14 @@ type Inbound {
 }
 
 # Transfers Objects
-type Transfers {
+type TransferList {
+  data: [Transfer]
+}
+
+type Transfer {
   id: String!
-  source: Warehouse!
-  destination: Warehouse!
+  source: String!
+  destination: String!
   items: [ProductAmount]
   createdAt: String!
   createdBy: String!

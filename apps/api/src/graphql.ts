@@ -121,7 +121,7 @@ export abstract class IQuery {
 
     abstract inbounds(warehouseId: string, pagination?: Nullable<PaginationInput>): Nullable<InboundList> | Promise<Nullable<InboundList>>;
 
-    abstract transfers(sourceId: string, destId: string, pagination?: Nullable<PaginationInput>): Nullable<Transfers> | Promise<Nullable<Transfers>>;
+    abstract transfers(warehouseId: string, destinationId: string, pagination?: Nullable<PaginationInput>): Nullable<TransferList> | Promise<Nullable<TransferList>>;
 }
 
 export abstract class IMutation {
@@ -331,10 +331,14 @@ export class Inbound {
     createdBy: string;
 }
 
-export class Transfers {
+export class TransferList {
+    data?: Nullable<Nullable<Transfer>[]>;
+}
+
+export class Transfer {
     id: string;
-    source: Warehouse;
-    destination: Warehouse;
+    source: string;
+    destination: string;
     items?: Nullable<Nullable<ProductAmount>[]>;
     createdAt: string;
     createdBy: string;

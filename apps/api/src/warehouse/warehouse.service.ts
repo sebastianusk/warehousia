@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
 import { NotEnoughItem } from '../common/errors';
 import DBService from '../db/db.service';
-import { InboundModel } from './stock.dto';
+import { InboundModel, TransferModel } from './stock.dto';
 import WarehouseModel, { Feature } from './warehouse.dto';
 
 @Injectable()
@@ -249,5 +249,21 @@ export default class WarehouseService {
       ...listTransaction,
     ]);
     return data[0].id;
+  }
+
+  async getTransfers(
+    warheouseId: string,
+    destinationId: string,
+    offset: number = 0,
+    limit: number = 10
+  ): Promise<TransferModel[]> {
+    const data = await this.db.transfer.findMany({
+      skip: offset * limit,
+      take: limit,
+      where: { warehouse: warheouseId, destination: destinationId },
+      orderBy: { created_at: 'desc' },
+      include: { transfer_item: true },
+    });
+    return data.map((item) => TransferModel.fromDB(item));
   }
 }
