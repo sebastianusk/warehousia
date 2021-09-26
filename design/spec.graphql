@@ -32,12 +32,12 @@ type Mutation {
   editProduct(input: ProductInput): IdPayload
   editProductStock(input: StockProductInput): IdPayload
 
-  addOutbound(input: OutboundInput): OutboundResponse
+  addOutbound(warehouseId: String!, shopId: String!, items: [ProductAmountInput]!): OutboundResponse
   addPreparation(input: AddPreparationInput): IdPayload
   addMissing(input: AddMissingInput): IdPayload
   addTransaction(input: AddTransactionInput): IdPayload
 
-  addInbound(warehouseId: String!, items: [ProductAmountInput]): IdPayload
+  addInbound(warehouseId: String!, items: [ProductAmountInput]!): IdPayload
   addTransfer(warehouseId: String!, destinationId: String!, items: [ProductAmountInput]!): IdPayload
 }
 
@@ -235,12 +235,6 @@ type Outbound {
   shop: Shop!
   warehouse: Warehouse!
   items: [ProductAmount]!
-}
-
-input OutboundInput {
-  warehouseId: String!
-  shopId: String!
-  items: [ProductAmountInput]
 }
 
 type OutboundResponse {

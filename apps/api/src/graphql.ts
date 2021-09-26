@@ -81,12 +81,6 @@ export class EditWarehouseInput {
     active?: Nullable<boolean>;
 }
 
-export class OutboundInput {
-    warehouseId: string;
-    shopId: string;
-    items?: Nullable<Nullable<ProductAmountInput>[]>;
-}
-
 export class AddPreparationInput {
     shopId: string;
     warehouseId: string;
@@ -153,7 +147,7 @@ export abstract class IMutation {
 
     abstract editProductStock(input?: Nullable<StockProductInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
-    abstract addOutbound(input?: Nullable<OutboundInput>): Nullable<OutboundResponse> | Promise<Nullable<OutboundResponse>>;
+    abstract addOutbound(warehouseId: string, shopId: string, items: Nullable<ProductAmountInput>[]): Nullable<OutboundResponse> | Promise<Nullable<OutboundResponse>>;
 
     abstract addPreparation(input?: Nullable<AddPreparationInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
@@ -161,7 +155,7 @@ export abstract class IMutation {
 
     abstract addTransaction(input?: Nullable<AddTransactionInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
-    abstract addInbound(warehouseId: string, items?: Nullable<Nullable<ProductAmountInput>[]>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
+    abstract addInbound(warehouseId: string, items: Nullable<ProductAmountInput>[]): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
     abstract addTransfer(warehouseId: string, destinationId: string, items: Nullable<ProductAmountInput>[]): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 }
