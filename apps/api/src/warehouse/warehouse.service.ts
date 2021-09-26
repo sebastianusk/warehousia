@@ -70,4 +70,57 @@ export default class WarehouseService {
     const data = await this.db.warehouse.findFirst({ where: { id } });
     return WarehouseModel.fromDB(data);
   }
+
+  async addInbound(
+    auth: AuthWrapper,
+    id: string,
+    items: { productid: string; amount: number }[]
+  ): Promise<string> {
+    const inbound = this.db.inbound.create({
+      data: {
+        warehouse: id,
+        created_by: auth.username,
+        inbound_item: {
+          create: items.map((item) => ({
+            amount: item.amount,
+            product_id: item.productid,
+          })),
+        },
+      },
+    });
+    const stocks = items.map((item) =>
+      this.db.stock.upsert({
+        create: {
+          product_id: item.productid,
+          warehouse_id: id,
+          stock: item.amount,
+          logs: {
+            create: {
+              action: 'inbound',
+              amount: item.amount,
+              created_by: auth.username,
+            },
+          },
+        },
+        update: {
+          stock: { increment: item.amount },
+          logs: {
+            create: {
+              action: 'inbound',
+              amount: item.amount,
+              created_by: auth.username,
+            },
+          },
+        },
+        where: {
+          product_id_warehouse_id: {
+            product_id: item.productid,
+            warehouse_id: id,
+          },
+        },
+      })
+    );
+    const result = await this.db.$transaction([inbound, ...stocks]);
+    return result[0].id;
+  }
 }

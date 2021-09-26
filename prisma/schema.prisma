@@ -50,11 +50,12 @@ model shop {
 }
 
 model product {
-  id         String   @id
-  name       String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  stock      stock[]
+  id           String         @id
+  name         String
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  stock        stock[]
+  inbound_item inbound_item[]
 }
 
 model stock {
@@ -79,4 +80,21 @@ model stocklog {
   created_at DateTime @default(now())
   created_by String
   remarks    Json?
+}
+
+model inbound {
+  id           String         @id @default(uuid())
+  warehouse    String
+  created_by   String
+  created_at   DateTime       @default(now())
+  inbound_item inbound_item[]
+}
+
+model inbound_item {
+  id         String  @id @default(uuid())
+  inbound    inbound @relation(fields: [inbound_id], references: [id])
+  product    product @relation(fields: [product_id], references: [id])
+  amount     Int
+  inbound_id String
+  product_id String
 }

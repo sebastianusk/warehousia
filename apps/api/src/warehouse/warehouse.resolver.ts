@@ -83,12 +83,16 @@ export default class WarehouseResolver {
   @CheckPolicies((ability: AppAbility) =>
     ability.can(Action.Create, Feature.INBOUND)
   )
-  // eslint-disable-next-line class-methods-use-this
   async addInbound(
     @Args('warehouseId') warehouseId: string,
     @Args('items') items: ProductAmountInput[],
     @CurrentAuth() auth: AuthWrapper
   ): Promise<IdPayload> {
-    return { id: '' };
+    const id = await this.warehouseService.addInbound(
+      auth,
+      warehouseId,
+      items.map((item) => ({ amount: item.amount, productid: item.productId }))
+    );
+    return { id };
   }
 }
