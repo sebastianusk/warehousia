@@ -99,6 +99,27 @@ CREATE TABLE "inbound_item" (
 );
 
 -- CreateTable
+CREATE TABLE "transfer" (
+    "id" TEXT NOT NULL,
+    "warehouse" TEXT NOT NULL,
+    "destination" TEXT NOT NULL,
+    "created_by" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "transfer_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "transfer_item" (
+    "id" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "transferId" TEXT NOT NULL,
+    "productId" TEXT NOT NULL,
+
+    CONSTRAINT "transfer_item_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_admin_access" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
@@ -130,6 +151,12 @@ ALTER TABLE "inbound_item" ADD CONSTRAINT "inbound_item_inbound_id_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "inbound_item" ADD CONSTRAINT "inbound_item_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "transfer_item" ADD CONSTRAINT "transfer_item_transferId_fkey" FOREIGN KEY ("transferId") REFERENCES "transfer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "transfer_item" ADD CONSTRAINT "transfer_item_productId_fkey" FOREIGN KEY ("productId") REFERENCES "product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_admin_access" ADD FOREIGN KEY ("A") REFERENCES "admin"("username") ON DELETE CASCADE ON UPDATE CASCADE;
