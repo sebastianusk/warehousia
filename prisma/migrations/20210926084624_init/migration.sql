@@ -79,6 +79,26 @@ CREATE TABLE "stocklog" (
 );
 
 -- CreateTable
+CREATE TABLE "inbound" (
+    "id" TEXT NOT NULL,
+    "warehouse" TEXT NOT NULL,
+    "created_by" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "inbound_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "inbound_item" (
+    "id" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "inbound_id" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
+
+    CONSTRAINT "inbound_item_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_admin_access" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
@@ -104,6 +124,12 @@ ALTER TABLE "stock" ADD CONSTRAINT "stock_warehouse_id_fkey" FOREIGN KEY ("wareh
 
 -- AddForeignKey
 ALTER TABLE "stocklog" ADD CONSTRAINT "stocklog_stock_id_fkey" FOREIGN KEY ("stock_id") REFERENCES "stock"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "inbound_item" ADD CONSTRAINT "inbound_item_inbound_id_fkey" FOREIGN KEY ("inbound_id") REFERENCES "inbound"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "inbound_item" ADD CONSTRAINT "inbound_item_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_admin_access" ADD FOREIGN KEY ("A") REFERENCES "admin"("username") ON DELETE CASCADE ON UPDATE CASCADE;
