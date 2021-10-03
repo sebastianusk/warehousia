@@ -29,7 +29,7 @@ services:
     depends_on:
       - "postgres"
   postgres:
-    image: postgres
+    image: postgres:13.4
     restart: always
     ports:
       - "5432:5432"

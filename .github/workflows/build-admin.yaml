@@ -1,5 +1,8 @@
 name: GitHub Actions Admin Warehousia
-on: [push]
+on:
+  push:
+    paths:
+      - ./apps/admin
 env:
   REGISTRY: ghcr.io
 jobs:

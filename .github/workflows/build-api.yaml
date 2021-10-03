@@ -1,5 +1,8 @@
 name: GitHub Actions API Warehousia
-on: [push]
+on:
+  push:
+    paths:
+      - ./apps/api
 env:
   REGISTRY: ghcr.io
 jobs:
