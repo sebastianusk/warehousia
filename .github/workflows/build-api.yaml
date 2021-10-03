@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - ./apps/api
+      - ./prisma
 env:
   REGISTRY: ghcr.io
 jobs:
