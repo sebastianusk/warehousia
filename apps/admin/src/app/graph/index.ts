@@ -120,3 +120,88 @@ export const EDIT_SHOP = gql`
     }
   }
 `;
+
+export const GET_PRODUCTS = gql`
+  query products(
+    $warehouseId: String!
+    $query: String
+    $pagination: PaginationInput
+  ) {
+    products(
+      warehouseId: $warehouseId
+      query: $query
+      pagination: $pagination
+    ) {
+      data {
+        id
+        name
+        stock {
+          amount
+          all
+          topWarehouse
+          topAmount
+        }
+      }
+    }
+  }
+`;
+
+// input ProductInput {
+//   id: String!
+//   name: String!
+// }
+export const EDIT_PRODUCT = gql`
+  mutation editProduct($input: ProductInput) {
+    editProduct(input: $input) {
+      id
+    }
+  }
+`;
+
+// input StockProductInput {
+//   id: String!
+//   warehouse: String!
+//   stock: Int!
+// }
+export const EDIT_PRODUCT_STOCK = gql`
+  mutation editProductStock($input: StockProductInput) {
+    editProductStock(input: $input) {
+      id
+    }
+  }
+`;
+export const GET_OUTBOUNDS = gql`
+  query outbounds(
+    $warehouseId: String!
+    $shopId: String!
+    $pagination: PaginationInput
+  ) {
+    outbounds(
+      warehouseId: $warehouseId
+      shopId: $shopId
+      pagination: $pagination
+    ) {
+      id
+      createdAt
+      createdBy {
+        username
+      }
+      shop {
+        id
+        name
+        active
+      }
+      warehouse {
+        id
+        name
+        active
+        features
+      }
+      items {
+        id
+        product
+        amount
+      }
+    }
+  }
+`;

@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
 import { Button, Input, Card } from 'antd';
 import styles from './index.module.css';
-import ProductListEditor from '../../components/ProductListEditor';
 import ModalAddProduct from '../../components/ModalAddProduct';
 import useProductsPageHooks from './hooks';
+import ProductListEditorv2 from '../../components/ProductListEditorv2';
 
 export default function ProductsPage(): ReactElement {
   const { showModal, setShowModal, openModal, onSearch } =
@@ -31,7 +31,7 @@ export default function ProductsPage(): ReactElement {
             style={{ width: 200 }}
           />
         </div>
-        <ProductListEditor />
+        <ProductListEditorv2 />
       </Card>
       <ModalAddProduct visible={showModal} setVisible={setShowModal} />
     </>
