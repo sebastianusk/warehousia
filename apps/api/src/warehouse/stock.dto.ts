@@ -55,7 +55,7 @@ export class TransferModel {
       data.created_by,
       data.transfer_item.map((item) => ({
         id: item.id,
-        productId: item.productId,
+        productId: item.product_id,
         amount: item.amount,
       }))
     );

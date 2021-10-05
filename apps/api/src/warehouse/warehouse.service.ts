@@ -227,7 +227,7 @@ export default class WarehouseService {
         created_by: auth.username,
         transfer_item: {
           create: items.map((item) => ({
-            productId: item.productId,
+            product_id: item.productId,
             amount: item.amount,
           })),
         },

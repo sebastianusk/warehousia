@@ -110,10 +110,79 @@ model transfer {
 }
 
 model transfer_item {
-  id         String   @id @default(uuid())
-  transfer   transfer @relation(fields: [transferId], references: [id])
-  product    product  @relation(fields: [productId], references: [id])
-  amount     Int
-  transferId String
-  productId  String
+  id          String   @id @default(uuid())
+  transfer    transfer @relation(fields: [transfer_id], references: [id])
+  product     product  @relation(fields: [product_id], references: [id])
+  amount      Int
+  transfer_id String
+  product_id  String
+}
+
+model outbound {
+  id         String          @id @default(uuid())
+  item       outbound_item[]
+  created_by String
+  demand     demand[]
+}
+
+model outbound_item {
+  id             String       @id @default(uuid())
+  product_id     String
+  warehouse_id   String
+  shop_id        String
+  amount         Int
+  outbound       outbound     @relation(fields: [outbound_id], references: [id])
+  preparation    preparation? @relation(fields: [preparation_id], references: [id])
+  created_at     DateTime     @default(now())
+  outbound_id    String
+  preparation_id String?
+  demand         demand?      @relation
+  missing        missing?     @relation
+}
+
+model preparation {
+  id          String          @id @default(uuid())
+  created_at  DateTime        @default(now())
+  created_by  String
+  outbound    outbound_item[]
+  transaction transaction[]
+}
+
+model demand {
+  id                    String         @id @default(uuid())
+  product_id            String
+  warehouse_id          String
+  shop_id               String
+  amount                Int
+  outbound              outbound       @relation(fields: [outbound_id], references: [id])
+  outbound_id           String
+  fulfiled_at           DateTime?
+  input_type            String?
+  input_id              String?
+  fulfiled_outbound     outbound_item? @relation(fields: [outbound_item_id], references: [id])
+  outbound_item_id      String?
+  previous_demand       demand?        @relation("child_demand")
+  unfulfilled_demand    demand?        @relation("child_demand", fields: [unfulfilled_demand_id], references: [id])
+  unfulfilled_demand_id String?
+}
+
+model missing {
+  id               String        @id @default(uuid())
+  outbound_item    outbound_item @relation(fields: [outbound_item_id], references: [id])
+  outbound_item_id String
+  product_id       String
+  missing          Int
+  created_at       DateTime      @default(now())
+  created_by       String
+}
+
+model transaction {
+  id             String      @id @default(uuid())
+  product_id     String
+  warehouse_id   String
+  shop_id        String
+  amount         Int
+  preparation    preparation @relation(fields: [preparation_id], references: [id])
+  preparation_id String
+  remarks        Json
 }
