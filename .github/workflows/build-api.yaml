@@ -2,8 +2,8 @@ name: GitHub Actions API Warehousia
 on:
   push:
     paths:
-      - ./apps/api
-      - ./prisma
+      - './apps/api/**'
+      - './prisma/**'
 env:
   REGISTRY: ghcr.io
 jobs:
