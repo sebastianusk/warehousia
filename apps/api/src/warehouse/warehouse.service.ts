@@ -165,26 +165,18 @@ export default class WarehouseService {
           stock: {
             decrement: item.amount,
           },
+          logs: {
+            create: {
+              action: 'transfer-out',
+              amount: item.amount,
+              created_by: auth.username,
+            },
+          },
         },
         where: {
           product_id_warehouse_id: {
             warehouse_id: warehouseId,
             product_id: item.productId,
-          },
-        },
-      });
-      const sourceLog = this.db.stocklog.create({
-        data: {
-          action: 'transfer-out',
-          amount: item.amount,
-          created_by: auth.username,
-          stock: {
-            connect: {
-              product_id_warehouse_id: {
-                product_id: item.productId,
-                warehouse_id: warehouseId,
-              },
-            },
           },
         },
       });
@@ -218,7 +210,7 @@ export default class WarehouseService {
           },
         },
       });
-      return [source, sourceLog, destination];
+      return [source, destination];
     });
     const transfer = this.db.transfer.create({
       data: {
