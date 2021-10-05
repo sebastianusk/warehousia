@@ -42,8 +42,8 @@ export default class ShopService {
     offset: number
   ): Promise<ShopModel[]> {
     const result = await this.db.shop.findMany({
-      skip: offset * limit,
       take: limit,
+      skip: offset * limit,
       where: {
         name: {
           startsWith: query,
