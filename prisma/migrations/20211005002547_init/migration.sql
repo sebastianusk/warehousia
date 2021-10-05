@@ -113,10 +113,83 @@ CREATE TABLE "transfer" (
 CREATE TABLE "transfer_item" (
     "id" TEXT NOT NULL,
     "amount" INTEGER NOT NULL,
-    "transferId" TEXT NOT NULL,
-    "productId" TEXT NOT NULL,
+    "transfer_id" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
 
     CONSTRAINT "transfer_item_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "outbound" (
+    "id" TEXT NOT NULL,
+    "created_by" TEXT NOT NULL,
+
+    CONSTRAINT "outbound_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "outbound_item" (
+    "id" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
+    "warehouse_id" TEXT NOT NULL,
+    "shop_id" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "outbound_id" TEXT NOT NULL,
+    "preparation_id" TEXT,
+
+    CONSTRAINT "outbound_item_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "preparation" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_by" TEXT NOT NULL,
+
+    CONSTRAINT "preparation_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "demand" (
+    "id" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
+    "warehouse_id" TEXT NOT NULL,
+    "shop_id" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "outbound_id" TEXT NOT NULL,
+    "fulfiled_at" TIMESTAMP(3),
+    "input_type" TEXT,
+    "input_id" TEXT,
+    "outbound_item_id" TEXT,
+    "unfulfilled_demand_id" TEXT,
+
+    CONSTRAINT "demand_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "missing" (
+    "id" TEXT NOT NULL,
+    "outbound_item_id" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
+    "missing" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_by" TEXT NOT NULL,
+
+    CONSTRAINT "missing_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "transaction" (
+    "id" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
+    "warehouse_id" TEXT NOT NULL,
+    "shop_id" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "preparation_id" TEXT NOT NULL,
+    "remarks" JSONB NOT NULL,
+
+    CONSTRAINT "transaction_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -127,6 +200,15 @@ CREATE TABLE "_admin_access" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "stock_product_id_warehouse_id_key" ON "stock"("product_id", "warehouse_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "demand_outbound_item_id_unique" ON "demand"("outbound_item_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "demand_unfulfilled_demand_id_unique" ON "demand"("unfulfilled_demand_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "missing_outbound_item_id_unique" ON "missing"("outbound_item_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_admin_access_AB_unique" ON "_admin_access"("A", "B");
@@ -153,10 +235,31 @@ ALTER TABLE "inbound_item" ADD CONSTRAINT "inbound_item_inbound_id_fkey" FOREIGN
 ALTER TABLE "inbound_item" ADD CONSTRAINT "inbound_item_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "transfer_item" ADD CONSTRAINT "transfer_item_transferId_fkey" FOREIGN KEY ("transferId") REFERENCES "transfer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "transfer_item" ADD CONSTRAINT "transfer_item_transfer_id_fkey" FOREIGN KEY ("transfer_id") REFERENCES "transfer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "transfer_item" ADD CONSTRAINT "transfer_item_productId_fkey" FOREIGN KEY ("productId") REFERENCES "product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "transfer_item" ADD CONSTRAINT "transfer_item_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "outbound_item" ADD CONSTRAINT "outbound_item_outbound_id_fkey" FOREIGN KEY ("outbound_id") REFERENCES "outbound"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "outbound_item" ADD CONSTRAINT "outbound_item_preparation_id_fkey" FOREIGN KEY ("preparation_id") REFERENCES "preparation"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "demand" ADD CONSTRAINT "demand_outbound_id_fkey" FOREIGN KEY ("outbound_id") REFERENCES "outbound"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "demand" ADD CONSTRAINT "demand_outbound_item_id_fkey" FOREIGN KEY ("outbound_item_id") REFERENCES "outbound_item"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "demand" ADD CONSTRAINT "demand_unfulfilled_demand_id_fkey" FOREIGN KEY ("unfulfilled_demand_id") REFERENCES "demand"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "missing" ADD CONSTRAINT "missing_outbound_item_id_fkey" FOREIGN KEY ("outbound_item_id") REFERENCES "outbound_item"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "transaction" ADD CONSTRAINT "transaction_preparation_id_fkey" FOREIGN KEY ("preparation_id") REFERENCES "preparation"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_admin_access" ADD FOREIGN KEY ("A") REFERENCES "admin"("username") ON DELETE CASCADE ON UPDATE CASCADE;
