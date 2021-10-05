@@ -29,8 +29,8 @@ export default function SuperAdminMenuPage(): ReactElement {
               Add New Warehouse
             </Button>
             <Input.Search
-              placeholder="search by name"
               onSearch={onSearch}
+              placeholder="search by name"
               style={{ width: 200 }}
             />
           </div>
