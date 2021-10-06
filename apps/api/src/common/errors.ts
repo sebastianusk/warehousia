@@ -36,3 +36,11 @@ export class NotEnoughItem extends UserInputError {
     super(`${item} not enough, need ${expected}, got ${actual}`);
   }
 }
+
+export class NotEnoughItems extends UserInputError {
+  constructor(errors: {
+    errors: { productId: string; expected: number; actual: number }[];
+  }) {
+    super('Not enough item', errors);
+  }
+}

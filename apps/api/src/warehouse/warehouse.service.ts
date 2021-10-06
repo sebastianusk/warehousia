@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
-import { NotEnoughItem } from '../common/errors';
+import { NotEnoughItem, NotEnoughItems } from '../common/errors';
 import DBService from '../db/db.service';
 import { InboundModel, TransferModel } from './stock.dto';
 import WarehouseModel, { Feature } from './warehouse.dto';
@@ -142,13 +142,13 @@ export default class WarehouseService {
     return data.map((item) => InboundModel.fromDB(item));
   }
 
-  async addTransfer(
-    auth: AuthWrapper,
+  async checkStock(
     warehouseId: string,
-    destinationId: string,
     items: { productId: string; amount: number }[]
-  ): Promise<string> {
-    const transactions = items.map(async (item) => {
+  ): Promise<{
+    errors: { productId: string; expected: number; actual: number }[];
+  }> {
+    const status = items.map(async (item) => {
       const check = await this.db.stock.findUnique({
         where: {
           product_id_warehouse_id: {
@@ -158,8 +158,29 @@ export default class WarehouseService {
         },
       });
       if (check.stock < item.amount) {
-        throw new NotEnoughItem(item.productId, item.amount, check.stock);
+        return {
+          productId: item.productId,
+          expected: item.amount,
+          actual: check.stock,
+        };
       }
+      return undefined;
+    });
+    const errors = (await Promise.all(status)).filter((value) => value);
+    return { errors };
+  }
+
+  async addTransfer(
+    auth: AuthWrapper,
+    warehouseId: string,
+    destinationId: string,
+    items: { productId: string; amount: number }[]
+  ): Promise<string> {
+    const errors = await this.checkStock(warehouseId, items);
+    if (errors.errors) {
+      throw new NotEnoughItems(errors);
+    }
+    const transactions = items.map(async (item) => {
       const source = this.db.stock.update({
         data: {
           stock: {
