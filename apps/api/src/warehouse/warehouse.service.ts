@@ -177,7 +177,7 @@ export default class WarehouseService {
     items: { productId: string; amount: number }[]
   ): Promise<string> {
     const errors = await this.checkStock(warehouseId, items);
-    if (errors.errors) {
+    if (errors.errors.length !== 0) {
       throw new NotEnoughItems(errors);
     }
     const transactions = items.map(async (item) => {
