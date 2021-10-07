@@ -1,4 +1,5 @@
 # Warehousia
+[![GitHub Actions API Warehousia](https://github.com/sebastianusk/warehousia/actions/workflows/build-api.yaml/badge.svg)](https://github.com/sebastianusk/warehousia/actions/workflows/build-api.yaml)
 
 This project was generated using [Nx](https://nx.dev).
 
