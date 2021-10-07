@@ -7,6 +7,7 @@ import AuthModule from '../auth/auth.module';
 import DBModule from '../db/db.module';
 import ProductModule from '../product/product.module';
 import ShopModule from '../shop/shop.module';
+import TransactionModule from '../transaction/transaction.module';
 import WarehouseModule from '../warehouse/warehouse.module';
 
 @Module({
@@ -17,6 +18,7 @@ import WarehouseModule from '../warehouse/warehouse.module';
     WarehouseModule,
     ShopModule,
     ProductModule,
+    TransactionModule,
     GraphQLModule.forRoot({
       typePaths: ['./design/spec.graphql'],
       definitions: {

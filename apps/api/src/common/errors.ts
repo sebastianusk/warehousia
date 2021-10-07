@@ -44,3 +44,9 @@ export class NotEnoughItems extends UserInputError {
     super('Not enough item', errors);
   }
 }
+
+export class ProductsNotFound extends UserInputError {
+  constructor(products: string[]) {
+    super('Products Not found', { errors: products });
+  }
+}
