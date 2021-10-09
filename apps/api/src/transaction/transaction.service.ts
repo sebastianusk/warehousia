@@ -154,4 +154,21 @@ export default class TransactionService {
     });
     return outbounds.map((data) => OutboundModel.fromDB(data));
   }
+
+  async createPreparation(
+    auth: AuthWrapper,
+    warehouseId: string,
+    shopId: string
+  ): Promise<string> {
+    const { id } = await this.db.preparation.create({
+      data: {
+        created_by: auth.username,
+      },
+    });
+    await this.db.outbound_item.updateMany({
+      where: { warehouse_id: warehouseId, shop_id: shopId },
+      data: { preparation_id: id },
+    });
+    return id;
+  }
 }

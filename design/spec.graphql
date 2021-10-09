@@ -33,7 +33,7 @@ type Mutation {
   editProductStock(input: StockProductInput): IdPayload
 
   addOutbound(warehouseId: String!, shopId: String!, items: [ProductAmountInput]!): OutboundResponse
-  addPreparation(input: AddPreparationInput): IdPayload
+  addPreparation(warehouseId: String!, shopId: String!): IdPayload
   addMissing(input: AddMissingInput): IdPayload
   addTransaction(input: AddTransactionInput): IdPayload
 

@@ -4,6 +4,7 @@ import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
 import AuthWrapper from '../auth/auth.wrapper';
 import {
   DemandList,
+  IdPayload,
   OutboundList,
   OutboundResponse,
   PaginationInput,
@@ -69,5 +70,20 @@ export default class TransactionResolver {
     return {
       data: data.map((item) => item.toResponse()),
     };
+  }
+
+  @Mutation()
+  @UseGuards(JwtAuthGuard)
+  async addPreparation(
+    @CurrentAuth() auth: AuthWrapper,
+    @Args('warehouseId') warehouseId: string,
+    @Args('shopId') shopId: string
+  ): Promise<IdPayload> {
+    const id = await this.transactionService.createPreparation(
+      auth,
+      warehouseId,
+      shopId
+    );
+    return { id };
   }
 }
