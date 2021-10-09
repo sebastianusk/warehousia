@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
 import { ProductsNotFound } from '../common/errors';
 import DBService from '../db/db.service';
+import { DemandModel, OutboundModel } from './transaction.dto';
 
 @Injectable()
 export default class TransactionService {
@@ -114,5 +115,43 @@ export default class TransactionService {
       demands: demands.map((item) => item.id),
       outbounds: outbounds.map((item) => item.id),
     };
+  }
+
+  async getDemands(
+    warehouseId: string,
+    shopId: string,
+    limit: number = 10,
+    offset: number = 0
+  ): Promise<DemandModel[]> {
+    const demands = await this.db.demand.findMany({
+      skip: offset * limit,
+      take: limit,
+      where: {
+        warehouse_id: warehouseId,
+        shop_id: shopId,
+        fulfiled_at: null,
+      },
+      orderBy: { created_at: 'desc' },
+    });
+    return demands.map((data) => DemandModel.fromDB(data));
+  }
+
+  async getOutbounds(
+    warehouseId: string,
+    shopId: string,
+    offset: number = 0,
+    limit: number = 10
+  ): Promise<OutboundModel[]> {
+    const outbounds = await this.db.outbound_item.findMany({
+      skip: offset * limit,
+      take: limit,
+      where: {
+        warehouse_id: warehouseId,
+        shop_id: shopId,
+        preparation_id: null,
+      },
+      orderBy: { created_at: 'desc' },
+    });
+    return outbounds.map((data) => OutboundModel.fromDB(data));
   }
 }

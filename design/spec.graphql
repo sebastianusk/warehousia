@@ -6,7 +6,7 @@ type Query {
   shops(query: String, pagination: PaginationInput): ShopList
   products(warehouseId: String!, query: String, pagination: PaginationInput): ProductList
   productLog(productId: String, pagination: PaginationInput): ProductLogList
-  outbounds(warehouseId: String!, shopId: String!, pagination: PaginationInput): Outbound
+  outbounds(warehouseId: String!, shopId: String!, pagination: PaginationInput): OutboundList
   demands(warehouseId: String, shopId: String, pagination: PaginationInput): DemandList
   preparations(preparationId: String): Preparation
   transactions(productId: String, warehouseId: String, shopId: String, pagination: PaginationInput): TransactionList
@@ -228,13 +228,18 @@ input EditWarehouseInput {
 }
 
 # Outbound Objects
+type OutboundList {
+  data: [Outbound]!
+}
+
 type Outbound {
   id: String!
   createdAt: String!
-  createdBy: Admin!
-  shop: Shop!
-  warehouse: Warehouse!
-  items: [ProductAmount]!
+  createdBy: String!
+  shopId: String!
+  warehouseId: String!
+  productId: String!
+  amount: Int!
 }
 
 type OutboundResponse {
@@ -248,12 +253,12 @@ type DemandList {
 
 type Demand {
   id: String!
-  warehouse: Warehouse!
-  shop: Shop!
-  product: Product
+  warehouseId: String!
+  shopId: String!
+  productId: String
   amount: Int!
   createdAt: String!
-  createdBy: Admin!
+  createdBy: String!
 }
 
 type Preparation {
