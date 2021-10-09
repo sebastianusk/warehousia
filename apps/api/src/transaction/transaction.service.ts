@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
-import { ProductsNotFound, WrongMissingAmount } from '../common/errors';
+import {
+  PreparationNotFound,
+  ProductsNotFound,
+  WrongMissingAmount,
+} from '../common/errors';
 import DBService from '../db/db.service';
 import {
   DemandModel,
@@ -182,10 +186,10 @@ export default class TransactionService {
     return id;
   }
 
-  async getPreparation(
+  async getPreparations(
     id: string,
-    warehouseId: string,
-    shopId: string
+    warehouseId: string = '',
+    shopId: string = ''
   ): Promise<PreparationModel[]> {
     const data = await this.db.preparation.findMany({
       where: {
@@ -195,29 +199,43 @@ export default class TransactionService {
         ],
         transaction: undefined,
       },
-      include: { outbound: { include: { missing: true } } },
+      include: { outbound: true, missing: true },
     });
-    return data.map(
-      (preparation) =>
-        new PreparationModel(
-          preparation.id,
-          preparation.warehouse_id,
-          preparation.shop_id,
-          preparation.created_by,
-          preparation.created_at,
-          preparation.outbound.map((item) => ({
-            productId: item.product_id,
-            expected: item.amount,
-            actual: item.missing
-              ? item.amount -
-                item.missing.reduce(
-                  (total, missingItem) => total + missingItem.missing,
-                  0
-                )
-              : item.amount,
-          }))
-        )
-    );
+    return data.map((preparation) => {
+      const products = preparation.outbound.reduce((prev, item) => {
+        const next = prev;
+        if (next[item.product_id]) {
+          next[item.product_id] += item.amount;
+        } else {
+          next[item.product_id] = item.amount;
+        }
+        return next;
+      }, {} as { [key: string]: number });
+      const amount = Object.entries(products).map((product) => {
+        const missing = preparation.missing
+          .filter((missings) => missings.product_id === product[0])
+          .reduce((total, item) => total + item.missing, 0);
+        return {
+          productId: product[0],
+          expected: product[1],
+          actual: product[1] - missing,
+        };
+      });
+      return new PreparationModel(
+        preparation.id,
+        preparation.warehouse_id,
+        preparation.shop_id,
+        preparation.created_by,
+        preparation.created_at,
+        amount
+      );
+    });
+  }
+
+  async getPreparation(id: string): Promise<PreparationModel> {
+    const preparations = await this.getPreparations(id);
+    if (preparations.length !== 1) throw new PreparationNotFound(id);
+    return preparations[0];
   }
 
   async createMissing(
@@ -226,24 +244,21 @@ export default class TransactionService {
     productId: string,
     amount: number
   ): Promise<string> {
-    const data = await this.db.outbound_item.findFirst({
-      where: {
-        preparation: { id: preparationId, transaction: undefined },
-        product_id: productId,
-      },
-      include: { missing: true },
-    });
-    const countMiss =
-      amount + data.missing.reduce((total, item) => total + item.missing, 0);
-    if (data.amount < countMiss) {
-      throw new WrongMissingAmount(productId, data.amount, countMiss);
-    }
+    const preparation = await this.getPreparation(preparationId);
+    const item = preparation.items.find((data) => data.productId === productId);
+    if (!item) throw new ProductsNotFound([productId]);
+    if (item.actual - amount < 0)
+      throw new WrongMissingAmount(
+        productId,
+        item.expected,
+        item.expected - item.actual + amount
+      );
     const missing = await this.db.missing.create({
       data: {
         product_id: productId,
         missing: amount,
         created_by: auth.username,
-        outbound_item_id: data.id,
+        preparation: { connect: { id: preparation.id } },
       },
     });
     return missing.id;
@@ -251,28 +266,24 @@ export default class TransactionService {
 
   async createTransaction(
     auth: AuthWrapper,
-    preparationId: string
+    preparationId: string,
+    remarks: string
   ): Promise<String> {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { shop_id, warehouse_id, outbound } =
-      await this.db.preparation.findUnique({
-        where: { id: preparationId },
-        include: { outbound: { include: { missing: true } } },
-      });
+    const { shopId, warehouseId, items } = await this.getPreparation(
+      preparationId
+    );
     const data = await this.db.transaction.create({
       data: {
         preparation: { connect: { id: preparationId } },
         created_by: auth.username,
-        shop_id,
-        warehouse_id,
-        remarks: '',
+        shop_id: shopId,
+        warehouse_id: warehouseId,
+        remarks,
         items: {
           createMany: {
-            data: outbound.map(({ product_id, amount, missing }) => ({
-              product_id,
-              amount:
-                amount -
-                missing.reduce((total, item) => total + item.missing, 0),
+            data: items.map((item) => ({
+              product_id: item.productId,
+              amount: item.actual,
             })),
           },
         },

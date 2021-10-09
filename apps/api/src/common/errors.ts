@@ -58,3 +58,9 @@ export class WrongMissingAmount extends UserInputError {
     );
   }
 }
+
+export class PreparationNotFound extends UserInputError {
+  constructor(id: string) {
+    super(`Preparatin ${id} not found`);
+  }
+}

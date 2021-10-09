@@ -95,7 +95,7 @@ export default class TransactionResolver {
     @Args('warehouseId') warehouseId: string,
     @Args('shopId') shopId: string
   ): Promise<PreparationList> {
-    const data = await this.transactionService.getPreparation(
+    const data = await this.transactionService.getPreparations(
       query,
       warehouseId,
       shopId

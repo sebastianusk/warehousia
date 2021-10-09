@@ -129,7 +129,6 @@ model outbound_item {
   created_at     DateTime     @default(now())
   created_by     String
   demand         demand?      @relation
-  missing        missing[]    @relation
 }
 
 model preparation {
@@ -140,6 +139,7 @@ model preparation {
   shop_id      String
   transaction  transaction?
   outbound     outbound_item[]
+  missing      missing[]
 }
 
 model demand {
@@ -161,13 +161,13 @@ model demand {
 }
 
 model missing {
-  id               String        @id @default(uuid())
-  outbound_item    outbound_item @relation(fields: [outbound_item_id], references: [id])
-  outbound_item_id String
-  product_id       String
-  missing          Int
-  created_at       DateTime      @default(now())
-  created_by       String
+  id             String      @id @default(uuid())
+  preparation    preparation @relation(fields: [preparation_id], references: [id])
+  preparation_id String
+  product_id     String
+  missing        Int
+  created_at     DateTime    @default(now())
+  created_by     String
 }
 
 model transaction {
