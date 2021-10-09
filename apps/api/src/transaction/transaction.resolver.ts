@@ -154,6 +154,6 @@ export default class TransactionResolver {
       pagination.offset,
       pagination.limit
     );
-    return { data:  data.map((item) => item.toResponse())}
+    return { data: data.map((item) => item.toResponse()) };
   }
 }
