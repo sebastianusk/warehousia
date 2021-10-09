@@ -280,7 +280,7 @@ export default class WarehouseService {
     if (errors.errors.length !== 0) {
       throw new NotEnoughItems(errors);
     }
-    const log = await auth.log(
+    await auth.log(
       this.db,
       'transfer',
       AuthWrapper.structRemarks(warehouseId, { destinationId })
