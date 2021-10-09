@@ -233,11 +233,10 @@ export default class TransactionService {
       },
       include: { missing: true },
     });
-    if (
-      data.amount <
-      amount + data.missing.reduce((total, item) => total + item.missing, 0)
-    ) {
-      throw new WrongMissingAmount(productId, data.amount, amount);
+    const countMiss =
+      amount + data.missing.reduce((total, item) => total + item.missing, 0);
+    if (data.amount < countMiss) {
+      throw new WrongMissingAmount(productId, data.amount, countMiss);
     }
     const missing = await this.db.missing.create({
       data: {
