@@ -35,7 +35,7 @@ type Mutation {
   addOutbound(warehouseId: String!, shopId: String!, items: [ProductAmountInput]!): OutboundResponse
   addPreparation(warehouseId: String!, shopId: String!): IdPayload
   addMissing(preparationId: String!, productId: String!, amount: Int!): IdPayload
-  addTransaction(input: AddTransactionInput): IdPayload
+  addTransaction(preparationId: String!): IdPayload
 
   addInbound(warehouseId: String!, items: [ProductAmountInput]!): IdPayload
   addTransfer(warehouseId: String!, destinationId: String!, items: [ProductAmountInput]!): IdPayload

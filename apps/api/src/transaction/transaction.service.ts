@@ -248,4 +248,36 @@ export default class TransactionService {
     });
     return missing.id;
   }
+
+  async createTransaction(
+    auth: AuthWrapper,
+    preparationId: string
+  ): Promise<String> {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { shop_id, warehouse_id, outbound } =
+      await this.db.preparation.findUnique({
+        where: { id: preparationId },
+        include: { outbound: { include: { missing: true } } },
+      });
+    const data = await this.db.transaction.create({
+      data: {
+        preparation: { connect: { id: preparationId } },
+        created_by: auth.username,
+        shop_id,
+        warehouse_id,
+        remarks: '',
+        items: {
+          createMany: {
+            data: outbound.map(({ product_id, amount, missing }) => ({
+              product_id,
+              amount:
+                amount -
+                missing.reduce((total, item) => total + item.missing, 0),
+            })),
+          },
+        },
+      },
+    });
+    return data.id;
+  }
 }
