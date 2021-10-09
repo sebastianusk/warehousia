@@ -10,6 +10,7 @@ import {
   PaginationInput,
   PreparationList,
   ProductAmountInput,
+  TransactionList,
 } from '../graphql';
 import TransactionService from './transaction.service';
 
@@ -135,5 +136,24 @@ export default class TransactionResolver {
       remarks
     );
     return { id };
+  }
+
+  @Query()
+  @UseGuards(JwtAuthGuard)
+  async transactions(
+    @CurrentAuth() auth: AuthWrapper,
+    @Args('productId') productId: string,
+    @Args('warehouseId') warehouseId: string,
+    @Args('shopId') shopId: string,
+    @Args('pagination') pagination: PaginationInput
+  ): Promise<TransactionList> {
+    const data = await this.transactionService.getTransactions(
+      productId,
+      warehouseId,
+      shopId,
+      pagination.offset,
+      pagination.limit
+    );
+    return { data:  data.map((item) => item.toResponse())}
   }
 }

@@ -301,9 +301,9 @@ type TransactionList {
 
 type Transaction {
   id: String!
-  shop: Shop!
-  warehouse: Warehouse!
-  items: Product!
+  shopId: String!
+  warehouseId: String!
+  productId: String!
   amount: Int!
   createdAt: String!
   createdBy: String!

@@ -322,9 +322,9 @@ export class TransactionList {
 
 export class Transaction {
     id: string;
-    shop: Shop;
-    warehouse: Warehouse;
-    items: Product;
+    shopId: string;
+    warehouseId: string;
+    productId: string;
     amount: number;
     createdAt: string;
     createdBy: string;

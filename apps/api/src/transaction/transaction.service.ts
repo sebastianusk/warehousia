@@ -10,6 +10,7 @@ import {
   DemandModel,
   OutboundModel,
   PreparationModel,
+  TransactionModel,
 } from './transaction.dto';
 
 @Injectable()
@@ -290,5 +291,35 @@ export default class TransactionService {
       },
     });
     return data.id;
+  }
+
+  async getTransactions(
+    productId: string,
+    warehouseId: string,
+    shopId: string,
+    offset: number = 0,
+    limit: number = 10
+  ): Promise<TransactionModel[]> {
+    const transactions = await this.db.transaction_item.findMany({
+      take: limit,
+      skip: offset * limit,
+      where: {
+        product_id: productId,
+        transaction: { warehouse_id: warehouseId, shop_id: shopId },
+      },
+      include: { transaction: true },
+    });
+    return transactions.map(
+      (item) =>
+        new TransactionModel(
+          item.id,
+          item.transaction.shop_id,
+          item.transaction.warehouse_id,
+          item.product_id,
+          item.amount,
+          item.transaction.created_at,
+          item.transaction.created_by
+        )
+    );
   }
 }
