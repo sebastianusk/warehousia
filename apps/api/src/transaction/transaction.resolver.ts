@@ -128,7 +128,7 @@ export default class TransactionResolver {
   async addTransaction(
     @CurrentAuth() auth: AuthWrapper,
     @Args('preparationId') preparationId: string,
-    @Args('remarks') remarks: string
+    @Args('remarks') remarks: string = ''
   ): Promise<IdPayload> {
     const id = await this.transactionService.createTransaction(
       auth,
@@ -145,7 +145,7 @@ export default class TransactionResolver {
     @Args('productId') productId: string,
     @Args('warehouseId') warehouseId: string,
     @Args('shopId') shopId: string,
-    @Args('pagination') pagination: PaginationInput
+    @Args('pagination') pagination: PaginationInput = { limit: 10, offset: 0 }
   ): Promise<TransactionList> {
     const data = await this.transactionService.getTransactions(
       productId,
