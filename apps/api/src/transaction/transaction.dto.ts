@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
-import { demand, outbound_item } from '@prisma/client';
-import { Demand, Outbound } from '../graphql';
+import { demand, outbound_item, Prisma } from '@prisma/client';
+import { Demand, Outbound, Preparation } from '../graphql';
 
 export class DemandModel {
   constructor(
@@ -68,6 +68,32 @@ export class OutboundModel {
       shopId: this.shopId,
       productId: this.productId,
       amount: this.amount,
+      createdAt: this.createdAt.toISOString(),
+      createdBy: this.createdBy,
+    };
+  }
+}
+
+export class PreparationModel {
+  constructor(
+    public id: string,
+    public warehouseId: string,
+    public shopId: string,
+    public createdBy: string,
+    public createdAt: Date,
+    public items: {
+      productId: string;
+      expected: number;
+      actual: number;
+    }[]
+  ) {}
+
+  toResponse(): Preparation {
+    return {
+      id: this.id,
+      warehouseId: this.warehouseId,
+      shopId: this.shopId,
+      items: this.items,
       createdAt: this.createdAt.toISOString(),
       createdBy: this.createdBy,
     };

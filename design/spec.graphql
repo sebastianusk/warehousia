@@ -8,7 +8,7 @@ type Query {
   productLog(productId: String, pagination: PaginationInput): ProductLogList
   outbounds(warehouseId: String!, shopId: String!, pagination: PaginationInput): OutboundList
   demands(warehouseId: String, shopId: String, pagination: PaginationInput): DemandList
-  preparations(preparationId: String): Preparation
+  preparations(query: String, warehouseId: String, shopId: String): PreparationList
   transactions(productId: String, warehouseId: String, shopId: String, pagination: PaginationInput): TransactionList
   inbounds(warehouseId: String!, pagination: PaginationInput): InboundList
   transfers(warehouseId: String!, destinationId: String!, pagination: PaginationInput): TransferList
@@ -261,15 +261,21 @@ type Demand {
   createdBy: String!
 }
 
+type PreparationList {
+  data: [Preparation]!
+}
+
 type Preparation {
   id: String!
-  warehouse: Warehouse!
-  shop: Shop!
+  warehouseId: String!
+  shopId: String!
+  createdBy: String!
+  createdAt: String!
   items: [PreparationItem]
 }
 
 type PreparationItem {
-  product: Product!
+  productId: String!
   expected: Int!
   actual: Int!
 }

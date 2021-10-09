@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
 import { ProductsNotFound } from '../common/errors';
 import DBService from '../db/db.service';
-import { DemandModel, OutboundModel } from './transaction.dto';
+import {
+  DemandModel,
+  OutboundModel,
+  PreparationModel,
+} from './transaction.dto';
 
 @Injectable()
 export default class TransactionService {
@@ -163,12 +167,55 @@ export default class TransactionService {
     const { id } = await this.db.preparation.create({
       data: {
         created_by: auth.username,
+        warehouse_id: warehouseId,
+        shop_id: shopId,
       },
     });
     await this.db.outbound_item.updateMany({
-      where: { warehouse_id: warehouseId, shop_id: shopId },
+      where: {
+        warehouse_id: warehouseId,
+        shop_id: shopId,
+        preparation_id: null,
+      },
       data: { preparation_id: id },
     });
     return id;
+  }
+
+  async getPreparation(
+    id: string,
+    warehouseId: string,
+    shopId: string
+  ): Promise<PreparationModel[]> {
+    const data = await this.db.preparation.findMany({
+      where: {
+        OR: [
+          { id: { contains: id } },
+          { warehouse_id: warehouseId, shop_id: shopId },
+        ],
+      },
+      include: { outbound: { include: { missing: true } } },
+    });
+    return data.map(
+      (preparation) =>
+        new PreparationModel(
+          preparation.id,
+          preparation.warehouse_id,
+          preparation.shop_id,
+          preparation.created_by,
+          preparation.created_at,
+          preparation.outbound.map((item) => ({
+            productId: item.product_id,
+            expected: item.amount,
+            actual: item.missing
+              ? item.amount -
+                item.missing.reduce(
+                  (total, missingItem) => total + missingItem.missing,
+                  0
+                )
+              : item.amount,
+          }))
+        )
+    );
   }
 }

@@ -8,6 +8,7 @@ import {
   OutboundList,
   OutboundResponse,
   PaginationInput,
+  PreparationList,
   ProductAmountInput,
 } from '../graphql';
 import TransactionService from './transaction.service';
@@ -85,5 +86,22 @@ export default class TransactionResolver {
       shopId
     );
     return { id };
+  }
+
+  @Query()
+  @UseGuards(JwtAuthGuard)
+  async preparations(
+    @Args('query') query: string,
+    @Args('warehouseId') warehouseId: string,
+    @Args('shopId') shopId: string
+  ): Promise<PreparationList> {
+    const data = await this.transactionService.getPreparation(
+      query,
+      warehouseId,
+      shopId
+    );
+    return {
+      data: data.map((item) => item.toResponse()),
+    };
   }
 }
