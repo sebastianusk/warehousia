@@ -104,4 +104,21 @@ export default class TransactionResolver {
       data: data.map((item) => item.toResponse()),
     };
   }
+
+  @Mutation()
+  @UseGuards(JwtAuthGuard)
+  async addMissing(
+    @CurrentAuth() auth: AuthWrapper,
+    @Args('preparationId') preparationId: string,
+    @Args('productId') productId: string,
+    @Args('amount') amount: number
+  ): Promise<IdPayload> {
+    const id = await this.transactionService.createMissing(
+      auth,
+      preparationId,
+      productId,
+      amount
+    );
+    return { id };
+  }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
-import { ProductsNotFound } from '../common/errors';
+import { ProductsNotFound, WrongMissingAmount } from '../common/errors';
 import DBService from '../db/db.service';
 import {
   DemandModel,
@@ -193,6 +193,7 @@ export default class TransactionService {
           { id: { contains: id } },
           { warehouse_id: warehouseId, shop_id: shopId },
         ],
+        transaction: undefined,
       },
       include: { outbound: { include: { missing: true } } },
     });
@@ -217,5 +218,35 @@ export default class TransactionService {
           }))
         )
     );
+  }
+
+  async createMissing(
+    auth: AuthWrapper,
+    preparationId: string,
+    productId: string,
+    amount: number
+  ): Promise<string> {
+    const data = await this.db.outbound_item.findFirst({
+      where: {
+        preparation: { id: preparationId, transaction: undefined },
+        product_id: productId,
+      },
+      include: { missing: true },
+    });
+    if (
+      data.amount <
+      amount + data.missing.reduce((total, item) => total + item.missing, 0)
+    ) {
+      throw new WrongMissingAmount(productId, data.amount, amount);
+    }
+    const missing = await this.db.missing.create({
+      data: {
+        product_id: productId,
+        missing: amount,
+        created_by: auth.username,
+        outbound_item_id: data.id,
+      },
+    });
+    return missing.id;
   }
 }

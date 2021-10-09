@@ -50,3 +50,11 @@ export class ProductsNotFound extends UserInputError {
     super('Products Not found', { errors: products });
   }
 }
+
+export class WrongMissingAmount extends UserInputError {
+  constructor(productId: string, expected: number, missing: number) {
+    super(
+      `Product ${productId} just need ${expected}, claimed missing ${missing}`
+    );
+  }
+}

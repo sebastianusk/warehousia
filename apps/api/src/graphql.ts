@@ -151,7 +151,7 @@ export abstract class IMutation {
 
     abstract addPreparation(warehouseId: string, shopId: string): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
-    abstract addMissing(input?: Nullable<AddMissingInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
+    abstract addMissing(preparationId: string, productId: string, amount: number): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
     abstract addTransaction(input?: Nullable<AddTransactionInput>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
