@@ -23,6 +23,7 @@ export default class TransactionService {
     shopId: string,
     items: { productId: string; amount: number }[]
   ): Promise<{ demands: string[]; outbounds: string[] }> {
+    await auth.log(this.db, 'createOutbound', { warehouseId, shopId, items });
     const stocks = await Promise.all(
       items.map(async ({ productId, amount }) => {
         const stock = await this.db.stock.findUnique({
@@ -87,6 +88,9 @@ export default class TransactionService {
           },
           data: {
             stock: { decrement: amount },
+            logs: {
+              create: { amount, created_by: auth.username, action: 'outbound' },
+            },
           },
         })
       )
@@ -169,6 +173,7 @@ export default class TransactionService {
     warehouseId: string,
     shopId: string
   ): Promise<string> {
+    await auth.log(this.db, 'createPreparation', { warehouseId, shopId });
     const { id } = await this.db.preparation.create({
       data: {
         created_by: auth.username,
@@ -245,6 +250,11 @@ export default class TransactionService {
     productId: string,
     amount: number
   ): Promise<string> {
+    await auth.log(this.db, 'createMissing', {
+      preparationId,
+      productId,
+      amount,
+    });
     const preparation = await this.getPreparation(preparationId);
     const item = preparation.items.find((data) => data.productId === productId);
     if (!item) throw new ProductsNotFound([productId]);
@@ -270,6 +280,7 @@ export default class TransactionService {
     preparationId: string,
     remarks: string
   ): Promise<string> {
+    await auth.log(this.db, 'createTransaction', { preparationId });
     const { shopId, warehouseId, items } = await this.getPreparation(
       preparationId
     );
