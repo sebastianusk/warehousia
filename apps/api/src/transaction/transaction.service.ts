@@ -119,6 +119,9 @@ export default class TransactionService {
             warehouse_id: warehouseId,
             shop_id: shopId,
             created_by: auth.username,
+            remarks: {
+              source: 'outbound',
+            },
           },
         })
       )

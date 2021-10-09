@@ -150,9 +150,8 @@ model demand {
   amount               Int
   created_at           DateTime       @default(now())
   created_by           String
+  remarks              Json
   fulfiled_at          DateTime?
-  input_type           String?
-  input_id             String?
   fulfiled_outbound    outbound_item? @relation(fields: [fulfiled_outbound_id], references: [id])
   fulfiled_outbound_id String?
   previous_demand      demand?        @relation("child_demand", fields: [previous_demand_id], references: [id])
