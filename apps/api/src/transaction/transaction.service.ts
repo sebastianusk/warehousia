@@ -268,7 +268,7 @@ export default class TransactionService {
     auth: AuthWrapper,
     preparationId: string,
     remarks: string
-  ): Promise<String> {
+  ): Promise<string> {
     const { shopId, warehouseId, items } = await this.getPreparation(
       preparationId
     );

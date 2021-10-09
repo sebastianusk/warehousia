@@ -121,4 +121,19 @@ export default class TransactionResolver {
     );
     return { id };
   }
+
+  @Mutation()
+  @UseGuards(JwtAuthGuard)
+  async addTransaction(
+    @CurrentAuth() auth: AuthWrapper,
+    @Args('preparationId') preparationId: string,
+    @Args('remarks') remarks: string
+  ): Promise<IdPayload> {
+    const id = await this.transactionService.createTransaction(
+      auth,
+      preparationId,
+      remarks
+    );
+    return { id };
+  }
 }
