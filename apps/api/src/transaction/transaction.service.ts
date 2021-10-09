@@ -38,10 +38,6 @@ export default class TransactionService {
       throw new ProductsNotFound(error);
     }
 
-    const outboundLog = await this.db.outbound.create({
-      data: { created_by: auth.username },
-    });
-
     const data = stocks.map((stock) => {
       if (stock.stock > stock.amount) {
         return {
@@ -70,6 +66,22 @@ export default class TransactionService {
       }
     );
 
+    await this.db.$transaction(
+      wrapper.outbound.map(({ productId, amount }) =>
+        this.db.stock.update({
+          where: {
+            product_id_warehouse_id: {
+              product_id: productId,
+              warehouse_id: warehouseId,
+            },
+          },
+          data: {
+            stock: { decrement: amount },
+          },
+        })
+      )
+    );
+
     const outbounds = await this.db.$transaction(
       wrapper.outbound.map(({ amount, productId }) =>
         this.db.outbound_item.create({
@@ -78,7 +90,7 @@ export default class TransactionService {
             amount,
             warehouse_id: warehouseId,
             shop_id: shopId,
-            outbound: { connect: { id: outboundLog.id } },
+            created_by: auth.username,
           },
         })
       )
@@ -92,7 +104,7 @@ export default class TransactionService {
             amount,
             warehouse_id: warehouseId,
             shop_id: shopId,
-            outbound: { connect: { id: outboundLog.id } },
+            created_by: auth.username,
           },
         })
       )
