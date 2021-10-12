@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Table, Button, Popconfirm } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Table, Popconfirm } from 'antd';
 import { useQuery, useMutation } from '@apollo/client';
+import client from '../../config/client';
 import {
   EditableTableProps,
   ColumnTypes,
@@ -8,6 +9,7 @@ import {
   EditableCell,
 } from '../EditableTable';
 import { GET_PRODUCTS, EDIT_PRODUCT } from '../../graph';
+import type { Warehouse } from '../../pages/ProductsPage/hooks';
 
 type Columns = (ColumnTypes[number] & {
   editable?: boolean;
@@ -25,12 +27,13 @@ type DataType = {
   };
 };
 
-function ProductListEditable(props: EditableTableProps) {
-  // const [dataSource, setDataSource] = useState<any>([]);
-  const [count, setCount] = useState(0);
+function ProductListEditable(
+  props: EditableTableProps & { selectedWarehouse: Warehouse | undefined }
+) {
+  // const [count, setCount] = useState(0);
   const { loading, error, data } = useQuery(GET_PRODUCTS, {
     variables: {
-      warehouseId: 'tangerang',
+      warehouseId: props.selectedWarehouse?.id,
       query: '',
       pagination: {
         offset: 0,
@@ -38,6 +41,12 @@ function ProductListEditable(props: EditableTableProps) {
       },
     },
   });
+
+  useEffect(() => {
+    client.refetchQueries({
+      include: ['products'],
+    });
+  }, [props.selectedWarehouse?.id]);
 
   const [editProduct] = useMutation(EDIT_PRODUCT);
 
@@ -70,7 +79,7 @@ function ProductListEditable(props: EditableTableProps) {
         {
           query: GET_PRODUCTS,
           variables: {
-            warehouseId: 'tangerang',
+            warehouseId: props.selectedWarehouse?.id,
             query: '',
             pagination: {
               offset: 0,
@@ -108,12 +117,16 @@ function ProductListEditable(props: EditableTableProps) {
       }),
     },
     {
-      title: 'Stock',
-      dataIndex: ['stock', 'all'],
+      title: 'Current WH Stock',
+      dataIndex: ['stock', 'amount'],
     },
     {
       title: 'Top Warehouse',
       dataIndex: ['stock', 'topWarehouse'],
+    },
+    {
+      title: 'Total Stock',
+      dataIndex: ['stock', 'all'],
     },
     {
       title: 'Action',
