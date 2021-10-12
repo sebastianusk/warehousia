@@ -62,6 +62,14 @@ export const GET_ADMIN_LOG = gql`
   }
 `;
 
+export const CHANGE_PASSWORD = gql`
+  mutation AddAdmin($input: ChangeMyPasswordInput) {
+    changeMyPassword(input: $input) {
+      username
+    }
+  }
+`;
+
 export const GET_WAREHOUSES = gql`
   query warehouses($query: String, $pagination: PaginationInput) {
     warehouses(query: $query, pagination: $pagination) {
