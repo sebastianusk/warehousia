@@ -154,10 +154,14 @@ export const GET_PRODUCTS = gql`
   }
 `;
 
-// input ProductInput {
-//   id: String!
-//   name: String!
-// }
+export const ADD_PRODUCTS = gql`
+  mutation addProducts($input: [ProductInput]) {
+    addProducts(input: $input) {
+      count
+    }
+  }
+`;
+
 export const EDIT_PRODUCT = gql`
   mutation editProduct($input: ProductInput) {
     editProduct(input: $input) {

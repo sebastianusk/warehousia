@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Table, Popconfirm } from 'antd';
 import { useQuery, useMutation } from '@apollo/client';
 import client from '../../config/client';
@@ -11,10 +11,10 @@ import {
 import { GET_PRODUCTS, EDIT_PRODUCT } from '../../graph';
 import type { Warehouse } from '../../pages/ProductsPage/hooks';
 
-type Columns = (ColumnTypes[number] & {
-  editable?: boolean;
-  dataIndex: string;
-})[];
+// type Columns = (ColumnTypes[number] & {
+//   editable?: boolean;
+//   dataIndex: string;
+// })[];
 
 type DataType = {
   id: string;
@@ -52,19 +52,9 @@ function ProductListEditable(
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error.toString()}</div>;
+
   // const handleDelete = (id: string) => {
   //   setDataSource(dataSource.filter((item: DataType) => item.id !== id));
-  // };
-
-  // const handleAdd = () => {
-  //   const newData: DataType = {
-  //     key: count,
-  //     name: `Edward King ${count}`,
-  //     age: '32',
-  //     address: `London, Park Lane no. ${count}`,
-  //   };
-  //   setDataSource([...dataSource, newData]);
-  //   setCount(count + 1);
   // };
 
   const handleSave = (row: DataType) => {
@@ -131,7 +121,7 @@ function ProductListEditable(
     {
       title: 'Action',
       dataIndex: 'Action',
-      render: (_: any, record: any) =>
+      render: () =>
         data?.products.data.length >= 1 ? (
           <Popconfirm
             title="Sure to delete?"
@@ -145,9 +135,6 @@ function ProductListEditable(
 
   return (
     <div>
-      {/* <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-        Add a row
-      </Button> */}
       <Table
         components={components}
         rowClassName={() => 'editable-row'}

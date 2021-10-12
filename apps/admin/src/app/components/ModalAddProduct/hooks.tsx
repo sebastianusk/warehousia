@@ -1,66 +1,59 @@
 import { useState, Dispatch, SetStateAction } from 'react';
+import { useMutation, ApolloError } from '@apollo/client';
+import { ADD_PRODUCTS } from '../../graph/index';
+import client from '../../config/client';
 
 interface ModalAddProductState {
-  confirmLoading: boolean;
+  error: ApolloError | undefined;
+  loading: boolean;
   handleOk: () => void;
   handleCancel: () => void;
   onInputProductCode: (e: any) => void;
   onInputProductName: (e: any) => void;
-  onInputProductPrice: (e: any) => void;
-  onInputProductCategory: (e: any) => void;
-  onInputProductStock: (e: any) => void;
 }
 
 export default function useModalAddProductHooks(
   setVisible: Dispatch<SetStateAction<boolean>>
 ): ModalAddProductState {
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [productCode, setProductCode] = useState('');
-  const [productName, setProductName] = useState('');
-  const [category, setCategory] = useState('');
-  const [price, setPrice] = useState(0);
-  const [stock, setStock] = useState(0);
-
-  const handleOk = () => {
-    setConfirmLoading(true);
-    // mock post to server
-    // eslint-disable-next-line no-console
-    console.log(productCode, productName, category, price, stock);
-    setTimeout(() => {
+  const [formData, setFormData] = useState({
+    id: '',
+    name: '',
+  });
+  const [addProducts, { loading, error }] = useMutation(ADD_PRODUCTS, {
+    onCompleted() {
+      setFormData({
+        id: '',
+        name: '',
+      });
       setVisible(false);
-      setConfirmLoading(false);
-    }, 2000);
+      client.refetchQueries({
+        include: ['products'],
+      });
+    },
+  });
+  const handleOk = () => {
+    addProducts({
+      variables: { input: formData },
+    });
   };
 
   const handleCancel = () => {
-    // eslint-disable-next-line no-console
-    console.log('Clicked cancel button');
     setVisible(false);
   };
 
   const onInputProductCode = (e: any) => {
-    setProductCode(e.target.value);
+    setFormData({ ...formData, id: e.target.value });
   };
   const onInputProductName = (e: any) => {
-    setProductName(e.target.value);
+    setFormData({ ...formData, name: e.target.value });
   };
-  const onInputProductPrice = (e: any) => {
-    setPrice(e.target.value);
-  };
-  const onInputProductCategory = (e: any) => {
-    setCategory(e.target.value);
-  };
-  const onInputProductStock = (e: any) => {
-    setStock(e.target.value);
-  };
+
   return {
-    confirmLoading,
+    error,
+    loading,
     handleOk,
     handleCancel,
     onInputProductCode,
     onInputProductName,
-    onInputProductPrice,
-    onInputProductCategory,
-    onInputProductStock,
   };
 }
