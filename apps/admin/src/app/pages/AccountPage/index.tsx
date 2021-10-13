@@ -1,17 +1,19 @@
 import React from 'react';
-import { Button, Card, Form, Input, message } from 'antd';
+import { Button, Card, Form, Input } from 'antd';
 
 import styles from './index.module.css';
 import useAccountPageHooks from './hooks';
 
 export default function AccountPage(): React.ReactElement {
-  const { onSubmit, loading } = useAccountPageHooks();
+  const { onSubmit, loading, form, contextHolder } = useAccountPageHooks();
   return (
     <>
+      {contextHolder}
       <Card className={styles.card}>
         <div>
           <h3>CHANGE PASSWORD</h3>
           <Form
+            form={form}
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 8 }}
             onFinish={onSubmit}
