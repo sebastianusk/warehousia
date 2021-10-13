@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Table, Button, Popconfirm } from 'antd';
+import React, { useEffect } from 'react';
+import { Table, Popconfirm } from 'antd';
 import { useQuery, useMutation } from '@apollo/client';
+import client from '../../config/client';
 import {
   EditableTableProps,
   ColumnTypes,
@@ -8,11 +9,12 @@ import {
   EditableCell,
 } from '../EditableTable';
 import { GET_PRODUCTS, EDIT_PRODUCT } from '../../graph';
+import type { Warehouse } from '../../pages/ProductsPage/hooks';
 
-type Columns = (ColumnTypes[number] & {
-  editable?: boolean;
-  dataIndex: string;
-})[];
+// type Columns = (ColumnTypes[number] & {
+//   editable?: boolean;
+//   dataIndex: string;
+// })[];
 
 type DataType = {
   id: string;
@@ -25,12 +27,13 @@ type DataType = {
   };
 };
 
-function ProductListEditable(props: EditableTableProps) {
-  // const [dataSource, setDataSource] = useState<any>([]);
-  const [count, setCount] = useState(0);
+function ProductListEditable(
+  props: EditableTableProps & { selectedWarehouse: Warehouse | undefined }
+) {
+  // const [count, setCount] = useState(0);
   const { loading, error, data } = useQuery(GET_PRODUCTS, {
     variables: {
-      warehouseId: 'tangerang',
+      warehouseId: props.selectedWarehouse?.id,
       query: '',
       pagination: {
         offset: 0,
@@ -39,23 +42,19 @@ function ProductListEditable(props: EditableTableProps) {
     },
   });
 
+  useEffect(() => {
+    client.refetchQueries({
+      include: ['products'],
+    });
+  }, [props.selectedWarehouse?.id]);
+
   const [editProduct] = useMutation(EDIT_PRODUCT);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error.toString()}</div>;
+
   // const handleDelete = (id: string) => {
   //   setDataSource(dataSource.filter((item: DataType) => item.id !== id));
-  // };
-
-  // const handleAdd = () => {
-  //   const newData: DataType = {
-  //     key: count,
-  //     name: `Edward King ${count}`,
-  //     age: '32',
-  //     address: `London, Park Lane no. ${count}`,
-  //   };
-  //   setDataSource([...dataSource, newData]);
-  //   setCount(count + 1);
   // };
 
   const handleSave = (row: DataType) => {
@@ -70,7 +69,7 @@ function ProductListEditable(props: EditableTableProps) {
         {
           query: GET_PRODUCTS,
           variables: {
-            warehouseId: 'tangerang',
+            warehouseId: props.selectedWarehouse?.id,
             query: '',
             pagination: {
               offset: 0,
@@ -108,17 +107,21 @@ function ProductListEditable(props: EditableTableProps) {
       }),
     },
     {
-      title: 'Stock',
-      dataIndex: ['stock', 'all'],
+      title: 'Current WH Stock',
+      dataIndex: ['stock', 'amount'],
     },
     {
       title: 'Top Warehouse',
       dataIndex: ['stock', 'topWarehouse'],
     },
     {
+      title: 'Total Stock',
+      dataIndex: ['stock', 'all'],
+    },
+    {
       title: 'Action',
       dataIndex: 'Action',
-      render: (_: any, record: any) =>
+      render: () =>
         data?.products.data.length >= 1 ? (
           <Popconfirm
             title="Sure to delete?"
@@ -132,9 +135,6 @@ function ProductListEditable(props: EditableTableProps) {
 
   return (
     <div>
-      {/* <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-        Add a row
-      </Button> */}
       <Table
         components={components}
         rowClassName={() => 'editable-row'}

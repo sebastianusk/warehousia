@@ -1,5 +1,5 @@
 import React, { ReactElement, Dispatch, SetStateAction } from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, Row, Col, Alert } from 'antd';
 import useModalAddProductHooks from './hooks';
 
 type ModalPropsType = {
@@ -12,14 +12,12 @@ export default function ModalAddProduct({
   setVisible,
 }: ModalPropsType): ReactElement {
   const {
-    confirmLoading,
+    error,
+    loading,
     handleOk,
     handleCancel,
     onInputProductCode,
     onInputProductName,
-    onInputProductPrice,
-    onInputProductCategory,
-    onInputProductStock,
   } = useModalAddProductHooks(setVisible);
   return (
     <>
@@ -27,50 +25,33 @@ export default function ModalAddProduct({
         title="Add New Product"
         visible={visible}
         onOk={handleOk}
-        confirmLoading={confirmLoading}
+        confirmLoading={loading}
         onCancel={handleCancel}
       >
-        {confirmLoading ? (
-          <p>Loading...</p>
-        ) : (
-          <>
-            <Form
-              layout="horizontal"
-              labelCol={{ span: 7 }}
-              wrapperCol={{ span: 14 }}
-            >
-              <Form.Item label="Product Code">
-                <Input
-                  placeholder="input product code"
-                  onChange={onInputProductCode}
-                />
-              </Form.Item>
-              <Form.Item label="Product Name">
-                <Input
-                  placeholder="input product name"
-                  onChange={onInputProductName}
-                />
-              </Form.Item>
-              <Form.Item label="Price">
-                <Input
-                  placeholder="input product price"
-                  onChange={onInputProductPrice}
-                />
-              </Form.Item>
-              <Form.Item label="Category">
-                <Input
-                  placeholder="input product's category"
-                  onChange={onInputProductCategory}
-                />
-              </Form.Item>
-              <Form.Item label="Stocks">
-                <Input
-                  placeholder="input product's stock"
-                  onChange={onInputProductStock}
-                />
-              </Form.Item>
-            </Form>
-          </>
+        <Form
+          layout="horizontal"
+          labelCol={{ span: 7 }}
+          wrapperCol={{ span: 14 }}
+        >
+          <Form.Item label="Product Code">
+            <Input
+              placeholder="input product code"
+              onChange={onInputProductCode}
+            />
+          </Form.Item>
+          <Form.Item label="Product Name">
+            <Input
+              placeholder="input product name"
+              onChange={onInputProductName}
+            />
+          </Form.Item>
+        </Form>
+        {error && (
+          <Row>
+            <Col span="24">
+              <Alert message={error.message} type="warning" />
+            </Col>
+          </Row>
         )}
       </Modal>
     </>
