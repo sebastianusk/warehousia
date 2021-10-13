@@ -3,11 +3,13 @@ import { Button, Card, Form, Input } from 'antd';
 
 import styles from './index.module.css';
 import useAccountPageHooks from './hooks';
+import ModalLoading from '../../components/ModalLoading';
 
 export default function AccountPage(): React.ReactElement {
-  const { onFinish } = useAccountPageHooks();
+  const { onFinish, loading } = useAccountPageHooks();
   return (
     <>
+      <ModalLoading visible={loading} />
       <Card className={styles.card}>
         <div>
           <h3>CHANGE PASSWORD</h3>

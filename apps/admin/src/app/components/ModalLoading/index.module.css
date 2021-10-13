@@ -1,0 +1,8 @@
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+.text {
+  text-align: center;
+}
