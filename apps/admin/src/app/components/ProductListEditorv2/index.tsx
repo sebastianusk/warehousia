@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Table, Popconfirm } from 'antd';
-import { useQuery, useMutation } from '@apollo/client';
-import client from '../../config/client';
+import { useQuery, useMutation, useApolloClient } from '@apollo/client';
 import {
   EditableTableProps,
   ColumnTypes,
@@ -31,6 +30,7 @@ function ProductListEditable(
   props: EditableTableProps & { selectedWarehouse: Warehouse | undefined }
 ) {
   // const [count, setCount] = useState(0);
+  const client = useApolloClient();
   const { loading, error, data } = useQuery(GET_PRODUCTS, {
     variables: {
       warehouseId: props.selectedWarehouse?.id,

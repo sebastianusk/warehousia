@@ -2,18 +2,26 @@ import React, { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
-import client from './app/config/client';
 
 import './styles.css';
 import App from './app/app';
+import useGraphQLClient from './app/config/client';
+
+function Initializer(): React.ReactElement {
+  const { client, contextHolder } = useGraphQLClient();
+  return (
+    <ApolloProvider client={client}>
+      {contextHolder}
+      <App />
+    </ApolloProvider>
+  );
+}
 
 ReactDOM.render(
   <StrictMode>
-    <ApolloProvider client={client}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ApolloProvider>
+    <BrowserRouter>
+      <Initializer />
+    </BrowserRouter>
   </StrictMode>,
   document.getElementById('root')
 );

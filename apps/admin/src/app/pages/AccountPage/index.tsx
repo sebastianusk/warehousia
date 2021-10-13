@@ -1,22 +1,20 @@
 import React from 'react';
-import { Button, Card, Form, Input } from 'antd';
+import { Button, Card, Form, Input, message } from 'antd';
 
 import styles from './index.module.css';
 import useAccountPageHooks from './hooks';
-import ModalLoading from '../../components/ModalLoading';
 
 export default function AccountPage(): React.ReactElement {
-  const { onFinish, loading } = useAccountPageHooks();
+  const { onSubmit, loading } = useAccountPageHooks();
   return (
     <>
-      <ModalLoading visible={loading} />
       <Card className={styles.card}>
         <div>
           <h3>CHANGE PASSWORD</h3>
           <Form
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 8 }}
-            onFinish={onFinish}
+            onFinish={onSubmit}
           >
             <Form.Item
               name="oldPass"
@@ -54,8 +52,10 @@ export default function AccountPage(): React.ReactElement {
             >
               <Input.Password />
             </Form.Item>
-            <Form.Item>
-              <Button htmlType="submit">SUBMIT</Button>
+            <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
+              <Button htmlType="submit" type="primary" loading={loading}>
+                SUBMIT
+              </Button>
             </Form.Item>
           </Form>
         </div>

@@ -1,12 +1,10 @@
 import { ApolloError, useMutation } from '@apollo/client';
-import Form from 'antd/lib/form/Form';
-import { useState } from 'react';
 import { CHANGE_PASSWORD } from '../../graph';
 
 interface AccountState {
   loading: boolean;
   error: ApolloError | undefined;
-  onFinish(values: {
+  onSubmit(values: {
     oldPass: string;
     newPass: string;
     confirmPass: string;
@@ -14,11 +12,9 @@ interface AccountState {
 }
 
 export default function useAccountPageHooks(): AccountState {
-  const [changePassword, { loading, error }] = useMutation(CHANGE_PASSWORD, {
-    onCompleted() {},
-  });
+  const [changePassword, { loading, error }] = useMutation(CHANGE_PASSWORD);
 
-  const onFinish = (values: {
+  const onSubmit = (values: {
     oldPass: string;
     newPass: string;
     confirmPass: string;
@@ -34,6 +30,6 @@ export default function useAccountPageHooks(): AccountState {
   return {
     loading,
     error,
-    onFinish,
+    onSubmit,
   };
 }

@@ -1,7 +1,6 @@
 import { useState, Dispatch, SetStateAction } from 'react';
-import { useMutation, ApolloError } from '@apollo/client';
+import { useMutation, ApolloError, useApolloClient } from '@apollo/client';
 import { ADD_PRODUCTS } from '../../graph/index';
-import client from '../../config/client';
 
 interface ModalAddProductState {
   error: ApolloError | undefined;
@@ -15,6 +14,7 @@ interface ModalAddProductState {
 export default function useModalAddProductHooks(
   setVisible: Dispatch<SetStateAction<boolean>>
 ): ModalAddProductState {
+  const client = useApolloClient();
   const [formData, setFormData] = useState({
     id: '',
     name: '',
