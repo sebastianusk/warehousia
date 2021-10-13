@@ -1,34 +1,39 @@
 import { ApolloError, useMutation } from '@apollo/client';
+import Form from 'antd/lib/form/Form';
 import { useState } from 'react';
 import { CHANGE_PASSWORD } from '../../graph';
 
 interface AccountState {
   loading: boolean;
   error: ApolloError | undefined;
-  handleSubmit(): void;
-  setNewPass(input: string): void;
-  setOldPass(input: string): void;
+  onFinish(values: {
+    oldPass: string;
+    newPass: string;
+    confirmPass: string;
+  }): void;
 }
 
 export default function useAccountPageHooks(): AccountState {
-  const [oldPassword, setOldPass] = useState('');
-  const [newPassword, setNewPass] = useState('');
   const [changePassword, { loading, error }] = useMutation(CHANGE_PASSWORD, {
-    onCompleted({ }) {},
+    onCompleted() {},
   });
 
-  const handleSubmit = () => {
-    if (oldPassword && newPassword) {
+  const onFinish = (values: {
+    oldPass: string;
+    newPass: string;
+    confirmPass: string;
+  }) => {
+    if (values.oldPass && values.newPass) {
       changePassword({
-        variables: { input: { oldPassword, newPassword } },
-      }).catch(console.warn);
+        variables: {
+          input: { oldPassword: values.oldPass, newPassword: values.newPass },
+        },
+      });
     }
   };
   return {
     loading,
     error,
-    handleSubmit,
-    setNewPass,
-    setOldPass,
+    onFinish,
   };
 }
