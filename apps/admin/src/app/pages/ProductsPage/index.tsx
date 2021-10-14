@@ -6,6 +6,7 @@ import ModalAddProduct from '../../components/ModalAddProduct';
 import useProductsPageHooks from './hooks';
 import ProductListEditorv2 from '../../components/ProductListEditorv2';
 import type { WarehouseList } from './hooks';
+import ModalAddProductBulk from '../../components/ModalAddProductBulk';
 
 export default function ProductsPage(): ReactElement {
   const {
@@ -70,6 +71,7 @@ export default function ProductsPage(): ReactElement {
         )}
       </Card>
       <ModalAddProduct visible={showModal} setVisible={setShowModal} />
+      <ModalAddProductBulk visible />
     </>
   );
 }

@@ -30,7 +30,6 @@ export default function useAccountPageHooks(): AccountState {
           input: { oldPassword: values.oldPass, newPassword: values.newPass },
         },
       }).then(() => {
-        console.log('heye');
         form.resetFields();
         messageApi.info('Successfully Change Password');
       });

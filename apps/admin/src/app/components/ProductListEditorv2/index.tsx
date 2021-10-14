@@ -122,7 +122,7 @@ function ProductListEditable(
       title: 'Action',
       dataIndex: 'Action',
       render: () =>
-        data?.products.data.length >= 1 ? (
+        data?.products?.data.length >= 1 ? (
           <Popconfirm
             title="Sure to delete?"
             // onConfirm={() => handleDelete(record.id)}
