@@ -40,7 +40,8 @@ export default function useProductsPageHooks(): ProductsPageState {
       },
     },
     onCompleted(response) {
-      setSelectedWarehouse(response.warehouses.data[0]);
+      if (response?.warehouses?.data[0])
+        setSelectedWarehouse(response.warehouses.data[0]);
     },
   });
 
