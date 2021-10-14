@@ -1,37 +1,57 @@
+import { useApolloClient, useMutation } from '@apollo/client';
 import { Dispatch, SetStateAction, useState } from 'react';
 import parseExcel from '../../excel';
+import { ADD_PRODUCTS } from '../../graph';
 
 export interface ProductData {
-  productName: string;
-  productCode: string;
+  id: string;
+  name: string;
 }
 
 interface ModalAddProductBulkState {
   handleFile(file: File): void;
-  loading: boolean;
+  fileLoading: boolean;
   data: ProductData[];
+  uploadData(): void;
+  uploadLoading: boolean;
 }
 
 export default function useModalAddProductBulkHooks(
   setVisible: Dispatch<SetStateAction<boolean>>
 ): ModalAddProductBulkState {
   const [data, setData] = useState<ProductData[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [fileLoading, setFileLoading] = useState(false);
   const handleFile = (file: File) => {
-    setLoading(true);
+    setFileLoading(true);
     parseExcel(file).then((excelData) => {
       setData(
         excelData.map((item) => ({
-          productCode: item[0],
-          productName: item[1],
+          id: item[0],
+          name: item[1],
         }))
       );
-      setLoading(false);
+      setFileLoading(false);
     });
+  };
+
+  const client = useApolloClient();
+  const [addProducts, { loading }] = useMutation(ADD_PRODUCTS, {
+    onCompleted() {
+      setVisible(false);
+      client.refetchQueries({
+        include: ['products'],
+      });
+    },
+  });
+
+  const uploadData = () => {
+    addProducts({ variables: { input: data } });
   };
   return {
     data,
     handleFile,
-    loading,
+    fileLoading,
+    uploadData,
+    uploadLoading: loading,
   };
 }

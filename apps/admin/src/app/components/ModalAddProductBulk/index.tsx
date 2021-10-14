@@ -9,11 +9,11 @@ import styles from './index.module.css';
 const columns: ColumnType<ProductData>[] = [
   {
     title: 'Kode Produk',
-    dataIndex: 'productCode',
+    dataIndex: 'id',
   },
   {
     title: 'Nama Produk',
-    dataIndex: 'productName',
+    dataIndex: 'name',
   },
 ];
 
@@ -21,14 +21,14 @@ export default function ModalAddProductBulk(props: {
   visible: boolean;
   setVisible: Dispatch<SetStateAction<boolean>>;
 }): React.ReactElement {
-  const { handleFile, data, loading } = useModalAddProductBulkHooks(
-    props.setVisible
-  );
+  const { handleFile, data, fileLoading, uploadData, uploadLoading } =
+    useModalAddProductBulkHooks(props.setVisible);
   return (
     <Modal
       visible={props.visible}
       onCancel={() => props.setVisible(false)}
-      okButtonProps={{ disabled: data.length === 0 }}
+      onOk={uploadData}
+      okButtonProps={{ disabled: data.length === 0, loading: uploadLoading }}
     >
       <div className={styles.container}>
         <input
@@ -39,12 +39,8 @@ export default function ModalAddProductBulk(props: {
             if (files && files[0]) handleFile(files[0]);
           }}
         />
-        <Table columns={columns} loading={loading} dataSource={data} />
+        <Table columns={columns} loading={fileLoading} dataSource={data} />
       </div>
     </Modal>
   );
-}
-
-function setVisible(setVisible: any): {handleFile: any; data: any; loading: any;} {
-  throw new Error('Function not implemented.');
 }
