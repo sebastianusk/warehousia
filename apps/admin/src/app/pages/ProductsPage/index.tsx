@@ -13,6 +13,9 @@ export default function ProductsPage(): ReactElement {
     showModal,
     setShowModal,
     openModal,
+    showBulkModal,
+    setShowBulkModal,
+    openBulkModal,
     onSearch,
     handleMenuClick,
     handleVisibleDropdown,
@@ -53,7 +56,7 @@ export default function ProductsPage(): ReactElement {
             <Button className={styles.buttonAddOne} onClick={openModal}>
               Add One
             </Button>
-            <Button>Bulk Add</Button>
+            <Button onClick={openBulkModal}>Bulk Add</Button>
           </div>
         </div>
       </Card>
@@ -71,7 +74,7 @@ export default function ProductsPage(): ReactElement {
         )}
       </Card>
       <ModalAddProduct visible={showModal} setVisible={setShowModal} />
-      <ModalAddProductBulk visible />
+      <ModalAddProductBulk visible={showBulkModal} setVisible={setShowBulkModal} />
     </>
   );
 }

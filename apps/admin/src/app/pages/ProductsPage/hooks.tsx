@@ -14,6 +14,9 @@ interface ProductsPageState {
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
   openModal: () => void;
+  showBulkModal: boolean;
+  setShowBulkModal: Dispatch<SetStateAction<boolean>>;
+  openBulkModal: () => void;
   onSearch: (val: string) => void;
   handleMenuClick: (e: { key: React.SetStateAction<string> }) => void;
   handleVisibleDropdown: () => void;
@@ -26,6 +29,7 @@ interface ProductsPageState {
 
 export default function useProductsPageHooks(): ProductsPageState {
   const [showModal, setShowModal] = useState(false);
+  const [showBulkModal, setShowBulkModal] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
   const [selectedWarehouse, setSelectedWarehouse] = useState<
     Warehouse | undefined
@@ -54,6 +58,10 @@ export default function useProductsPageHooks(): ProductsPageState {
     setShowModal(true);
   };
 
+  const openBulkModal = () => {
+    setShowBulkModal(true);
+  };
+
   const handleVisibleDropdown = () => {
     setShowDropDown(!showDropDown);
   };
@@ -71,6 +79,9 @@ export default function useProductsPageHooks(): ProductsPageState {
     showModal,
     setShowModal,
     openModal,
+    showBulkModal,
+    setShowBulkModal,
+    openBulkModal,
     onSearch,
     handleMenuClick,
     handleVisibleDropdown,

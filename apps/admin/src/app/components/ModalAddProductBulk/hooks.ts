@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import parseExcel from '../../excel';
 
 export interface ProductData {
@@ -12,7 +12,9 @@ interface ModalAddProductBulkState {
   data: ProductData[];
 }
 
-export default function useModalAddProductBulkHooks(): ModalAddProductBulkState {
+export default function useModalAddProductBulkHooks(
+  setVisible: Dispatch<SetStateAction<boolean>>
+): ModalAddProductBulkState {
   const [data, setData] = useState<ProductData[]>([]);
   const [loading, setLoading] = useState(false);
   const handleFile = (file: File) => {

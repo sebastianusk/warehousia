@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import Modal from 'antd/lib/modal/Modal';
 import { Table } from 'antd';
 import { ColumnType } from 'antd/lib/table';
@@ -19,10 +19,17 @@ const columns: ColumnType<ProductData>[] = [
 
 export default function ModalAddProductBulk(props: {
   visible: boolean;
+  setVisible: Dispatch<SetStateAction<boolean>>;
 }): React.ReactElement {
-  const { handleFile, data, loading } = useModalAddProductBulkHooks();
+  const { handleFile, data, loading } = useModalAddProductBulkHooks(
+    props.setVisible
+  );
   return (
-    <Modal visible={props.visible}>
+    <Modal
+      visible={props.visible}
+      onCancel={() => props.setVisible(false)}
+      okButtonProps={{ disabled: data.length === 0 }}
+    >
       <div className={styles.container}>
         <input
           type="file"
@@ -36,4 +43,8 @@ export default function ModalAddProductBulk(props: {
       </div>
     </Modal>
   );
+}
+
+function setVisible(setVisible: any): {handleFile: any; data: any; loading: any;} {
+  throw new Error('Function not implemented.');
 }
