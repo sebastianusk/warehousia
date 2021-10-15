@@ -70,7 +70,7 @@ export default function WarehouseTransferPage(): ReactElement {
       </Card>
       <Card className={styles.card}>
         <h3>Items to transfer</h3>
-        <InlineProductForm />
+        {/* <InlineProductForm /> */}
         <Divider />
         <ProductListEditor />
         <div className={`${styles.bottomAction}`}>

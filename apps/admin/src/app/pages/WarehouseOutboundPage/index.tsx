@@ -70,7 +70,7 @@ export default function WarehouseOutboundPage(): ReactElement {
       </Card>
       <Card className={styles.card}>
         <h3>Input Order</h3>
-        <InlineProductForm />
+        {/* <InlineProductForm /> */}
         <Divider />
         <ProductListEditor />
         <div className={`${styles.bottomAction}`}>
