@@ -12,6 +12,7 @@ interface InboundState {
   setDataList: React.Dispatch<React.SetStateAction<DataList>>;
   onSubmit(): void;
   loading: boolean;
+  onAdd(data: Data): void;
 }
 
 export type DataList =
@@ -22,6 +23,11 @@ export type DataList =
     }[]
   | [];
 
+type Data = {
+  id: string;
+  name: string;
+  amount: number;
+};
 export default function useInboundHooks(): InboundState {
   const [showDropDown, setShowDropDown] = useState(false);
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
@@ -35,6 +41,9 @@ export default function useInboundHooks(): InboundState {
   const handleMenuClick = (e: { key: React.SetStateAction<string> }) => {
     setSelectedWarehouse(e.key);
     setShowDropDown(false);
+  };
+  const onAdd = (data: Data) => {
+    setDataList((prev) => [...prev, data]);
   };
 
   const onSubmit = () => {
@@ -62,5 +71,6 @@ export default function useInboundHooks(): InboundState {
     setDataList,
     onSubmit,
     loading,
+    onAdd,
   };
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Table, Popconfirm } from 'antd';
 import {
   EditableTableProps,
@@ -17,12 +17,34 @@ type DataType = {
 function InboundListEditor(
   props: EditableTableProps & {
     selectedWarehouseId: string | undefined;
-    dataList: any;
+    dataList: DataList;
     setData: React.Dispatch<React.SetStateAction<DataList>>;
   }
 ) {
-  const handleSave = (row: DataType) => {
-    props.setData({ ...props.dataList, row });
+  useEffect(() => {
+    console.log(props.dataList, 'isi datalist di inboundeditor');
+  }, []);
+
+  useEffect(() => {
+    console.log(props.dataList, 'update datalist ke table');
+  }, [props.dataList]);
+
+  const handleSave = (row: DataType, index) => {
+    const newData = props.dataList.map((datum) => {
+      if (datum.id === row.id) {
+        return row;
+      }
+      return datum;
+    });
+    props.setData(newData);
+    // props.setData((prevData) => {
+    //   const newData = [...prevData];
+    //   const newItem = { ...newData[index] };
+    //   newItem.name = row;
+    //   newData[index] = newItem;
+
+    //   return newData;
+    // });
   };
 
   const components = {
@@ -35,7 +57,7 @@ function InboundListEditor(
   const columns = [
     {
       title: 'Product Code',
-      dataIndex: 'productId',
+      dataIndex: 'id',
       width: '15%',
     },
     {
@@ -46,7 +68,7 @@ function InboundListEditor(
       title: 'Amount',
       dataIndex: 'amount',
       editable: true,
-      onCell: (record: DataType) => ({
+      onCell: (record: DataType, index: number) => ({
         record,
         editable: true,
         dataIndex: 'amount',

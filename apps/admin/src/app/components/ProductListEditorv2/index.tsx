@@ -106,7 +106,7 @@ function ProductListEditable(
       title: 'Product Name',
       dataIndex: 'name',
       editable: true,
-      onCell: (record: DataType) => ({
+      onCell: (record: DataType, rowIndex: number) => ({
         record,
         editable: true,
         dataIndex: 'name',

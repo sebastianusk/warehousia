@@ -10,6 +10,12 @@ interface InlineProductFormState {
   onInputAmount: (e: any) => void;
   onSubmit: () => void;
 }
+export type Data = {
+  id: string;
+  name: string;
+  amount: number;
+};
+export type DataList = Data[] | [];
 
 export default function useInlineProductFormHooks(
   onAdd: any
@@ -21,11 +27,11 @@ export default function useInlineProductFormHooks(
   });
 
   const onInputProductCode = (e: any): void => {
-    
+    setProduct({ ...product, id: e.target.value });
   };
 
   const onInputAmount = (e: any): void => {
-    setProduct({ ...product, amount: e.target.value });
+    setProduct({ ...product, amount: e });
   };
 
   const onSubmit = (): void => {

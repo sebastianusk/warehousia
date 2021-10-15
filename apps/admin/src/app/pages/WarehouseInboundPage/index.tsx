@@ -17,6 +17,7 @@ export default function WarehouseInboundPage(): ReactElement {
     setDataList,
     onSubmit,
     loading,
+    onAdd,
   } = useInboundHooks();
 
   const menu = (list: string[]) => (
@@ -47,7 +48,7 @@ export default function WarehouseInboundPage(): ReactElement {
             </div>
           </Card>
           <Card className={styles.card}>
-            <InlineProductForm onAdd={setDataList} />
+            <InlineProductForm onAdd={onAdd} />
             <Divider />
             <InboundListEditor
               selectedWarehouseId={selectedWarehouse}

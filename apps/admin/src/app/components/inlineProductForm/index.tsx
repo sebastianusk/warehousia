@@ -1,20 +1,12 @@
 import React, { ReactElement } from 'react';
 import { Form, Input, Button, InputNumber } from 'antd';
 import styles from './index.module.css';
-import useInlineProductFormHooks from './hooks';
-
-type DataList =
-  | {
-      id: string;
-      name: string;
-      amount: number;
-    }[]
-  | [];
+import useInlineProductFormHooks, { DataList, Data } from './hooks';
 
 export default function InlineProductForm({
   onAdd,
 }: {
-  onAdd: React.Dispatch<React.SetStateAction<DataList>>;
+  onAdd(data: Data): void;
 }): ReactElement {
   const { product, onInputProductCode, onInputAmount, onSubmit } =
     useInlineProductFormHooks(onAdd);
