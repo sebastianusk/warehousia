@@ -29,7 +29,7 @@ function InboundListEditor(
     console.log(props.dataList, 'update datalist ke table');
   }, [props.dataList]);
 
-  const handleSave = (row: DataType, index) => {
+  const handleSave = (row: DataType) => {
     const newData = props.dataList.map((datum) => {
       if (datum.id === row.id) {
         return row;
@@ -37,14 +37,6 @@ function InboundListEditor(
       return datum;
     });
     props.setData(newData);
-    // props.setData((prevData) => {
-    //   const newData = [...prevData];
-    //   const newItem = { ...newData[index] };
-    //   newItem.name = row;
-    //   newData[index] = newItem;
-
-    //   return newData;
-    // });
   };
 
   const components = {
