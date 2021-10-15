@@ -21,14 +21,6 @@ function InboundListEditor(
     setData: React.Dispatch<React.SetStateAction<DataList>>;
   }
 ) {
-  useEffect(() => {
-    console.log(props.dataList, 'isi datalist di inboundeditor');
-  }, []);
-
-  useEffect(() => {
-    console.log(props.dataList, 'update datalist ke table');
-  }, [props.dataList]);
-
   const handleSave = (row: DataType) => {
     const newData = props.dataList.map((datum) => {
       if (datum.id === row.id) {
