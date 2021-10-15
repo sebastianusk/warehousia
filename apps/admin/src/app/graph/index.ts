@@ -170,11 +170,6 @@ export const EDIT_PRODUCT = gql`
   }
 `;
 
-// input StockProductInput {
-//   id: String!
-//   warehouse: String!
-//   stock: Int!
-// }
 export const EDIT_PRODUCT_STOCK = gql`
   mutation editProductStock($input: StockProductInput) {
     editProductStock(input: $input) {
@@ -182,6 +177,41 @@ export const EDIT_PRODUCT_STOCK = gql`
     }
   }
 `;
+
+export const GET_INBOUNDS = gql`
+  query inbounds($warehouseId: String!, $pagination: PaginationInput) {
+    inbounds(warehouseId: $warehouseId, pagination: $pagination) {
+      data {
+        id
+        warehouse
+        items {
+          id
+          product
+          amount
+        }
+        createdAt
+        createdBy
+      }
+    }
+  }
+`;
+
+export const ADD_INBOUND = gql`
+  mutation addInbound($warehouseId: String!, $items: [ProductAmountInput]!) {
+    addInbound(warehouseId: $warehouseId, items: $items) {
+      id
+    }
+  }
+`;
+
+export const EDIT_INBOUND = gql`
+  mutation editProductStock($input: StockProductInput) {
+    editProductStock(input: $input) {
+      id
+    }
+  }
+`;
+
 export const GET_OUTBOUNDS = gql`
   query outbounds(
     $warehouseId: String!

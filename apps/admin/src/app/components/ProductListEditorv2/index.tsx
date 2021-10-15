@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Table, Popconfirm } from 'antd';
 import { useQuery, useMutation, useApolloClient } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
 import {
   EditableTableProps,
   ColumnTypes,
@@ -9,6 +10,7 @@ import {
 } from '../EditableTable';
 import { GET_PRODUCTS, EDIT_PRODUCT } from '../../graph';
 import type { Warehouse } from '../../pages/ProductsPage/hooks';
+import styles from './index.module.css';
 
 // type Columns = (ColumnTypes[number] & {
 //   editable?: boolean;
@@ -29,6 +31,7 @@ type DataType = {
 function ProductListEditable(
   props: EditableTableProps & { selectedWarehouse: Warehouse | undefined }
 ) {
+  const history = useHistory();
   // const [count, setCount] = useState(0);
   const client = useApolloClient();
   const { loading, error, data } = useQuery(GET_PRODUCTS, {
@@ -81,6 +84,11 @@ function ProductListEditable(
     });
   };
 
+  const handleViewDetail = (product_id: any) => {
+    console.log(product_id);
+    history.push(`/product-detail/${product_id}`);
+  };
+
   const components = {
     body: {
       row: EditableRow,
@@ -121,14 +129,20 @@ function ProductListEditable(
     {
       title: 'Action',
       dataIndex: 'Action',
-      render: () =>
-        data?.products?.data.length >= 1 ? (
-          <Popconfirm
-            title="Sure to delete?"
-            // onConfirm={() => handleDelete(record.id)}
-          >
-            <a>Delete</a>
-          </Popconfirm>
+      render: (record: DataType) =>
+        data?.products.data.length >= 1 ? (
+          <>
+            <a
+              onClick={() => handleViewDetail(record)}
+              role="presentation"
+              className={styles.actionView}
+            >
+              View
+            </a>
+            <Popconfirm title="Sure to delete?">
+              <a>Delete</a>
+            </Popconfirm>
+          </>
         ) : null,
     },
   ];

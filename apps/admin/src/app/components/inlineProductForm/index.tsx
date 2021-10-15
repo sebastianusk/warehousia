@@ -3,9 +3,21 @@ import { Form, Input, Button, InputNumber } from 'antd';
 import styles from './index.module.css';
 import useInlineProductFormHooks from './hooks';
 
-export default function InlineProductForm(): ReactElement {
-  const { productName, amount, onInputProductCode, onInputAmount, onSubmit } =
-    useInlineProductFormHooks();
+type DataList =
+  | {
+      id: string;
+      name: string;
+      amount: number;
+    }[]
+  | [];
+
+export default function InlineProductForm({
+  onAdd,
+}: {
+  onAdd: React.Dispatch<React.SetStateAction<DataList>>;
+}): ReactElement {
+  const { product, onInputProductCode, onInputAmount, onSubmit } =
+    useInlineProductFormHooks(onAdd);
 
   return (
     <div className={styles.formContainer}>
@@ -20,11 +32,15 @@ export default function InlineProductForm(): ReactElement {
           <Input
             placeholder="input product name"
             disabled
-            value={productName}
+            value={product.name}
           />
         </Form.Item>
         <Form.Item label="Amount">
-          <InputNumber min={0} onChange={onInputAmount} value={amount} />
+          <InputNumber
+            min={0}
+            onChange={onInputAmount}
+            value={product.amount}
+          />
         </Form.Item>
         <Form.Item>
           <Button type="primary" onClick={onSubmit}>
