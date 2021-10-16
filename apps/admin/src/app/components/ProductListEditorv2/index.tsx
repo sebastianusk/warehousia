@@ -100,16 +100,19 @@ function ProductListEditable(
     {
       title: 'Product Code',
       dataIndex: 'id',
+      key: 'id',
       width: '15%',
     },
     {
       title: 'Product Name',
       dataIndex: 'name',
       editable: true,
-      onCell: (record: DataType, rowIndex: number) => ({
+      key: 'name',
+      onCell: (record: DataType) => ({
         record,
         editable: true,
         dataIndex: 'name',
+        key: 'name',
         title: 'Product Name',
         handleSave,
       }),

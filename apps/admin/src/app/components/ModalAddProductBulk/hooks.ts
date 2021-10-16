@@ -12,6 +12,7 @@ interface ModalAddProductBulkState {
   handleFile(file: File): void;
   fileLoading: boolean;
   data: ProductData[];
+  setData: (data: ProductData[]) => void;
   uploadData(): void;
   uploadLoading: boolean;
 }
@@ -24,12 +25,11 @@ export default function useModalAddProductBulkHooks(
   const handleFile = (file: File) => {
     setFileLoading(true);
     parseExcel(file).then((excelData) => {
-      setData(
-        excelData.map((item) => ({
-          id: item[0],
-          name: item[1],
-        }))
-      );
+      const newData = excelData.map((item) => ({
+        id: item[0],
+        name: item[1],
+      }));
+      setData(newData);
       setFileLoading(false);
     });
   };
@@ -49,6 +49,7 @@ export default function useModalAddProductBulkHooks(
   };
   return {
     data,
+    setData,
     handleFile,
     fileLoading,
     uploadData,

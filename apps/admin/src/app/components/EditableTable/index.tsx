@@ -4,13 +4,6 @@ import { FormInstance } from 'antd/lib/form';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
-interface Item {
-  key: string;
-  name: string;
-  age: string;
-  address: string;
-}
-
 interface EditableRowProps {
   index: number;
 }
@@ -26,16 +19,16 @@ export const EditableRow = ({ index, ...props }: EditableRowProps) => {
   );
 };
 
-interface EditableCellProps {
+interface EditableCellProps<T> {
   title: React.ReactNode;
   editable: boolean;
   children: React.ReactNode;
-  dataIndex: keyof Item;
-  record: Item;
-  handleSave: (record: Item) => void;
+  dataIndex: keyof T;
+  record: T;
+  handleSave: (record: T) => void;
 }
 
-export const EditableCell = ({
+export function EditableCell<T>({
   title,
   editable,
   children,
@@ -43,7 +36,7 @@ export const EditableCell = ({
   record,
   handleSave,
   ...restProps
-}: EditableCellProps) => {
+}: EditableCellProps<T>): React.ReactElement {
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<Input>(null);
   const form = useContext(EditableContext)!;
@@ -76,7 +69,7 @@ export const EditableCell = ({
     childNode = editing ? (
       <Form.Item
         style={{ margin: 0 }}
-        name={dataIndex}
+        name={dataIndex.toString()}
         rules={[
           {
             required: true,
@@ -101,20 +94,32 @@ export const EditableCell = ({
   }
 
   return <td {...restProps}>{childNode}</td>;
-};
+}
 
 export type EditableTableProps = Parameters<typeof Table>[0];
 
-export interface DataType {
-  key: React.Key;
-  name: string;
-  age: string;
-  address: string;
-}
-
-export interface EditableTableState {
-  dataSource: DataType[];
-  count: number;
-}
-
 export type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
+
+export type EditableColumnTypes<T> = Partial<T> & {
+  editable: boolean;
+  dataIndex: string;
+  title: string;
+};
+
+export function mapEditableColumn<T>(handleSave: (data: T) => void) {
+  return (col: EditableColumnTypes<T>) => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record: T) => ({
+        record,
+        editable: col.editable,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        handleSave,
+      }),
+    };
+  };
+}
