@@ -12,12 +12,18 @@ export default class ProductService {
     products: { id: string; name: string }[]
   ): Promise<number> {
     const result = await this.db.$transaction([
-      this.db.product.createMany({ data: products, skipDuplicates: true }),
+      ...products.map(({ id, name }) =>
+        this.db.product.upsert({
+          create: { id, name },
+          update: { name },
+          where: { id },
+        })
+      ),
       auth.log(this.db, 'createProducts', {
         ids: products.map((item) => item.id),
       }),
     ]);
-    return result[0].count;
+    return result.length - 1;
   }
 
   async editProduct(
