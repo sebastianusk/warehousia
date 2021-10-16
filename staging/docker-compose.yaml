@@ -24,6 +24,7 @@ services:
     restart: always
     environment:
       DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
+      JWT_EXPIRES_IN: '1d'
     ports:
       - "3333:3333"
     depends_on:
