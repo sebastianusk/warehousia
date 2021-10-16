@@ -9,6 +9,7 @@ import {
   CountPayload,
   IdPayload,
   PaginationInput,
+  ProductAutoFillList,
   ProductInput,
   ProductList,
   ProductLogList,
@@ -101,5 +102,19 @@ export default class ProductResolver {
       input.stock
     );
     return id;
+  }
+
+  @Query()
+  @UseGuards(JwtAuthGuard)
+  async searchProduct(
+    @Args('query') query: string,
+    @Args('pagination') pagination: PaginationInput
+  ): Promise<ProductAutoFillList> {
+    const data = await this.productService.searchProduct(
+      query,
+      pagination.limit,
+      pagination.offset
+    );
+    return { data };
   }
 }

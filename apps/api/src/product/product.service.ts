@@ -149,4 +149,19 @@ export default class ProductService {
       })
     );
   }
+
+  async searchProduct(
+    query: string,
+    limit: number,
+    offset: number
+  ): Promise<{ id: string; name: string }[]> {
+    const data = await this.db.product.findMany({
+      skip: offset * limit,
+      take: limit,
+      where: {
+        OR: [{ id: { contains: query } }, { name: { contains: query } }],
+      },
+    });
+    return data.map(({ id, name }) => ({ id, name }));
+  }
 }
