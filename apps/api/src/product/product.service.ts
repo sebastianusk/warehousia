@@ -105,48 +105,70 @@ export default class ProductService {
     limit: number,
     offset: number
   ): Promise<ProductModel[]> {
-    const data = await this.db.stock.findMany({
-      skip: limit * offset,
-      take: limit,
-      where: {
-        product_id: { contains: query },
-        warehouse_id: { equals: warehouseId },
-      },
-      include: {
-        product: true,
-      },
-    });
+    const rawResult = await this.db.$queryRaw<
+      {
+        id: string;
+        name: string;
+        price: number;
+        stock: number;
+        total: number;
+        created_at: string;
+        updated_at: string;
+        stock_updated_at: string;
+      }[]
+    >`
+      select
+        product.id,
+        product.name,
+        product.price,
+        coalesce(stock.stock, 0) as stock,
+        coalesce((select sum(stock) from stock where product_id = product.id), 0) as total,
+        product.created_at,
+        product.updated_at,
+        stock.updated_at as stock_updated_at
+      from product left join (
+        select product_id, stock, updated_at from stock where stock.warehouse_id = ${warehouseId}
+      ) as stock on stock.product_id = product.id order by coalesce(stock.stock, 0) desc limit ${limit} offset ${offset};
+    `;
     return Promise.all(
-      data.map(async (item) => {
-        const aggr = await this.db.stock.aggregate({
-          _max: { stock: true },
-          _sum: { stock: true },
-          where: { product_id: item.product_id },
-        });
-        const topWarehouse = await this.db.stock.findFirst({
-          where: {
-            product_id: item.product_id,
-            // eslint-disable-next-line no-underscore-dangle
-            stock: aggr._max.stock,
-          },
-        });
-        return new ProductModel(
-          item.product_id,
-          item.product.name,
-          item.product.price,
-          item.product.created_at,
-          item.product.updated_at,
-          {
-            amount: item.stock,
-            // eslint-disable-next-line no-underscore-dangle
-            all: aggr._sum.stock,
-            // eslint-disable-next-line no-underscore-dangle
-            topAmount: aggr._max.stock,
-            topWarehouse: topWarehouse.warehouse_id,
-            updatedAt: item.updated_at,
+      rawResult.map(
+        async ({
+          id,
+          name,
+          price,
+          stock,
+          total,
+          created_at,
+          updated_at,
+          stock_updated_at,
+        }) => {
+          const createdAt = new Date(created_at);
+          const updatedAt = new Date(updated_at);
+          const stockUpdateAt = stock_updated_at
+            ? new Date(stock_updated_at)
+            : new Date();
+          if (total === 0) {
+            return new ProductModel(id, name, price, createdAt, updatedAt, {
+              amount: stock,
+              all: total,
+              topWarehouse: '',
+              topAmount: 0,
+              updatedAt: stockUpdateAt,
+            });
           }
-        );
-      })
+          const max = await this.db.stock.findFirst({
+            where: { product_id: id },
+            orderBy: { stock: 'desc' },
+          });
+          return new ProductModel(id, name, price, createdAt, updatedAt, {
+            amount: stock,
+            all: total,
+            topWarehouse: max.warehouse_id,
+            topAmount: max.stock,
+            updatedAt: stockUpdateAt,
+          });
+        }
+      )
     );
   }
 
