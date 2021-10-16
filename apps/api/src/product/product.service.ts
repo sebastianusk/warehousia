@@ -159,7 +159,10 @@ export default class ProductService {
       skip: offset * limit,
       take: limit,
       where: {
-        OR: [{ id: { contains: query } }, { name: { contains: query } }],
+        OR: [
+          { id: { contains: query, mode: 'insensitive' } },
+          { name: { contains: query, mode: 'insensitive' } },
+        ],
       },
     });
     return data.map(({ id, name }) => ({ id, name }));
