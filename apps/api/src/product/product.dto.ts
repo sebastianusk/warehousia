@@ -6,6 +6,7 @@ export class ProductModel {
   constructor(
     public id: string,
     public name: string,
+    public price: number,
     public createdAt: Date,
     public updatedAt: Date,
     public stock: {
@@ -21,6 +22,7 @@ export class ProductModel {
     return new ProductModel(
       data.product.id,
       data.product.name,
+      data.product.price,
       data.product.created_at,
       data.product.updated_at,
       {
@@ -37,6 +39,7 @@ export class ProductModel {
     return {
       id: this.id,
       name: this.name,
+      price: this.price,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString(),
       stock: {

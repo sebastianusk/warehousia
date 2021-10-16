@@ -52,6 +52,7 @@ model shop {
 model product {
   id            String          @id
   name          String
+  price         Int
   created_at    DateTime        @default(now())
   updated_at    DateTime        @updatedAt
   stock         stock[]

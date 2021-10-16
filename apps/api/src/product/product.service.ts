@@ -9,12 +9,12 @@ export default class ProductService {
 
   async addProducts(
     auth: AuthWrapper,
-    products: { id: string; name: string }[]
+    products: { id: string; name?: string; price?: number }[]
   ): Promise<number> {
     const result = await this.db.$transaction([
-      ...products.map(({ id, name }) =>
+      ...products.map(({ id, name, price }) =>
         this.db.product.upsert({
-          create: { id, name },
+          create: { id, name, price },
           update: { name },
           where: { id },
         })
@@ -133,6 +133,7 @@ export default class ProductService {
         return new ProductModel(
           item.product_id,
           item.product.name,
+          item.product.price,
           item.product.created_at,
           item.product.updated_at,
           {

@@ -43,7 +43,8 @@ export class ChangeMyPasswordInput {
 
 export class ProductInput {
     id: string;
-    name: string;
+    name?: Nullable<string>;
+    price?: Nullable<number>;
 }
 
 export class StockProductInput {
@@ -206,6 +207,7 @@ export class ProductList {
 export class Product {
     id: string;
     name: string;
+    price: number;
     stock: Stock;
     createdAt: string;
     updatedAt: string;

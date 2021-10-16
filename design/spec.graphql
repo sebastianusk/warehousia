@@ -126,6 +126,7 @@ type ProductList {
 type Product {
   id: String!
   name: String!
+  price: Int!
   stock: Stock!
   createdAt: String!
   updatedAt: String!
@@ -155,7 +156,8 @@ type ProductLog {
 
 input ProductInput {
   id: String!
-  name: String!
+  name: String
+  price: Int
 }
 
 input StockProductInput {

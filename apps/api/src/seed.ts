@@ -35,7 +35,9 @@ async function createShop(id: string, name: string) {
   await shopService.createShop(auth, id, name).catch(console.log);
 }
 
-async function createProducts(products: { id: string; name: string }[]) {
+async function createProducts(
+  products: { id: string; name: string; price: number }[]
+) {
   await productService.addProducts(auth, products).catch(console.log);
 }
 
@@ -65,14 +67,17 @@ async function seed() {
     {
       id: 'WA01',
       name: 'Dompet Wanita Baru',
+      price: 10000,
     },
     {
       id: 'WA02',
       name: 'Dompet Pria Coklat',
+      price: 500000,
     },
     {
       id: 'TA01',
       name: 'Tas Wanita',
+      price: 70000,
     },
   ]);
   await editStock('WA01', 'serpong', 5);
