@@ -10,12 +10,13 @@ import {
   EditableColumnTypes,
   mapEditableColumn,
 } from '../EditableTable';
+import ExcelInput from '../ExcelInput';
 
 export default function ModalAddProductBulk(props: {
   visible: boolean;
   setVisible: Dispatch<SetStateAction<boolean>>;
 }): React.ReactElement {
-  const { handleFile, data, setData, fileLoading, uploadData, uploadLoading } =
+  const { handleFile, data, setData, loading, uploadData } =
     useModalAddProductBulkHooks(props.setVisible);
   const columns: EditableColumnTypes<ProductData>[] = [
     {
@@ -47,20 +48,12 @@ export default function ModalAddProductBulk(props: {
       visible={props.visible}
       onCancel={() => props.setVisible(false)}
       onOk={uploadData}
-      okButtonProps={{ disabled: data.length === 0, loading: uploadLoading }}
+      okButtonProps={{ disabled: data.length === 0, loading }}
     >
       <div className={styles.container}>
-        <input
-          type="file"
-          accept=".xls,.xlsx"
-          onChange={(event) => {
-            const { files } = event.target;
-            if (files && files[0]) handleFile(files[0]);
-          }}
-        />
+        <ExcelInput onDataInput={handleFile} />
         <Table
           columns={columns}
-          loading={fileLoading}
           dataSource={data}
           components={{ body: { row: EditableRow, cell: EditableCell } }}
         />

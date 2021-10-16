@@ -1,6 +1,5 @@
 import { useApolloClient, useMutation } from '@apollo/client';
 import { Dispatch, SetStateAction, useState } from 'react';
-import parseExcel from '../../excel';
 import { ADD_PRODUCTS } from '../../graph';
 
 export interface ProductData {
@@ -9,29 +8,23 @@ export interface ProductData {
 }
 
 interface ModalAddProductBulkState {
-  handleFile(file: File): void;
-  fileLoading: boolean;
+  handleFile(data: string[][]): void;
   data: ProductData[];
-  setData: (data: ProductData[]) => void;
+  setData: (excel: ProductData[]) => void;
   uploadData(): void;
-  uploadLoading: boolean;
+  loading: boolean;
 }
 
 export default function useModalAddProductBulkHooks(
   setVisible: Dispatch<SetStateAction<boolean>>
 ): ModalAddProductBulkState {
   const [data, setData] = useState<ProductData[]>([]);
-  const [fileLoading, setFileLoading] = useState(false);
-  const handleFile = (file: File) => {
-    setFileLoading(true);
-    parseExcel(file).then((excelData) => {
-      const newData = excelData.map((item) => ({
-        id: item[0],
-        name: item[1],
-      }));
-      setData(newData);
-      setFileLoading(false);
-    });
+  const handleFile = (excel: string[][]) => {
+    const newData = excel.map((item) => ({
+      id: item[0],
+      name: item[1],
+    }));
+    setData(newData);
   };
 
   const client = useApolloClient();
@@ -51,8 +44,7 @@ export default function useModalAddProductBulkHooks(
     data,
     setData,
     handleFile,
-    fileLoading,
     uploadData,
-    uploadLoading: loading,
+    loading,
   };
 }
