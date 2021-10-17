@@ -37,13 +37,13 @@ function ProductListEditable(props: {
     client.refetchQueries({
       include: ['products'],
     });
-  }, [props.selectedWarehouse?.id]);
+  }, [client, props.selectedWarehouse?.id]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error.toString()}</div>;
 
-  const handleViewDetail = (product_id: any) => {
-    history.push(`/product-detail/${product_id}`);
+  const handleViewDetail = (item: DataType) => {
+    history.push(`/product-detail/${item.id}`);
   };
 
   const columns = [
@@ -66,30 +66,31 @@ function ProductListEditable(props: {
     {
       title: 'Current WH Stock',
       dataIndex: ['stock', 'amount'],
+      key: 'currentStock',
     },
     {
       title: 'Top Warehouse',
       dataIndex: ['stock', 'topWarehouse'],
+      key: 'topWarehouse',
     },
     {
       title: 'Total Stock',
       dataIndex: ['stock', 'all'],
+      key: 'total',
     },
     {
       title: 'Action',
       dataIndex: 'Action',
-      render: (record: DataType) =>
-        data?.products.data.length >= 1 ? (
-          <>
-            <a
-              onClick={() => handleViewDetail(record)}
-              role="presentation"
-              className={styles.actionView}
-            >
-              View
-            </a>
-          </>
-        ) : null,
+      key: 'action',
+      render: (_text: any, record: DataType) => (
+        <a
+          onClick={() => handleViewDetail(record)}
+          role="presentation"
+          className={styles.actionView}
+        >
+          View
+        </a>
+      ),
     },
   ];
 
