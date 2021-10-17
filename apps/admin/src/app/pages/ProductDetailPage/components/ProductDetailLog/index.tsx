@@ -13,11 +13,12 @@ export default function ProductDetailLog(props: {
   const { loading, data } = useQuery(GET_PRODUCT_LOGS, {
     variables: {
       productId: props.productId,
+      pagination: { offset: 0, limit: 10 },
     },
   });
   return (
     <Card className={styles.card} key="logs">
-      <Table loading={loading} dataSource={data.productLog.data}>
+      <Table loading={loading} dataSource={data?.productLog?.data}>
         <Column title="Time" dataIndex="createdAt" key="createdAt" />
         <Column title="Product ID" dataIndex="id" key="id" />
         <Column title="Action" dataIndex="action" key="action" />
