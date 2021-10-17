@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
+import { ProductsNotFound } from '../common/errors';
 import DBService from '../db/db.service';
-import { ProductLogModel, ProductModel } from './product.dto';
+import {
+  ProductLogModel,
+  ProductModel,
+  ProductStockModel,
+} from './product.dto';
 
 @Injectable()
 export default class ProductService {
@@ -188,5 +193,14 @@ export default class ProductService {
       },
     });
     return data.map(({ id, name }) => ({ id, name }));
+  }
+
+  async getProductStock(id: string): Promise<ProductStockModel> {
+    const product = await this.db.product.findUnique({
+      where: { id },
+      include: { stock: true },
+    });
+    if (!product) throw new ProductsNotFound([id]);
+    return ProductStockModel.fromDB(product);
   }
 }

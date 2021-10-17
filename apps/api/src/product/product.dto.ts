@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Prisma } from '@prisma/client';
-import { Product, ProductLog } from '../graphql';
+import { Product, ProductLog, ProductStock } from '../graphql';
 
 export class ProductModel {
   constructor(
@@ -100,3 +100,45 @@ const product = Prisma.validator<Prisma.stockArgs>()({
 });
 
 export type ProductDB = Prisma.stockGetPayload<typeof product>;
+
+export class ProductStockModel {
+  constructor(
+    public id: string,
+    public name: string,
+    public price: number,
+    public createdAt: Date,
+    public updatedAt: Date,
+    public stock: { warehouseId: string; amount: number }[]
+  ) {}
+
+  static fromDB(data: ProductStockDB): ProductStockModel {
+    return new ProductStockModel(
+      data.id,
+      data.name,
+      data.price,
+      data.created_at,
+      data.updated_at,
+      data.stock.map((item) => ({
+        warehouseId: item.warehouse_id,
+        amount: item.stock,
+      }))
+    );
+  }
+
+  toResponse(): ProductStock {
+    return {
+      id: this.id,
+      name: this.name,
+      price: this.price,
+      updatedAt: this.updatedAt.toISOString(),
+      createdAt: this.createdAt.toISOString(),
+      stocks: this.stock,
+    };
+  }
+}
+
+const productStock = Prisma.validator<Prisma.productArgs>()({
+  include: { stock: true },
+});
+
+export type ProductStockDB = Prisma.productGetPayload<typeof productStock>;

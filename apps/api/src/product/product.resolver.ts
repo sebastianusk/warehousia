@@ -13,6 +13,8 @@ import {
   ProductInput,
   ProductList,
   ProductLogList,
+  ProductPrice,
+  ProductStock,
   StockProductInput,
 } from '../graphql';
 import { ProductModel } from './product.dto';
@@ -116,5 +118,14 @@ export default class ProductResolver {
       pagination.offset
     );
     return { data };
+  }
+
+  @Query()
+  @UseGuards(JwtAuthGuard)
+  async productStock(
+    @Args('productId') productId: string
+  ): Promise<ProductStock> {
+    const data = await this.productService.getProductStock(productId);
+    return data.toResponse();
   }
 }

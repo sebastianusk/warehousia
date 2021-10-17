@@ -105,6 +105,8 @@ export abstract class IQuery {
 
     abstract products(warehouseId: string, query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<ProductList> | Promise<Nullable<ProductList>>;
 
+    abstract productStock(productId: string): Nullable<ProductStock> | Promise<Nullable<ProductStock>>;
+
     abstract searchProduct(query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<ProductAutoFillList> | Promise<Nullable<ProductAutoFillList>>;
 
     abstract productLog(productId?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<ProductLogList> | Promise<Nullable<ProductLogList>>;
@@ -195,6 +197,20 @@ export class AdminLog {
     action: string;
     createdAt: string;
     remarks?: Nullable<string>;
+}
+
+export class ProductStock {
+    id: string;
+    name: string;
+    price: number;
+    createdAt: string;
+    updatedAt: string;
+    stocks?: Nullable<Nullable<ProductStockAmount>[]>;
+}
+
+export class ProductStockAmount {
+    warehouseId: string;
+    amount: number;
 }
 
 export class ProductList {
