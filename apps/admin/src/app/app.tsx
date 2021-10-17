@@ -8,6 +8,7 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import WarehouseInboundPage from './pages/WarehouseInboundPage';
 import WarehouseTransferPage from './pages/WarehouseTransferPage';
 import WarehouseOutboundPage from './pages/WarehouseOutboundPage';
+import WarehouseTransactionPage from './pages/WarehouseTransactionPage';
 import SuperAdminMenuPage from './pages/SuperAdminMenuPage';
 import AccountPage from './pages/AccountPage';
 
@@ -85,6 +86,16 @@ export default function App() {
               render={() =>
                 localStorage.access_token ? (
                   <WarehouseOutboundPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/warehouse-transaction"
+              render={() =>
+                localStorage.access_token ? (
+                  <WarehouseTransactionPage />
                 ) : (
                   <Redirect to="/login" />
                 )

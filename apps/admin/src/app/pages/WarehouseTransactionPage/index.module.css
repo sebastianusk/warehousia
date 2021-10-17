@@ -1,0 +1,24 @@
+.title {
+  margin: 0 20px 0 0;
+}
+.card {
+  margin-top: 30px;
+  box-shadow: 0 1px 6px 0 rgba(49,53,59,0.12);
+}
+.flexContainer {
+  display: flex;
+  align-items: center;
+}
+.bottomAction {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+.warehousePicker {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+.dropdownLeft {
+  margin-right: 15px;
+}

@@ -248,3 +248,38 @@ export const GET_OUTBOUNDS = gql`
     }
   }
 `;
+
+export const GET_PREPARATION = gql`
+  query Preparation($query: String, $warehouseId: String) {
+    preparations(query: $query, warehouseId: $warehouseId) {
+      data {
+        id
+        warehouseId
+        createdAt
+        createdBy
+        items {
+          productId
+          expected
+          actual
+        }
+      }
+    }
+  }
+`;
+
+export const ADD_TRANSACTION = gql`
+  mutation AddTransaction($preparationId: String!) {
+    addTransaction(preparationId: $preparationId) {
+      data {
+        id
+      }
+      failed {
+        shopId
+        items {
+          amount
+          productId
+        }
+      }
+    }
+  }
+`;
