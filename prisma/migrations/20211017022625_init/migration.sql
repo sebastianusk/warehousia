@@ -140,7 +140,6 @@ CREATE TABLE "preparation" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" TEXT NOT NULL,
     "warehouse_id" TEXT NOT NULL,
-    "shop_id" TEXT NOT NULL,
 
     CONSTRAINT "preparation_pkey" PRIMARY KEY ("id")
 );
@@ -211,9 +210,6 @@ CREATE UNIQUE INDEX "demand_fulfiled_outbound_id_unique" ON "demand"("fulfiled_o
 
 -- CreateIndex
 CREATE UNIQUE INDEX "demand_previous_demand_id_unique" ON "demand"("previous_demand_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "transaction_preparation_id_unique" ON "transaction"("preparation_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_admin_access_AB_unique" ON "_admin_access"("A", "B");

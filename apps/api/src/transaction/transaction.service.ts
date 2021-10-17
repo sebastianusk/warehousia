@@ -284,15 +284,18 @@ export default class TransactionService {
     }[];
   }> {
     await auth.log(this.db, 'createTransaction', { preparationId });
+    const preparation = await this.db.preparation.findUnique({
+      where: { id: preparationId },
+      include: {
+        missing: true,
+        outbound: { orderBy: { created_at: 'desc' } },
+      },
+    });
+    if (!preparation) {
+      throw new PreparationNotFound(preparationId);
+    }
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { warehouse_id, missing, outbound } =
-      await this.db.preparation.findUnique({
-        where: { id: preparationId },
-        include: {
-          missing: true,
-          outbound: { orderBy: { created_at: 'desc' } },
-        },
-      });
+    const { warehouse_id, missing, outbound } = preparation;
 
     const notFounds = missing.reduce((prev, notFoundItem) => {
       const next = prev;
