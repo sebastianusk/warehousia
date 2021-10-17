@@ -5,7 +5,7 @@ import { ADD_PRODUCTS } from 'app/graph';
 import { useApolloClient, useMutation } from '@apollo/client';
 
 interface ProductEditModalProps {
-  data: { id: string; name: string; price: number } ;
+  data: { id: string; name: string; price: number };
   onCancel: () => void;
   visible: boolean;
 }

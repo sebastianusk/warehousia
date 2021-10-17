@@ -16,16 +16,12 @@ export default function ProductDetailLog(props: {
       pagination: { offset: 0, limit: 10 },
     },
   });
+  console.log(data?.productLog?.data);
   return (
     <Card className={styles.card} key="logs">
-      <Table
-        loading={loading}
-        dataSource={data?.productLog?.data.map((item: any, index: number) => ({
-          ...item,
-          key: index,
-        }))}
-      >
+      <Table loading={loading} dataSource={data?.productLog?.data}>
         <Column title="Time" dataIndex="createdAt" key="createdAt" />
+        <Column title="Warehouse" dataIndex="warehouse" key="warehouse" />
         <Column title="Action" dataIndex="action" key="action" />
         <Column title="Amount" dataIndex="amount" key="amount" />
         <Column title="By" dataIndex="createdBy" key="createdBy" />

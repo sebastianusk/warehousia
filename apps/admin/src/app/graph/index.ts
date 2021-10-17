@@ -313,3 +313,11 @@ export const GET_PRODUCT_STOCK = gql`
     }
   }
 `;
+
+export const UPDATE_PRODUCT_STOCK = gql`
+  mutation EditProductStock($input: StockProductInput) {
+    editProductStock(input: $input) {
+      id
+    }
+  }
+`;
