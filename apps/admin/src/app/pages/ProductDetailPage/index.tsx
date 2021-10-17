@@ -19,7 +19,7 @@ export default function ProductDetailPage(): ReactElement {
 
   return (
     <>
-      <Card className={styles.card}>
+      <Card className={styles.card} key="header">
         <div className={`${styles.flexContainer}`}>
           <h2>
             {productDetail.productCode}&nbsp;-&nbsp;{productDetail.productName}
@@ -45,7 +45,7 @@ export default function ProductDetailPage(): ReactElement {
           </div>
         </div>
       </Card>
-      <Card className={styles.card}>
+      <Card className={styles.card} key="logs">
         <Input.Search
           placeholder="search activity"
           onSearch={handleSearch}

@@ -43,7 +43,6 @@ function ProductListEditable(props: {
   if (error) return <div>{error.toString()}</div>;
 
   const handleViewDetail = (product_id: any) => {
-    console.log(product_id);
     history.push(`/product-detail/${product_id}`);
   };
 

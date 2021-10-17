@@ -1,30 +1,24 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 import { useMutation, ApolloError, useApolloClient } from '@apollo/client';
+import { FormInstance, useForm } from 'antd/lib/form/Form';
 import { ADD_PRODUCTS } from '../../graph/index';
 
 interface ModalAddProductState {
+  form: FormInstance;
   error: ApolloError | undefined;
   loading: boolean;
   handleOk: () => void;
   handleCancel: () => void;
-  onInputProductCode: (e: any) => void;
-  onInputProductName: (e: any) => void;
 }
 
 export default function useModalAddProductHooks(
   setVisible: Dispatch<SetStateAction<boolean>>
 ): ModalAddProductState {
+  const [form] = useForm();
   const client = useApolloClient();
-  const [formData, setFormData] = useState({
-    id: '',
-    name: '',
-  });
   const [addProducts, { loading, error }] = useMutation(ADD_PRODUCTS, {
     onCompleted() {
-      setFormData({
-        id: '',
-        name: '',
-      });
+      form.resetFields();
       setVisible(false);
       client.refetchQueries({
         include: ['products'],
@@ -32,28 +26,22 @@ export default function useModalAddProductHooks(
     },
   });
   const handleOk = () => {
+    const { id, name, price } = form.getFieldsValue();
     addProducts({
-      variables: { input: formData },
+      variables: { input: [{ id, name, price: parseInt(price, 10) }] },
     });
   };
 
   const handleCancel = () => {
+    form.resetFields();
     setVisible(false);
   };
 
-  const onInputProductCode = (e: any) => {
-    setFormData({ ...formData, id: e.target.value });
-  };
-  const onInputProductName = (e: any) => {
-    setFormData({ ...formData, name: e.target.value });
-  };
-
   return {
+    form,
     error,
     loading,
     handleOk,
     handleCancel,
-    onInputProductCode,
-    onInputProductName,
   };
 }

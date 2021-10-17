@@ -11,14 +11,8 @@ export default function ModalAddProduct({
   visible,
   setVisible,
 }: ModalPropsType): ReactElement {
-  const {
-    error,
-    loading,
-    handleOk,
-    handleCancel,
-    onInputProductCode,
-    onInputProductName,
-  } = useModalAddProductHooks(setVisible);
+  const { form, error, loading, handleOk, handleCancel } =
+    useModalAddProductHooks(setVisible);
   return (
     <>
       <Modal
@@ -29,21 +23,19 @@ export default function ModalAddProduct({
         onCancel={handleCancel}
       >
         <Form
+          form={form}
           layout="horizontal"
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 14 }}
         >
-          <Form.Item label="Product Code">
-            <Input
-              placeholder="input product code"
-              onChange={onInputProductCode}
-            />
+          <Form.Item label="Product Code" name="id">
+            <Input placeholder="input product code" />
           </Form.Item>
-          <Form.Item label="Product Name">
-            <Input
-              placeholder="input product name"
-              onChange={onInputProductName}
-            />
+          <Form.Item label="Product Name" name="name">
+            <Input placeholder="input product name" />
+          </Form.Item>
+          <Form.Item label="Product Price" name="price">
+            <Input placeholder="input product price" type="number" />
           </Form.Item>
         </Form>
         {error && (
