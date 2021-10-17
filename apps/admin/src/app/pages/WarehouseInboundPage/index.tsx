@@ -18,6 +18,7 @@ export default function WarehouseInboundPage(): ReactElement {
     onSubmit,
     loading,
     onAdd,
+    setDefaultWarehouse,
   } = useInboundHooks();
 
   const menu = (list: string[]) => (
@@ -41,7 +42,7 @@ export default function WarehouseInboundPage(): ReactElement {
                 visible={showDropDown}
               >
                 <Button size="large" onClick={(e) => e.preventDefault()}>
-                  {selectedWarehouse || user.warehouses[0]}
+                  {selectedWarehouse || setDefaultWarehouse(user.warehouses)}
                   <DownOutlined />
                 </Button>
               </Dropdown>

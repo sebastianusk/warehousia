@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
+import { message } from 'antd';
 import { ADD_INBOUND } from '../../graph';
 
 interface InboundState {
@@ -7,27 +8,22 @@ interface InboundState {
   handleVisibleChange: () => void;
   showDropDown: boolean;
   selectedWarehouse: string;
-  warehouseList: string[];
   dataList: DataList;
   setDataList: React.Dispatch<React.SetStateAction<DataList>>;
   onSubmit(): void;
   loading: boolean;
   onAdd(data: Data): void;
+  setDefaultWarehouse(whList: any): string;
 }
 
-export type DataList =
-  | {
-      id: string;
-      name: string;
-      amount: number;
-    }[]
-  | [];
+export type DataList = Data[] | [];
 
 type Data = {
   id: string;
   name: string;
   amount: number;
 };
+
 export default function useInboundHooks(): InboundState {
   const [showDropDown, setShowDropDown] = useState(false);
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
@@ -42,8 +38,18 @@ export default function useInboundHooks(): InboundState {
     setSelectedWarehouse(e.key);
     setShowDropDown(false);
   };
+
   const onAdd = (data: Data) => {
     setDataList((prev) => [...prev, data]);
+  };
+
+  const setDefaultWarehouse = (whList: any) => {
+    if (whList.length > 0) {
+      setSelectedWarehouse(whList[0]);
+      return whList[0];
+    }
+    message.error('you dont have any warehouse assigned');
+    return 'No Warehouse';
   };
 
   const onSubmit = () => {
@@ -59,18 +65,16 @@ export default function useInboundHooks(): InboundState {
     });
   };
 
-  const warehouseList = ['Warehouse A', 'Warehouse B', 'Warehouse C'];
-
   return {
     handleMenuClick,
     handleVisibleChange,
     showDropDown,
     selectedWarehouse,
-    warehouseList,
     dataList,
     setDataList,
     onSubmit,
     loading,
     onAdd,
+    setDefaultWarehouse,
   };
 }
