@@ -7,6 +7,7 @@ import ModalEditProduct from 'app/components/ModalEditProduct';
 import Column from 'antd/lib/table/Column';
 
 import styles from './index.module.css';
+import ProductEditModal from '../ProductEditModal';
 
 export default function ProductDetailHeader(props: {
   productId: string;
@@ -60,10 +61,10 @@ export default function ProductDetailHeader(props: {
           </Table>
         </>
       )}
-      <ModalEditProduct
+      <ProductEditModal
         visible={modal}
-        setVisible={setModal}
-        initialData={undefined}
+        onCancel={() => setModal(false)}
+        data={{ id: 'cuk', name: 'des', price: 522 }}
       />
     </Card>
   );
