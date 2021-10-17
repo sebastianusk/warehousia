@@ -3,7 +3,6 @@ import { EditOutlined } from '@ant-design/icons';
 import { Button, Card, Spin, Table } from 'antd';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCT_STOCK } from 'app/graph';
-import ModalEditProduct from 'app/components/ModalEditProduct';
 import Column from 'antd/lib/table/Column';
 
 import styles from './index.module.css';
@@ -49,6 +48,7 @@ export default function ProductDetailHeader(props: {
             <Column title="Amount" dataIndex="amount" key="amount" />
             <Column
               title="Edit"
+              key="edit"
               render={(_text: any, record: { warehouseId: string }) => (
                 <a
                   onClick={() => showModalEditStock(record.warehouseId)}
@@ -64,7 +64,15 @@ export default function ProductDetailHeader(props: {
       <ProductEditModal
         visible={modal}
         onCancel={() => setModal(false)}
-        data={{ id: 'cuk', name: 'des', price: 522 }}
+        data={
+          data
+            ? {
+                id: props.productId,
+                name: data.productStock.name,
+                price: data.productStock.price,
+              }
+            : undefined
+        }
       />
     </Card>
   );
