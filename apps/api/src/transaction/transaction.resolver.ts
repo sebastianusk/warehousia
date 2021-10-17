@@ -8,9 +8,11 @@ import {
   OutboundList,
   OutboundResponse,
   PaginationInput,
+  Preparation,
   PreparationList,
   ProductAmountInput,
   TransactionList,
+  TransactionResponse,
 } from '../graphql';
 import TransactionService from './transaction.service';
 
@@ -79,7 +81,7 @@ export default class TransactionResolver {
   async addPreparation(
     @CurrentAuth() auth: AuthWrapper,
     @Args('warehouseId') warehouseId: string,
-    @Args('shopId') shopId: string
+    @Args('shopId') shopId: string[]
   ): Promise<IdPayload> {
     const id = await this.transactionService.createPreparation(
       auth,
@@ -93,13 +95,11 @@ export default class TransactionResolver {
   @UseGuards(JwtAuthGuard)
   async preparations(
     @Args('query') query: string,
-    @Args('warehouseId') warehouseId: string,
-    @Args('shopId') shopId: string
+    @Args('warehouseId') warehouseId: string
   ): Promise<PreparationList> {
     const data = await this.transactionService.getPreparations(
       query,
-      warehouseId,
-      shopId
+      warehouseId
     );
     return {
       data: data.map((item) => item.toResponse()),
@@ -129,13 +129,16 @@ export default class TransactionResolver {
     @CurrentAuth() auth: AuthWrapper,
     @Args('preparationId') preparationId: string,
     @Args('remarks') remarks: string = ''
-  ): Promise<IdPayload> {
-    const id = await this.transactionService.createTransaction(
+  ): Promise<TransactionResponse> {
+    const data = await this.transactionService.createTransaction(
       auth,
       preparationId,
       remarks
     );
-    return { id };
+    return {
+      data: data.transactions.map((id) => ({ id })),
+      failed: data.failed,
+    };
   }
 
   @Query()

@@ -174,20 +174,19 @@ export default class TransactionService {
   async createPreparation(
     auth: AuthWrapper,
     warehouseId: string,
-    shopId: string
+    shopId: string[]
   ): Promise<string> {
     await auth.log(this.db, 'createPreparation', { warehouseId, shopId });
     const { id } = await this.db.preparation.create({
       data: {
         created_by: auth.username,
         warehouse_id: warehouseId,
-        shop_id: shopId,
       },
     });
     await this.db.outbound_item.updateMany({
       where: {
         warehouse_id: warehouseId,
-        shop_id: shopId,
+        shop_id: { in: shopId },
         preparation_id: null,
       },
       data: { preparation_id: id },
@@ -197,15 +196,11 @@ export default class TransactionService {
 
   async getPreparations(
     id: string,
-    warehouseId: string = '',
-    shopId: string = ''
+    warehouseId: string = ''
   ): Promise<PreparationModel[]> {
     const data = await this.db.preparation.findMany({
       where: {
-        OR: [
-          { id: { contains: id } },
-          { warehouse_id: warehouseId, shop_id: shopId },
-        ],
+        OR: [{ id: { contains: id } }, { warehouse_id: warehouseId }],
         transaction: undefined,
       },
       include: { outbound: true, missing: true },
@@ -233,7 +228,6 @@ export default class TransactionService {
       return new PreparationModel(
         preparation.id,
         preparation.warehouse_id,
-        preparation.shop_id,
         preparation.created_by,
         preparation.created_at,
         amount
@@ -282,29 +276,110 @@ export default class TransactionService {
     auth: AuthWrapper,
     preparationId: string,
     remarks: string
-  ): Promise<string> {
+  ): Promise<{
+    transactions: string[];
+    failed: {
+      shopId: string;
+      items: { productId: string; amount: number }[];
+    }[];
+  }> {
     await auth.log(this.db, 'createTransaction', { preparationId });
-    const { shopId, warehouseId, items } = await this.getPreparation(
-      preparationId
-    );
-    const data = await this.db.transaction.create({
-      data: {
-        preparation: { connect: { id: preparationId } },
-        created_by: auth.username,
-        shop_id: shopId,
-        warehouse_id: warehouseId,
-        remarks,
-        items: {
-          createMany: {
-            data: items.map((item) => ({
-              product_id: item.productId,
-              amount: item.actual,
-            })),
-          },
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { warehouse_id, missing, outbound } =
+      await this.db.preparation.findUnique({
+        where: { id: preparationId },
+        include: {
+          missing: true,
+          outbound: { orderBy: { created_at: 'desc' } },
         },
+      });
+
+    const notFounds = missing.reduce((prev, notFoundItem) => {
+      const next = prev;
+      if (!next[notFoundItem.product_id]) {
+        next[notFoundItem.product_id] = notFoundItem.missing;
+      } else {
+        next[notFoundItem.product_id] += notFoundItem.missing;
+      }
+      return next;
+    }, {} as { [key: string]: number });
+
+    const perShop = outbound.reduce<{
+      transaction: { [key: string]: { productId: string; amount: number }[] };
+      failed: { [key: string]: { productId: string; amount: number }[] };
+    }>(
+      (prev, item) => {
+        const { transaction, failed } = prev;
+        const shopId = item.shop_id;
+        if (!transaction[shopId]) {
+          transaction[shopId] = [];
+        }
+        const productId = item.product_id;
+        const notFoundAmount = notFounds[productId];
+        if (notFoundAmount) {
+          if (!failed[shopId]) {
+            failed[shopId] = [];
+          }
+          if (notFoundAmount < item.amount) {
+            transaction[shopId].push({
+              productId: item.product_id,
+              amount: item.amount - notFoundAmount,
+            });
+            failed[shopId].push({
+              productId: item.product_id,
+              amount: notFoundAmount,
+            });
+            notFounds[productId] = undefined;
+          } else {
+            failed[shopId].push({
+              productId: item.product_id,
+              amount: item.amount,
+            });
+            notFounds[productId] = notFoundAmount - item.amount;
+          }
+        } else {
+          transaction[shopId].push({
+            productId: item.product_id,
+            amount: item.amount,
+          });
+        }
+        return { transaction, failed };
       },
-    });
-    return data.id;
+      {
+        transaction: {},
+        failed: {},
+      }
+    );
+    const data = await Promise.all(
+      Object.entries(perShop.transaction).map(async (transaction) => {
+        const shopId = transaction[0];
+        const items = transaction[1];
+        return this.db.transaction.create({
+          data: {
+            preparation: { connect: { id: preparationId } },
+            created_by: auth.username,
+            shop_id: shopId,
+            warehouse_id,
+            remarks,
+            items: {
+              createMany: {
+                data: items.map(({ productId, amount }) => ({
+                  product_id: productId,
+                  amount,
+                })),
+              },
+            },
+          },
+        });
+      })
+    );
+    return {
+      transactions: data.map((item) => item.id),
+      failed: Object.entries(perShop.failed).map(([shopId, items]) => ({
+        shopId,
+        items,
+      })),
+    };
   }
 
   async getTransactions(

@@ -82,11 +82,6 @@ export class EditWarehouseInput {
     active?: Nullable<boolean>;
 }
 
-export class AddPreparationInput {
-    shopId: string;
-    warehouseId: string;
-}
-
 export class AddMissingInput {
     preparationId: string;
     productId: string;
@@ -118,7 +113,7 @@ export abstract class IQuery {
 
     abstract demands(warehouseId?: Nullable<string>, shopId?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<DemandList> | Promise<Nullable<DemandList>>;
 
-    abstract preparations(query?: Nullable<string>, warehouseId?: Nullable<string>, shopId?: Nullable<string>): Nullable<PreparationList> | Promise<Nullable<PreparationList>>;
+    abstract preparations(query?: Nullable<string>, warehouseId?: Nullable<string>): Nullable<PreparationList> | Promise<Nullable<PreparationList>>;
 
     abstract transactions(productId?: Nullable<string>, warehouseId?: Nullable<string>, shopId?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<TransactionList> | Promise<Nullable<TransactionList>>;
 
@@ -152,11 +147,11 @@ export abstract class IMutation {
 
     abstract addOutbound(warehouseId: string, shopId: string, items: Nullable<ProductAmountInput>[]): Nullable<OutboundResponse> | Promise<Nullable<OutboundResponse>>;
 
-    abstract addPreparation(warehouseId: string, shopId: string): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
+    abstract addPreparation(warehouseId: string, shopId: Nullable<string>[]): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
     abstract addMissing(preparationId: string, productId: string, amount: number): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
-    abstract addTransaction(preparationId: string, remarks?: Nullable<string>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
+    abstract addTransaction(preparationId: string, remarks?: Nullable<string>): Nullable<TransactionResponse> | Promise<Nullable<TransactionResponse>>;
 
     abstract addInbound(warehouseId: string, items: Nullable<ProductAmountInput>[]): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
@@ -311,13 +306,12 @@ export class Demand {
 }
 
 export class PreparationList {
-    data: Nullable<Preparation>[];
+    data?: Nullable<Nullable<Preparation>[]>;
 }
 
 export class Preparation {
     id: string;
     warehouseId: string;
-    shopId: string;
     createdBy: string;
     createdAt: string;
     items?: Nullable<Nullable<PreparationItem>[]>;
@@ -327,6 +321,21 @@ export class PreparationItem {
     productId: string;
     expected: number;
     actual: number;
+}
+
+export class TransactionResponse {
+    data?: Nullable<Nullable<IdPayload>[]>;
+    failed?: Nullable<Nullable<ShopFailed>[]>;
+}
+
+export class ShopFailed {
+    shopId: string;
+    items?: Nullable<Nullable<ProductFailed>[]>;
+}
+
+export class ProductFailed {
+    productId: string;
+    amount: number;
 }
 
 export class TransactionList {

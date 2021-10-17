@@ -137,8 +137,7 @@ model preparation {
   created_at   DateTime        @default(now())
   created_by   String
   warehouse_id String
-  shop_id      String
-  transaction  transaction?
+  transaction  transaction[]
   outbound     outbound_item[]
   missing      missing[]
 }

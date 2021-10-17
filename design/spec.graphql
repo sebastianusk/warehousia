@@ -9,7 +9,7 @@ type Query {
   productLog(productId: String, pagination: PaginationInput): ProductLogList
   outbounds(warehouseId: String!, shopId: String!, pagination: PaginationInput): OutboundList
   demands(warehouseId: String, shopId: String, pagination: PaginationInput): DemandList
-  preparations(query: String, warehouseId: String, shopId: String): PreparationList
+  preparations(query: String, warehouseId: String): PreparationList
   transactions(productId: String, warehouseId: String, shopId: String, pagination: PaginationInput): TransactionList
   inbounds(warehouseId: String!, pagination: PaginationInput): InboundList
   transfers(warehouseId: String!, destinationId: String!, pagination: PaginationInput): TransferList
@@ -34,9 +34,9 @@ type Mutation {
   editProductStock(input: StockProductInput): IdPayload
 
   addOutbound(warehouseId: String!, shopId: String!, items: [ProductAmountInput]!): OutboundResponse
-  addPreparation(warehouseId: String!, shopId: String!): IdPayload
+  addPreparation(warehouseId: String!, shopId: [String]!): IdPayload
   addMissing(preparationId: String!, productId: String!, amount: Int!): IdPayload
-  addTransaction(preparationId: String!, remarks: String): IdPayload
+  addTransaction(preparationId: String!, remarks: String): TransactionResponse
 
   addInbound(warehouseId: String!, items: [ProductAmountInput]!): IdPayload
   addTransfer(warehouseId: String!, destinationId: String!, items: [ProductAmountInput]!): IdPayload
@@ -274,13 +274,12 @@ type Demand {
 }
 
 type PreparationList {
-  data: [Preparation]!
+  data: [Preparation]
 }
 
 type Preparation {
   id: String!
   warehouseId: String!
-  shopId: String!
   createdBy: String!
   createdAt: String!
   items: [PreparationItem]
@@ -292,11 +291,6 @@ type PreparationItem {
   actual: Int!
 }
 
-input AddPreparationInput {
-  shopId: String!
-  warehouseId: String!
-}
-
 input AddMissingInput {
   preparationId: String!
   productId: String!
@@ -305,6 +299,21 @@ input AddMissingInput {
 
 input AddTransactionInput {
   preparationId: String!
+}
+
+type TransactionResponse {
+  data: [IdPayload]
+  failed: [ShopFailed]
+}
+
+type ShopFailed {
+  shopId: String!
+  items: [ProductFailed]
+}
+
+type ProductFailed {
+  productId: String!
+  amount: Int!
 }
 
 type TransactionList {
