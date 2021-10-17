@@ -13,7 +13,6 @@ import {
   ProductInput,
   ProductList,
   ProductLogList,
-  ProductPrice,
   ProductStock,
   StockProductInput,
 } from '../graphql';
