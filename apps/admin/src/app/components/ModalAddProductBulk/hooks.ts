@@ -23,6 +23,7 @@ export default function useModalAddProductBulkHooks(
     const newData = excel.map((item) => ({
       id: item[0],
       name: item[1],
+      price: item[2],
     }));
     setData(newData);
   };

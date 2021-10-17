@@ -1,21 +1,10 @@
 import React, { useEffect } from 'react';
-import { Table, Popconfirm } from 'antd';
-import { useQuery, useMutation, useApolloClient } from '@apollo/client';
+import { Table } from 'antd';
+import { useQuery, useApolloClient } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import {
-  EditableTableProps,
-  ColumnTypes,
-  EditableRow,
-  EditableCell,
-} from '../EditableTable';
-import { GET_PRODUCTS, EDIT_PRODUCT } from '../../graph';
+import { GET_PRODUCTS } from '../../graph';
 import type { Warehouse } from '../../pages/ProductsPage/hooks';
 import styles from './index.module.css';
-
-// type Columns = (ColumnTypes[number] & {
-//   editable?: boolean;
-//   dataIndex: string;
-// })[];
 
 type DataType = {
   id: string;
@@ -28,11 +17,10 @@ type DataType = {
   };
 };
 
-function ProductListEditable(
-  props: EditableTableProps & { selectedWarehouse: Warehouse | undefined }
-) {
+function ProductListEditable(props: {
+  selectedWarehouse: Warehouse | undefined;
+}): React.ReactElement {
   const history = useHistory();
-  // const [count, setCount] = useState(0);
   const client = useApolloClient();
   const { loading, error, data } = useQuery(GET_PRODUCTS, {
     variables: {
@@ -51,49 +39,12 @@ function ProductListEditable(
     });
   }, [props.selectedWarehouse?.id]);
 
-  const [editProduct] = useMutation(EDIT_PRODUCT);
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error.toString()}</div>;
-
-  // const handleDelete = (id: string) => {
-  //   setDataSource(dataSource.filter((item: DataType) => item.id !== id));
-  // };
-
-  const handleSave = (row: DataType) => {
-    editProduct({
-      variables: {
-        input: {
-          id: row.id,
-          name: row.name,
-        },
-      },
-      refetchQueries: [
-        {
-          query: GET_PRODUCTS,
-          variables: {
-            warehouseId: props.selectedWarehouse?.id,
-            query: '',
-            pagination: {
-              offset: 0,
-              limit: 10,
-            },
-          },
-        },
-      ],
-    });
-  };
 
   const handleViewDetail = (product_id: any) => {
     console.log(product_id);
     history.push(`/product-detail/${product_id}`);
-  };
-
-  const components = {
-    body: {
-      row: EditableRow,
-      cell: EditableCell,
-    },
   };
 
   const columns = [
@@ -106,16 +57,12 @@ function ProductListEditable(
     {
       title: 'Product Name',
       dataIndex: 'name',
-      editable: true,
       key: 'name',
-      onCell: (record: DataType) => ({
-        record,
-        editable: true,
-        dataIndex: 'name',
-        key: 'name',
-        title: 'Product Name',
-        handleSave,
-      }),
+    },
+    {
+      title: 'Price',
+      dataIndex: 'price',
+      key: 'price',
     },
     {
       title: 'Current WH Stock',
@@ -142,9 +89,6 @@ function ProductListEditable(
             >
               View
             </a>
-            <Popconfirm title="Sure to delete?">
-              <a>Delete</a>
-            </Popconfirm>
           </>
         ) : null,
     },
@@ -153,11 +97,9 @@ function ProductListEditable(
   return (
     <div>
       <Table
-        components={components}
-        rowClassName={() => 'editable-row'}
         bordered
         dataSource={data.products.data}
-        columns={columns as ColumnTypes}
+        columns={columns}
         {...props}
       />
     </div>

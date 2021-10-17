@@ -143,6 +143,7 @@ export const GET_PRODUCTS = gql`
       data {
         id
         name
+        price
         stock {
           amount
           all

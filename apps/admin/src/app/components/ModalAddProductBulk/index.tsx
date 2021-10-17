@@ -31,6 +31,12 @@ export default function ModalAddProductBulk(props: {
       key: 'name',
       editable: true,
     },
+    {
+      title: 'Harga',
+      dataIndex: 'price',
+      key: 'price',
+      editable: true,
+    },
   ].map(
     mapEditableColumn((record: EditableColumnTypes<ProductData>) => {
       const newData = Array.from(data);

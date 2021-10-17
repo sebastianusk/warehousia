@@ -74,7 +74,10 @@ export default function ProductsPage(): ReactElement {
         )}
       </Card>
       <ModalAddProduct visible={showModal} setVisible={setShowModal} />
-      <ModalAddProductBulk visible={showBulkModal} setVisible={setShowBulkModal} />
+      <ModalAddProductBulk
+        visible={showBulkModal}
+        setVisible={setShowBulkModal}
+      />
     </>
   );
 }
