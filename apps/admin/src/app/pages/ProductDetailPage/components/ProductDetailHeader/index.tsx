@@ -7,6 +7,7 @@ import Column from 'antd/lib/table/Column';
 
 import styles from './index.module.css';
 import ProductEditModal from '../ProductEditModal';
+import useProductEditStockModal from '../ProductEditStockModal';
 
 export default function ProductDetailHeader(props: {
   productId: string;
@@ -15,16 +16,34 @@ export default function ProductDetailHeader(props: {
   const { loading, data } = useQuery(GET_PRODUCT_STOCK, {
     variables: { productId: props.productId },
   });
-  const showModalEditStock = (warehouseId: string) => {
-    console.log('show modal');
-  };
+
+  const item: {
+    name: string;
+    price: number;
+    stocks: { warehouseId: string; amount: number }[];
+  } = data?.productStock;
+
+  const { contextHolder, showEditStockModal } = useProductEditStockModal();
 
   return (
     <Card className={styles.card} key="header">
       {loading ? (
         <Spin size="large" />
       ) : (
-        <>
+        <div>
+          {contextHolder}
+          {item ? (
+            <ProductEditModal
+              visible={modal}
+              onCancel={() => setModal(false)}
+              data={{
+                id: props.productId,
+                name: item.name,
+                price: item.price,
+              }}
+            />
+          ) : undefined}
+
           <div className={`${styles.flexContainer}`}>
             <h2>
               {props.productId}&nbsp;-&nbsp;{data.productStock.name}
@@ -43,15 +62,30 @@ export default function ProductDetailHeader(props: {
               {data.productStock.price}
             </div>
           </div>
-          <Table dataSource={data.productStock.stocks} pagination={false}>
+          <Table
+            dataSource={item?.stocks.map((stock) => ({
+              ...stock,
+              key: stock.warehouseId,
+            }))}
+            pagination={false}
+          >
             <Column title="Warehouse" dataIndex="warehouseId" key="id" />
             <Column title="Amount" dataIndex="amount" key="amount" />
             <Column
               title="Edit"
               key="edit"
-              render={(_text: any, record: { warehouseId: string }) => (
+              render={(
+                _text: any,
+                record: { warehouseId: string; amount: number }
+              ) => (
                 <a
-                  onClick={() => showModalEditStock(record.warehouseId)}
+                  onClick={() => {
+                    showEditStockModal(
+                      props.productId,
+                      record.warehouseId,
+                      record.amount
+                    );
+                  }}
                   role="presentation"
                 >
                   Edit
@@ -59,21 +93,8 @@ export default function ProductDetailHeader(props: {
               )}
             />
           </Table>
-        </>
+        </div>
       )}
-      <ProductEditModal
-        visible={modal}
-        onCancel={() => setModal(false)}
-        data={
-          data
-            ? {
-                id: props.productId,
-                name: data.productStock.name,
-                price: data.productStock.price,
-              }
-            : undefined
-        }
-      />
     </Card>
   );
 }

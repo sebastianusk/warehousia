@@ -18,9 +18,14 @@ export default function ProductDetailLog(props: {
   });
   return (
     <Card className={styles.card} key="logs">
-      <Table loading={loading} dataSource={data?.productLog?.data}>
+      <Table
+        loading={loading}
+        dataSource={data?.productLog?.data.map((item: any, index: number) => ({
+          ...item,
+          key: index,
+        }))}
+      >
         <Column title="Time" dataIndex="createdAt" key="createdAt" />
-        <Column title="Product ID" dataIndex="id" key="id" />
         <Column title="Action" dataIndex="action" key="action" />
         <Column title="Amount" dataIndex="amount" key="amount" />
         <Column title="By" dataIndex="createdBy" key="createdBy" />

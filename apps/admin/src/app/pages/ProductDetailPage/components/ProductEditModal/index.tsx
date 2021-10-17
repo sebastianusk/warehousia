@@ -1,11 +1,11 @@
 import React from 'react';
 import { Form, Input, Modal } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-import {ADD_PRODUCTS} from 'app/graph';
-import {useApolloClient, useMutation} from '@apollo/client';
+import { ADD_PRODUCTS } from 'app/graph';
+import { useApolloClient, useMutation } from '@apollo/client';
 
 interface ProductEditModalProps {
-  data: { id: string; name: string; price: number } | undefined;
+  data: { id: string; name: string; price: number } ;
   onCancel: () => void;
   visible: boolean;
 }
@@ -40,16 +40,22 @@ export default function ProductEditModal(
       }}
     >
       <Form form={form} labelCol={{ span: 7 }}>
-        <Form.Item name="id" label="Product ID">
+        <Form.Item name="id" label="Product ID" key="id">
           {data?.id}
         </Form.Item>
-        <Form.Item name="name" label="Product Name" initialValue={data?.name}>
+        <Form.Item
+          name="name"
+          label="Product Name"
+          initialValue={data?.name}
+          key="name"
+        >
           <Input />
         </Form.Item>
         <Form.Item
           name="price"
           label="Product Price"
           initialValue={data?.price}
+          key="price"
         >
           <Input type="number" />
         </Form.Item>
