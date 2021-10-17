@@ -283,3 +283,33 @@ export const ADD_TRANSACTION = gql`
     }
   }
 `;
+
+export const GET_PRODUCT_LOGS = gql`
+  query ProductLog($productId: String!, $pagination: PaginationInput) {
+    productLog(productId: $productId, pagination: $pagination) {
+      data {
+        id
+        warehouse
+        createdBy
+        action
+        amount
+        createdAt
+      }
+    }
+  }
+`;
+
+export const GET_PRODUCT_STOCK = gql`
+  query ProductStock($productId: String!) {
+    productStock(productId: $productId) {
+      id
+      name
+      price
+      updatedAt
+      stocks {
+        warehouseId
+        amount
+      }
+    }
+  }
+`;

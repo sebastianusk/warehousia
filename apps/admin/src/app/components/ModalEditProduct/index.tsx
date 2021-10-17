@@ -5,16 +5,13 @@ import useModalEditProductHooks from './hooks';
 type ModalPropsType = {
   visible: boolean;
   setVisible: Dispatch<SetStateAction<boolean>>;
-  initialData: InitialDataType;
+  initialData: InitialDataType | undefined;
 };
 
 type InitialDataType = {
   id: string;
-  productName: string;
-  productCode: string;
+  name: string;
   price: number;
-  categories: string[];
-  stock: number;
 };
 
 export default function ModalEditProduct({
@@ -29,8 +26,6 @@ export default function ModalEditProduct({
     onInputProductCode,
     onInputProductName,
     onInputProductPrice,
-    onInputProductCategory,
-    onInputProductStock,
   } = useModalEditProductHooks(setVisible);
   return (
     <>
@@ -54,13 +49,13 @@ export default function ModalEditProduct({
                 <Input
                   placeholder="input product code"
                   onChange={onInputProductCode}
-                  value={initialData.productCode}
+                  value={initialData?.id}
                 />
               </Form.Item>
               <Form.Item label="Product Name">
                 <Input
                   placeholder="input product name"
-                  value={initialData.productName}
+                  value={initialData?.name}
                   onChange={onInputProductName}
                 />
               </Form.Item>
@@ -68,21 +63,7 @@ export default function ModalEditProduct({
                 <Input
                   placeholder="input product price"
                   onChange={onInputProductPrice}
-                  value={initialData.price}
-                />
-              </Form.Item>
-              <Form.Item label="Category">
-                <Input
-                  placeholder="input product's category"
-                  onChange={onInputProductCategory}
-                  value={initialData.categories}
-                />
-              </Form.Item>
-              <Form.Item label="Stocks">
-                <Input
-                  placeholder="input product's stock"
-                  onChange={onInputProductStock}
-                  value={initialData.stock}
+                  value={initialData?.price}
                 />
               </Form.Item>
             </Form>
