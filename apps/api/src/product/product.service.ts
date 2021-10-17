@@ -15,7 +15,7 @@ export default class ProductService {
       ...products.map(({ id, name, price }) =>
         this.db.product.upsert({
           create: { id, name, price },
-          update: { name },
+          update: { name, price },
           where: { id },
         })
       ),
