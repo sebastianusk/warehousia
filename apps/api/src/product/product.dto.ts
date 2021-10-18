@@ -66,7 +66,7 @@ export class ProductLogModel {
 
   static fromDB(log: ProductLogDB): ProductLogModel {
     return new ProductLogModel(
-      log.stock.product_id,
+      log.id,
       log.stock.warehouse_id,
       log.amount,
       log.action,
