@@ -11,7 +11,7 @@ type Preparation = {
     productId: string;
     expected: number;
     actual: number;
-  };
+  }[];
 };
 
 interface TransactionState {

@@ -4,6 +4,7 @@ import { DownOutlined } from '@ant-design/icons';
 import styles from './index.module.css';
 import useTransactionHooks from './hooks';
 import UserContext from '../../components/UserContext';
+import TablePreparation from '../../components/TablePreparation';
 
 type MenuProps = {
   list: string[];
@@ -76,7 +77,7 @@ export default function WarehouseTransactionPage(): ReactElement {
             </div>
           </Card>
           <Card className={styles.card}>
-            {/* <TablePreparation /> */}
+            <TablePreparation data={selectedPrep?.items} />
             <div className={`${styles.bottomAction}`}>
               <Button
                 size="large"
