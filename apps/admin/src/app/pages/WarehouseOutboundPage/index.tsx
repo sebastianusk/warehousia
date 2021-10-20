@@ -2,15 +2,22 @@ import React, { ReactElement } from 'react';
 import { Card, Divider, Button, Space } from 'antd';
 import WarehouseSelector from 'app/components/WarehousesSelector';
 import ShopsSelector from 'app/components/ShopsSelector';
-import InlineProductForm from '../../components/inlineProductForm';
-import ProductListEditor from '../../components/ProductListEditor';
+import InboundListEditor from 'app/components/InboundListEditor';
+import InlineProductForm from 'app/components/inlineProductForm';
 import useOutboundHooks from './hooks';
 
 import styles from './index.module.css';
 
 export default function WarehouseOutboundPage(): ReactElement {
-  const { setSelectedShop, setSelectedWarehouse, onAdd, onSubmit, loading } =
-    useOutboundHooks();
+  const {
+    setSelectedShop,
+    setSelectedWarehouse,
+    onAdd,
+    onSubmit,
+    loading,
+    dataList,
+    setDataList,
+  } = useOutboundHooks();
 
   return (
     <>
@@ -29,7 +36,7 @@ export default function WarehouseOutboundPage(): ReactElement {
         <h3>Input Order</h3>
         <InlineProductForm onAdd={onAdd} />
         <Divider />
-        <ProductListEditor />
+        <InboundListEditor dataList={dataList} setData={setDataList} />
         <div className={`${styles.bottomAction}`}>
           <Space size="middle">
             <Button>Bulk Input</Button>

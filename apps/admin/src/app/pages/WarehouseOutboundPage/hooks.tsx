@@ -8,6 +8,8 @@ interface OutboundState {
   onAdd: (data: Data) => void;
   onSubmit(): void;
   loading: boolean;
+  dataList: DataList;
+  setDataList: React.Dispatch<React.SetStateAction<DataList>>;
 }
 
 export type DataList = Data[] | [];
@@ -48,5 +50,7 @@ export default function useOutboundHooks(): OutboundState {
     onAdd,
     onSubmit,
     loading,
+    dataList,
+    setDataList,
   };
 }
