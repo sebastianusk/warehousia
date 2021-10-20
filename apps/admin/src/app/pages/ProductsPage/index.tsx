@@ -17,7 +17,6 @@ export default function ProductsPage(): ReactElement {
     showBulkModal,
     setShowBulkModal,
     openBulkModal,
-    onSearch,
     handleMenuClick,
     handleVisibleDropdown,
     selectedWarehouse,
@@ -61,19 +60,9 @@ export default function ProductsPage(): ReactElement {
           </div>
         </div>
       </Card>
-      <Card className={styles.card}>
-        <div className={styles.flexContainer}>
-          <h2>Product List</h2>
-          <Input.Search
-            placeholder="search by product name"
-            onSearch={onSearch}
-            style={{ width: 200 }}
-          />
-        </div>
-        {selectedWarehouse && (
-          <ProductListComponent selectedWarehouse={selectedWarehouse} />
-        )}
-      </Card>
+      {selectedWarehouse && (
+        <ProductListComponent selectedWarehouse={selectedWarehouse} />
+      )}
       <ModalAddProduct visible={showModal} setVisible={setShowModal} />
       <ModalAddProductBulk
         visible={showBulkModal}

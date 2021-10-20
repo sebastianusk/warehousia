@@ -17,7 +17,6 @@ interface ProductsPageState {
   showBulkModal: boolean;
   setShowBulkModal: Dispatch<SetStateAction<boolean>>;
   openBulkModal: () => void;
-  onSearch: (val: string) => void;
   handleMenuClick: (e: { key: React.SetStateAction<string> }) => void;
   handleVisibleDropdown: () => void;
   selectedWarehouse: Warehouse | undefined;
@@ -49,11 +48,6 @@ export default function useProductsPageHooks(): ProductsPageState {
     },
   });
 
-  const onSearch = (val: string): void => {
-    // eslint-disable-next-line no-console
-    console.log(val);
-  };
-
   const openModal = () => {
     setShowModal(true);
   };
@@ -82,7 +76,6 @@ export default function useProductsPageHooks(): ProductsPageState {
     showBulkModal,
     setShowBulkModal,
     openBulkModal,
-    onSearch,
     handleMenuClick,
     handleVisibleDropdown,
     showDropDown,

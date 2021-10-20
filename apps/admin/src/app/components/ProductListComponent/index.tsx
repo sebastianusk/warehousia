@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { Card, Input, Table } from 'antd';
 import { useQuery, useApolloClient } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { GET_PRODUCTS } from '../../graph';
@@ -24,8 +24,9 @@ export default function ProductListComponent(props: {
   selectedWarehouse: Warehouse | undefined;
 }): React.ReactElement {
   const history = useHistory();
-  const client = useApolloClient();
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const client = useApolloClient();
   const { loading, error, data, fetchMore } = useQuery(GET_PRODUCTS, {
     variables: {
       warehouseId: props.selectedWarehouse?.id,
@@ -34,12 +35,11 @@ export default function ProductListComponent(props: {
       limit: LIMIT,
     },
   });
-
   useEffect(() => {
     client.refetchQueries({
       include: ['products'],
     });
-  }, [client, props.selectedWarehouse?.id]);
+  }, [client, props.selectedWarehouse?.id, search]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error.toString()}</div>;
@@ -96,26 +96,36 @@ export default function ProductListComponent(props: {
     },
   ];
 
-  console.log(data);
   return (
-    <div>
-      <Table
-        bordered
-        dataSource={data.products}
-        columns={columns}
-        pagination={false}
-      />
-      <Page
-        page={page}
-        nextEnable={data.products.length === LIMIT}
-        prevEnable={page !== 1}
-        onNext={() => {
-          fetchMore({ variables: { offset: page * LIMIT } }).then(() =>
-            setPage(page + 1)
-          );
-        }}
-        onPrev={() => setPage(page - 1)}
-      />
-    </div>
+    <Card className={styles.card}>
+      <div>
+        <h2>Product List</h2>
+        <div className={styles.search}>
+          <Input.Search
+            placeholder="search by product name"
+            onSearch={(value) => setSearch(value)}
+            style={{ width: 200 }}
+          />
+        </div>
+
+        <Table
+          bordered
+          dataSource={data.products}
+          columns={columns}
+          pagination={false}
+        />
+        <Page
+          page={page}
+          nextEnable={data.products.length === LIMIT}
+          prevEnable={page !== 1}
+          onNext={() => {
+            fetchMore({ variables: { offset: page * LIMIT } }).then(() =>
+              setPage(page + 1)
+            );
+          }}
+          onPrev={() => setPage(page - 1)}
+        />
+      </div>
+    </Card>
   );
 }
