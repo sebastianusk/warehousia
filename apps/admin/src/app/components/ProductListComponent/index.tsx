@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
 import { useQuery, useApolloClient } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { GET_PRODUCTS } from '../../graph';
 import type { Warehouse } from '../../pages/ProductsPage/hooks';
 import styles from './index.module.css';
+import Page from '../Page';
 
 type DataType = {
   id: string;
@@ -17,19 +18,20 @@ type DataType = {
   };
 };
 
-function ProductListEditable(props: {
+const LIMIT = 5;
+
+export default function ProductListComponent(props: {
   selectedWarehouse: Warehouse | undefined;
 }): React.ReactElement {
   const history = useHistory();
   const client = useApolloClient();
-  const { loading, error, data } = useQuery(GET_PRODUCTS, {
+  const [page, setPage] = useState(1);
+  const { loading, error, data, fetchMore } = useQuery(GET_PRODUCTS, {
     variables: {
       warehouseId: props.selectedWarehouse?.id,
       query: '',
-      pagination: {
-        offset: 0,
-        limit: 10,
-      },
+      offset: (page - 1) * LIMIT,
+      limit: LIMIT,
     },
   });
 
@@ -94,15 +96,26 @@ function ProductListEditable(props: {
     },
   ];
 
+  console.log(data);
   return (
     <div>
       <Table
         bordered
-        dataSource={data.products.data}
+        dataSource={data.products}
         columns={columns}
-        {...props}
+        pagination={false}
+      />
+      <Page
+        page={page}
+        nextEnable={data.products.length === LIMIT}
+        prevEnable={page !== 1}
+        onNext={() => {
+          fetchMore({ variables: { offset: page * LIMIT } }).then(() =>
+            setPage(page + 1)
+          );
+        }}
+        onPrev={() => setPage(page - 1)}
       />
     </div>
   );
 }
-export default ProductListEditable;

@@ -6,6 +6,18 @@ export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
+        products: {
+          read(existing, { args }) {
+            if (args) {
+              return (
+                existing &&
+                existing.slice(args.offset, args.offset + args.limit)
+              );
+            }
+            return existing;
+          },
+          ...offsetLimitPagination(),
+        },
         productLog: {
           read(existing, { args }) {
             if (args) {

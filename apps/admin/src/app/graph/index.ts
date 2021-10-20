@@ -133,23 +133,23 @@ export const GET_PRODUCTS = gql`
   query products(
     $warehouseId: String!
     $query: String
-    $pagination: PaginationInput
+    $limit: Int
+    $offset: Int
   ) {
     products(
       warehouseId: $warehouseId
       query: $query
-      pagination: $pagination
+      limit: $limit
+      offset: $offset
     ) {
-      data {
-        id
-        name
-        price
-        stock {
-          amount
-          all
-          topWarehouse
-          topAmount
-        }
+      id
+      name
+      price
+      stock {
+        amount
+        all
+        topWarehouse
+        topAmount
       }
     }
   }

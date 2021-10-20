@@ -1,12 +1,13 @@
 import React, { ReactElement } from 'react';
 import { Button, Input, Card, Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import styles from './index.module.css';
+import ProductListComponent from 'app/components/ProductListComponent';
 import ModalAddProduct from '../../components/ModalAddProduct';
 import useProductsPageHooks from './hooks';
-import ProductListEditorv2 from '../../components/ProductListEditorv2';
 import type { WarehouseList } from './hooks';
 import ModalAddProductBulk from '../../components/ModalAddProductBulk';
+
+import styles from './index.module.css';
 
 export default function ProductsPage(): ReactElement {
   const {
@@ -70,7 +71,7 @@ export default function ProductsPage(): ReactElement {
           />
         </div>
         {selectedWarehouse && (
-          <ProductListEditorv2 selectedWarehouse={selectedWarehouse} />
+          <ProductListComponent selectedWarehouse={selectedWarehouse} />
         )}
       </Card>
       <ModalAddProduct visible={showModal} setVisible={setShowModal} />
