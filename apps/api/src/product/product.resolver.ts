@@ -27,12 +27,13 @@ export default class ProductResolver {
   @UseGuards(JwtAuthGuard)
   async productLog(
     @Args('productId') productId: string,
-    @Args('pagination') pagination: PaginationInput
+    @Args('offset') offset: number,
+    @Args('limit') limit: number,
   ): Promise<ProductLogList> {
     const data = await this.productService.getProductLog(
       productId,
-      pagination.limit,
-      pagination.offset
+      limit,
+      offset
     );
     return {
       data: data.map((item) => item.toResponse()),

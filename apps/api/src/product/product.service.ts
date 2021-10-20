@@ -91,7 +91,7 @@ export default class ProductService {
     offset: number
   ): Promise<ProductLogModel[]> {
     const data = await this.db.stocklog.findMany({
-      skip: offset * limit,
+      skip: offset,
       take: limit,
       where: { stock: { product_id: id } },
       orderBy: {
