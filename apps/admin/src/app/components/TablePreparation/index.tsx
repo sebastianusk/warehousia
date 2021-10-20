@@ -6,7 +6,7 @@ type TablePrepProps = {
   data:
     | {
         productId: string;
-        expected: number;
+        expected?: number;
         actual: number;
       }[]
     | undefined;

@@ -212,7 +212,7 @@ export const EDIT_INBOUND = gql`
 `;
 
 export const GET_OUTBOUNDS = gql`
-  query outbounds(
+  query Outbounds(
     $warehouseId: String!
     $shopId: String!
     $pagination: PaginationInput
@@ -222,27 +222,23 @@ export const GET_OUTBOUNDS = gql`
       shopId: $shopId
       pagination: $pagination
     ) {
-      id
-      createdAt
-      createdBy {
-        username
-      }
-      shop {
+      data {
         id
-        name
-        active
-      }
-      warehouse {
-        id
-        name
-        active
-        features
-      }
-      items {
-        id
-        product
+        createdAt
+        createdBy
         amount
+        productId
+        shopId
+        warehouseId
       }
+    }
+  }
+`;
+
+export const ADD_PREPARATION = gql`
+  mutation AddPreparation($warehouseId: String!, $shopId: [String]!) {
+    addPreparation(warehouseId: $warehouseId, shopId: $shopId) {
+      id
     }
   }
 `;

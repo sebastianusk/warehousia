@@ -46,8 +46,10 @@ export default function useTransactionHooks(): TransactionState {
     },
     onCompleted(response) {
       if (response?.preparations?.data.length > 0) {
-        const newData = response.preparation.data.map((datum: any) => datum.id);
-        setDataSource(response.preparation.data);
+        const newData = response.preparations.data.map(
+          (datum: any) => datum.id
+        );
+        setDataSource(response.preparations.data);
         setPrepIdList(newData);
         setSelectedPrep(response.preparations.data[0]);
       }
