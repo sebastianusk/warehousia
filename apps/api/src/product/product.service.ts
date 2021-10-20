@@ -181,11 +181,11 @@ export default class ProductService {
 
   async searchProduct(
     query: string,
-    limit: number,
-    offset: number
+    limit: number = 10,
+    offset: number = 0
   ): Promise<{ id: string; name: string }[]> {
     const data = await this.db.product.findMany({
-      skip: offset * limit,
+      skip: offset,
       take: limit,
       where: {
         OR: [

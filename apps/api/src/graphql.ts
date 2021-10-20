@@ -107,7 +107,7 @@ export abstract class IQuery {
 
     abstract productStock(productId: string): Nullable<ProductStock> | Promise<Nullable<ProductStock>>;
 
-    abstract searchProduct(query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<ProductAutoFillList> | Promise<Nullable<ProductAutoFillList>>;
+    abstract searchProduct(query?: Nullable<string>, limit?: Nullable<number>, offset?: Nullable<number>): Nullable<Nullable<ProductAutoFill>[]> | Promise<Nullable<Nullable<ProductAutoFill>[]>>;
 
     abstract productLog(productId?: Nullable<string>, limit?: Nullable<number>, offset?: Nullable<number>): Nullable<ProductLog[]> | Promise<Nullable<ProductLog[]>>;
 

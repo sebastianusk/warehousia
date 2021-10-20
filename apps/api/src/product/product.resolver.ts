@@ -8,11 +8,9 @@ import PoliciesGuard from '../auth/policy.guard';
 import {
   CountPayload,
   IdPayload,
-  PaginationInput,
   Product,
-  ProductAutoFillList,
+  ProductAutoFill,
   ProductInput,
-  ProductList,
   ProductLog,
   ProductStock,
   StockProductInput,
@@ -108,14 +106,11 @@ export default class ProductResolver {
   @UseGuards(JwtAuthGuard)
   async searchProduct(
     @Args('query') query: string,
-    @Args('pagination') pagination: PaginationInput
-  ): Promise<ProductAutoFillList> {
-    const data = await this.productService.searchProduct(
-      query,
-      pagination.limit,
-      pagination.offset
-    );
-    return { data };
+    @Args('offset') offset: number,
+    @Args('limit') limit: number
+  ): Promise<ProductAutoFill[]> {
+    const data = await this.productService.searchProduct(query, limit, offset);
+    return data;
   }
 
   @Query()
