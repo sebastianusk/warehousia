@@ -313,3 +313,12 @@ export const UPDATE_PRODUCT_STOCK = gql`
     }
   }
 `;
+
+export const SEARCH_PRODUCT = gql`
+  query SearchProduct($query: String!, $offset: Int, $limit: Int) {
+    searchProduct(query: $query, offset: $offset, limit: $limit) {
+      id
+      name
+    }
+  }
+`;

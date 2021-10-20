@@ -31,6 +31,7 @@ export default function WarehouseSelector(
     >
       {items?.map((item: any) => (
         <Select.Option
+          key={item.id}
           value={item.id}
         >{`${item.id} -  ${item.name}`}</Select.Option>
       ))}
