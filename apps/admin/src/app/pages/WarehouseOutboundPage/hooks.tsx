@@ -27,15 +27,7 @@ export default function useOutboundHooks(): OutboundState {
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
   const [selectedShop, setSelectedShop] = useState('');
   const [dataList, setDataList] = useState<DataList>([]);
-  const [addOutbound, { loading }] = useMutation(ADD_OUTBOUND,{
-    // onCompleted: (data) => {
-    //   console.log(data, 'ini isinya dataaa');
-      // if (data) {
-      //   setDataList([]);
-      //   message.info('Successfully upload inbounds');
-      // }
-    // },
-  });
+  const [addOutbound, { loading }] = useMutation(ADD_OUTBOUND);
 
   const onAdd = (data: Data) => {
     setDataList((prev) => [...prev, data]);
