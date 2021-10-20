@@ -3,6 +3,7 @@ import { Form, Button, InputNumber, AutoComplete } from 'antd';
 import { SEARCH_PRODUCT } from 'app/graph';
 import { useLazyQuery } from '@apollo/client';
 import { useForm } from 'antd/lib/form/Form';
+import _ from 'lodash';
 import styles from './index.module.css';
 
 export default function InlineProductForm({
@@ -12,6 +13,9 @@ export default function InlineProductForm({
 }): React.ReactElement {
   const [getProduct, { data }] = useLazyQuery(SEARCH_PRODUCT);
   const [form] = useForm();
+  const search = _.debounce((value) => {
+    getProduct({ variables: { query: value } });
+  }, 1000);
   return (
     <div className={styles.formContainer}>
       <Form
@@ -29,9 +33,7 @@ export default function InlineProductForm({
         <Form.Item label="Product Code" name="product">
           <AutoComplete
             style={{ width: '500px' }}
-            onSearch={(value) => {
-              getProduct({ variables: { query: value } });
-            }}
+            onSearch={(value) => search(value)}
             allowClear
           >
             {data?.searchProduct.map((item: { id: string; name: string }) => (
