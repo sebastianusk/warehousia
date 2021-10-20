@@ -1,0 +1,10 @@
+.page {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: right;
+}
+
+.number {
+  margin: 10px;
+}

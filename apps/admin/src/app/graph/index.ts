@@ -285,16 +285,14 @@ export const ADD_TRANSACTION = gql`
 `;
 
 export const GET_PRODUCT_LOGS = gql`
-  query ProductLog($productId: String!, $pagination: PaginationInput) {
-    productLog(productId: $productId, pagination: $pagination) {
-      data {
-        id
-        warehouse
-        createdBy
-        action
-        amount
-        createdAt
-      }
+  query ProductLog($productId: String!, $offset: Int, $limit: Int) {
+    productLog(productId: $productId, offset: $offset, limit: $limit) {
+      id
+      warehouse
+      createdBy
+      action
+      amount
+      createdAt
     }
   }
 `;
