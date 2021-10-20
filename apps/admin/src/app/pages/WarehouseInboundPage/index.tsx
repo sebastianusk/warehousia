@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Divider, Button, Space } from 'antd';
 import WarehouseSelector from 'app/components/WarehousesSelector';
+import ExcelInput from 'app/components/ExcelInput';
 import styles from './index.module.css';
 import InlineProductForm from '../../components/inlineProductForm';
 import InboundListEditor from '../../components/InboundListEditor';
@@ -30,7 +31,16 @@ export default function WarehouseInboundPage(): React.ReactElement {
         <InboundListEditor dataList={dataList} setData={setDataList} />
         <div className={`${styles.bottomAction}`}>
           <Space size="middle">
-            <Button>Bulk Input</Button>
+            <ExcelInput
+              onDataInput={(data) => {
+                const result = data.map((item) => ({
+                  id: item[0],
+                  name: '',
+                  amount: parseInt(item[1], 10),
+                }));
+                setDataList([...dataList, ...result]);
+              }}
+            />
             <Button>Error log</Button>
           </Space>
           <Button
