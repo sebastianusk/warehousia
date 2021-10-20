@@ -8,7 +8,6 @@ import useInboundHooks from './hooks';
 
 export default function WarehouseInboundPage(): React.ReactElement {
   const {
-    selectedWarehouse,
     setSelectedWarehouse,
     dataList,
     setDataList,
@@ -28,15 +27,11 @@ export default function WarehouseInboundPage(): React.ReactElement {
       <Card className={styles.card}>
         <InlineProductForm onAdd={onAdd} />
         <Divider />
-        <InboundListEditor
-          selectedWarehouseId={selectedWarehouse}
-          dataList={dataList}
-          setData={setDataList}
-        />
+        <InboundListEditor dataList={dataList} setData={setDataList} />
         <div className={`${styles.bottomAction}`}>
           <Space size="middle">
             <Button>Bulk Input</Button>
-            <Button>error log</Button>
+            <Button>Error log</Button>
           </Space>
           <Button
             size="large"

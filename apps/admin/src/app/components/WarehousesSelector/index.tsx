@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 
-import { Select  } from 'antd';
+import { Select } from 'antd';
 import { useQuery } from '@apollo/client';
 import { GET_WAREHOUSES } from 'app/graph';
 import UserContext from '../UserContext';

@@ -1,6 +1,5 @@
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
-import { message } from 'antd';
 import { ADD_INBOUND } from '../../graph';
 
 interface InboundState {

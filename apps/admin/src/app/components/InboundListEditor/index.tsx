@@ -16,7 +16,6 @@ type DataType = {
 
 function InboundListEditor(
   props: EditableTableProps & {
-    selectedWarehouseId: string | undefined;
     dataList: DataList;
     setData: React.Dispatch<React.SetStateAction<DataList>>;
   }
@@ -52,7 +51,7 @@ function InboundListEditor(
       title: 'Amount',
       dataIndex: 'amount',
       editable: true,
-      onCell: (record: DataType, index: number) => ({
+      onCell: (record: DataType) => ({
         record,
         editable: true,
         dataIndex: 'amount',
@@ -63,10 +62,17 @@ function InboundListEditor(
     {
       title: 'Action',
       dataIndex: 'Action',
-      render: () =>
+      render: (_text: any, _record: DataType, index: number) =>
         props.dataList.length >= 1 ? (
           <>
-            <Popconfirm title="Sure to delete?">
+            <Popconfirm
+              title="Sure to delete?"
+              onConfirm={() => {
+                const copy = Array.from(props.dataList);
+                copy.splice(index, 1);
+                props.setData(copy);
+              }}
+            >
               <a>Delete</a>
             </Popconfirm>
           </>
@@ -80,8 +86,9 @@ function InboundListEditor(
         components={components}
         rowClassName={() => 'editable-row'}
         bordered
-        dataSource={props.dataList}
+        dataSource={props.dataList.map((item) => ({ ...item, key: item.id }))}
         columns={columns as ColumnTypes}
+        pagination={false}
         {...props}
       />
     </div>
