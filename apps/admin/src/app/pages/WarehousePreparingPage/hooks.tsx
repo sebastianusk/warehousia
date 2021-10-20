@@ -24,13 +24,21 @@ type DataSource =
       productId: string;
       actual: number;
     }[]
-  | undefined;
+  | [];
+
+type DataOutbounds =
+  | {
+      shopId: string;
+      products: DataSource;
+    }[]
+  | [];
 
 export default function usePreparingHooks(): PreparingState {
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
   const [shopsOption, setShopsOption] = useState([]);
   const [selectedShops, setSelectedShops] = useState([]);
-  const [dataSource, setDataSource] = useState<DataSource>();
+  const [dataOutbounds, setDataOutbounds] = useState<DataOutbounds>([]);
+  const [dataSource, setDataSource] = useState<DataSource>([]);
   const [addPreparation, { loading }] = useMutation(ADD_PREPARATION);
 
   useQuery(GET_SHOPS, {
@@ -53,38 +61,52 @@ export default function usePreparingHooks(): PreparingState {
 
   const [getOutbounds] = useLazyQuery(GET_OUTBOUNDS, {
     onCompleted(response) {
-      console.log(response, 'ini dari oncompleteget');
       if (response?.outbounds?.data.length > 0) {
         const newData = response.outbounds.data.map((datum: any) => ({
           productId: datum.productId,
           actual: datum.amount,
         }));
-        console.log(newData, 'newDataa');
+        setDataOutbounds((prev: any) => [
+          ...prev,
+          {
+            shopId: response.outbounds.data[0].shopId,
+            products: newData,
+          },
+        ]);
         setDataSource((prev: any) => [...prev, ...newData]);
       }
     },
   });
 
   const onSelectWarehouse = (warehouseId: string) => {
+    setDataOutbounds([]);
     setDataSource([]);
     setSelectedShops([]);
     setSelectedWarehouse(warehouseId);
   };
 
-  const onChangeSelectShops = (e: any) => {
-    setSelectedShops(e);
+  const onChangeSelectShops = (shopIds: any) => {
+    setSelectedShops(shopIds);
     setDataSource([]);
-    e.forEach((idShop: any) => {
-      getOutbounds({
-        variables: {
-          warehouseId: selectedWarehouse,
-          shopId: idShop,
-          pagination: {
-            limit: 10,
-            offset: 0,
+    shopIds.forEach((shopId: any) => {
+      const index = dataOutbounds.findIndex((el) => el.shopId === shopId);
+      if (index > -1) {
+        setDataSource((prev: any) => [
+          ...prev,
+          ...dataOutbounds[index].products,
+        ]);
+      } else {
+        getOutbounds({
+          variables: {
+            warehouseId: selectedWarehouse,
+            shopId,
+            pagination: {
+              limit: 10,
+              offset: 0,
+            },
           },
-        },
-      });
+        });
+      }
     });
   };
 
