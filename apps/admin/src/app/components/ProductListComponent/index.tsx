@@ -110,7 +110,10 @@ export default function ProductListComponent(props: {
 
         <Table
           bordered
-          dataSource={data.products}
+          dataSource={data.products.map((item: any) => ({
+            ...item,
+            key: item.id,
+          }))}
           columns={columns}
           pagination={false}
         />

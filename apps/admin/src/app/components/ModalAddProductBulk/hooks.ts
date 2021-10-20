@@ -5,6 +5,7 @@ import { ADD_PRODUCTS } from '../../graph';
 export interface ProductData {
   id: string;
   name: string;
+  price: string;
 }
 
 interface ModalAddProductBulkState {
@@ -39,7 +40,15 @@ export default function useModalAddProductBulkHooks(
   });
 
   const uploadData = () => {
-    addProducts({ variables: { input: data } });
+    addProducts({
+      variables: {
+        input: data.map(({ id, name, price }) => ({
+          id,
+          name,
+          price: parseInt(price, 10),
+        })),
+      },
+    });
   };
   return {
     data,

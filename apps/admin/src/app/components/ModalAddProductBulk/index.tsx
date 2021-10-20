@@ -3,7 +3,6 @@ import Modal from 'antd/lib/modal/Modal';
 import { Table } from 'antd';
 import useModalAddProductBulkHooks, { ProductData } from './hooks';
 
-import styles from './index.module.css';
 import {
   EditableRow,
   EditableCell,
@@ -56,12 +55,14 @@ export default function ModalAddProductBulk(props: {
       onOk={uploadData}
       okButtonProps={{ disabled: data.length === 0, loading }}
     >
-      <div className={styles.container}>
+      <div>
         <ExcelInput onDataInput={handleFile} />
         <Table
           columns={columns}
           dataSource={data}
           components={{ body: { row: EditableRow, cell: EditableCell } }}
+          pagination={false}
+          scroll={{ y: 500 }}
         />
       </div>
     </Modal>
