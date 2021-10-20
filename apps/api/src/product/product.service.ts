@@ -110,6 +110,7 @@ export default class ProductService {
     limit: number,
     offset: number
   ): Promise<ProductModel[]> {
+    const likeQuery = `%${query}%`;
     const rawResult = await this.db.$queryRaw<
       {
         id: string;
@@ -122,18 +123,19 @@ export default class ProductService {
         stock_updated_at: string;
       }[]
     >`
-      select
+      SELECT
         product.id,
         product.name,
         product.price,
-        coalesce(stock.stock, 0) as stock,
-        coalesce((select sum(stock) from stock where product_id = product.id), 0) as total,
+        coalesce(stock.stock, 0) AS stock,
+        coalesce((select sum(stock) from stock where product_id = product.id), 0) AS total,
         product.created_at,
         product.updated_at,
-        stock.updated_at as stock_updated_at
-      from product left join (
-        select product_id, stock, updated_at from stock where stock.warehouse_id = ${warehouseId}
-      ) as stock on stock.product_id = product.id order by coalesce(stock.stock, 0) desc limit ${limit} offset ${offset};
+        stock.updated_at AS stock_updated_at
+      FROM product LEFT JOIN (
+        SELECT product_id, stock, updated_at FROM stock WHERE stock.warehouse_id = ${warehouseId}
+      ) AS stock ON stock.product_id = product.id WHERE product.id LIKE ${likeQuery} OR product.name ILIKE ${likeQuery} 
+      ORDER BY coalesce(stock.stock, 0) DESC LIMIT ${limit} OFFSET ${offset};
     `;
     return Promise.all(
       rawResult.map(

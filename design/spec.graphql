@@ -4,7 +4,7 @@ type Query {
   me: Admin
   warehouses(query: String, pagination: PaginationInput): WarehouseList
   shops(query: String, pagination: PaginationInput): ShopList
-  products(warehouseId: String!, query: String, pagination: PaginationInput): ProductList
+  products(warehouseId: String!, query: String, limit: Int, offset: Int): [Product]
   productStock(productId: String!): ProductStock
   searchProduct(query: String, pagination: PaginationInput): ProductAutoFillList
   productLog(productId: String, limit: Int, offset: Int): [ProductLog!]
@@ -126,7 +126,7 @@ type ProductStock {
   name: String!
   price: Int!
   createdAt: String!
-  updatedAt: String!  
+  updatedAt: String!
   stocks: [ProductStockAmount]
 }
 

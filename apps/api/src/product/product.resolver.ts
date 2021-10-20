@@ -9,6 +9,7 @@ import {
   CountPayload,
   IdPayload,
   PaginationInput,
+  Product,
   ProductAutoFillList,
   ProductInput,
   ProductList,
@@ -43,17 +44,16 @@ export default class ProductResolver {
   async products(
     @Args('query') query: string,
     @Args('warehouseId') warehouseId: string,
-    @Args('pagination') pagination: PaginationInput
-  ): Promise<ProductList> {
+    @Args('offset') offset: number,
+    @Args('limit') limit: number
+  ): Promise<Product[]> {
     const data = await this.productService.getProducts(
       query,
       warehouseId,
-      pagination.limit,
-      pagination.offset
+      limit,
+      offset
     );
-    return {
-      data: data.map((item) => item.toResponse()),
-    };
+    return data.map((item) => item.toResponse());
   }
 
   @Mutation()
