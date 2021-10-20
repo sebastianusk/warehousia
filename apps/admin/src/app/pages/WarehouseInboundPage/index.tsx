@@ -1,22 +1,28 @@
-import React, { ReactElement } from 'react';
-import { Menu, Card, Divider, Button, Space } from 'antd';
+import React from 'react';
+import { Card, Divider, Button, Space } from 'antd';
 import WarehouseSelector from 'app/components/WarehousesSelector';
 import styles from './index.module.css';
 import InlineProductForm from '../../components/inlineProductForm';
 import InboundListEditor from '../../components/InboundListEditor';
 import useInboundHooks from './hooks';
-import UserContext from '../../components/UserContext';
 
-export default function WarehouseInboundPage(): ReactElement {
-  const { selectedWarehouse, dataList, setDataList, onSubmit, loading, onAdd } =
-    useInboundHooks();
+export default function WarehouseInboundPage(): React.ReactElement {
+  const {
+    selectedWarehouse,
+    setSelectedWarehouse,
+    dataList,
+    setDataList,
+    onSubmit,
+    loading,
+    onAdd,
+  } = useInboundHooks();
 
   return (
     <>
       <Card className={styles.card}>
         <div className={`${styles.flexContainer}`}>
           <h2 className={styles.title}>INBOUND</h2>
-          <WarehouseSelector onSelectWarehouse={() => {}} />
+          <WarehouseSelector onSelectWarehouse={setSelectedWarehouse} />
         </div>
       </Card>
       <Card className={styles.card}>
