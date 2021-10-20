@@ -36,13 +36,17 @@ export default class WarehouseService {
     offset: number
   ): Promise<WarehouseModel[]> {
     const data = await this.db.warehouse.findMany({
-      skip: offset * limit,
+      skip: offset,
       take: limit,
-      where: {
-        name: {
-          startsWith: query,
-        },
-      },
+      where: query
+        ? {
+            OR: [
+              { name: { contains: query, mode: 'insensitive' } },
+              { id: { contains: query, mode: 'insensitive' } },
+            ],
+          }
+        : undefined,
+      orderBy: { id: 'asc' },
     });
     return data.map((item) => WarehouseModel.fromDB(item));
   }

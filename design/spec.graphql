@@ -2,7 +2,7 @@ type Query {
   admins(query: String, pagination: PaginationInput): AdminList
   adminLogs(username: String, pagination: PaginationInput): AdminLogList
   me: Admin
-  warehouses(query: String, pagination: PaginationInput): WarehouseList
+  warehouses(query: String, offset: Int, limit: Int): [Warehouse]
   shops(query: String, pagination: PaginationInput): ShopList
   products(warehouseId: String!, query: String, limit: Int, offset: Int): [Product]
   productStock(productId: String!): ProductStock

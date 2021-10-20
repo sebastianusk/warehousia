@@ -13,6 +13,7 @@ import {
   PaginationInput,
   ProductAmountInput,
   TransferList,
+  Warehouse,
   WarehouseList,
 } from '../graphql';
 import WarehouseModel, { Feature } from './warehouse.dto';
@@ -27,16 +28,11 @@ export default class WarehouseResolver {
   @UseGuards(JwtAuthGuard)
   async warehouses(
     @Args('query') query: string,
-    @Args('pagination') pagination: PaginationInput
-  ): Promise<WarehouseList> {
-    const data = await this.warehouseService.getList(
-      query,
-      pagination?.limit,
-      pagination?.offset
-    );
-    return {
-      data: data.map((item) => item.toResponse()),
-    };
+    @Args('offset') offset: number,
+    @Args('limit') limit: number
+  ): Promise<Warehouse[]> {
+    const data = await this.warehouseService.getList(query, limit, offset);
+    return data.map((item) => item.toResponse());
   }
 
   @Mutation()
