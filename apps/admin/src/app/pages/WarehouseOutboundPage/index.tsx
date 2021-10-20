@@ -1,40 +1,16 @@
 import React, { ReactElement } from 'react';
-import { Menu, Dropdown, Card, Divider, Button, Space } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
-import styles from './index.module.css';
+import { Card, Divider, Button, Space } from 'antd';
+import WarehouseSelector from 'app/components/WarehousesSelector';
+import ShopsSelector from 'app/components/ShopsSelector';
 import InlineProductForm from '../../components/inlineProductForm';
 import ProductListEditor from '../../components/ProductListEditor';
-import useTransferPageHooks from './hooks';
+import useOutboundHooks from './hooks';
+
+import styles from './index.module.css';
 
 export default function WarehouseOutboundPage(): ReactElement {
-  const {
-    handleMenuClickWarehouse,
-    handleMenuClickShop,
-    handleVisibleChangeWarehouse,
-    handleVisibleChangeShop,
-    showDropDownWarehouse,
-    showDropDownShop,
-    selectedWarehouse,
-    selectedShop,
-    warehouseList,
-    shopList,
-  } = useTransferPageHooks();
-
-  const menuWarehouse = (list: string[]) => (
-    <Menu onClick={handleMenuClickWarehouse}>
-      {list.map((item) => (
-        <Menu.Item key={item}>{item}</Menu.Item>
-      ))}
-    </Menu>
-  );
-
-  const menuShop = (list: string[]) => (
-    <Menu onClick={handleMenuClickShop}>
-      {list.map((item) => (
-        <Menu.Item key={item}>{item}</Menu.Item>
-      ))}
-    </Menu>
-  );
+  const { setSelectedShop, setSelectedWarehouse, onAdd, onSubmit, loading } =
+    useOutboundHooks();
 
   return (
     <>
@@ -44,33 +20,14 @@ export default function WarehouseOutboundPage(): ReactElement {
         </div>
         <Space size="middle" className={styles.warehousePicker}>
           <span>FROM</span>
-          <Dropdown
-            trigger={['click']}
-            overlay={menuWarehouse(warehouseList)}
-            onVisibleChange={handleVisibleChangeWarehouse}
-            visible={showDropDownWarehouse}
-            className={styles.dropdownLeft}
-          >
-            <Button size="large" onClick={(e) => e.preventDefault()}>
-              {selectedWarehouse} <DownOutlined />
-            </Button>
-          </Dropdown>
+          <WarehouseSelector onSelectWarehouse={setSelectedWarehouse} />
           <span>FOR</span>
-          <Dropdown
-            trigger={['click']}
-            overlay={menuShop(shopList)}
-            onVisibleChange={handleVisibleChangeShop}
-            visible={showDropDownShop}
-          >
-            <Button size="large" onClick={(e) => e.preventDefault()}>
-              {selectedShop} <DownOutlined />
-            </Button>
-          </Dropdown>
+          <ShopsSelector onSelectShop={setSelectedShop} />
         </Space>
       </Card>
       <Card className={styles.card}>
         <h3>Input Order</h3>
-        {/* <InlineProductForm /> */}
+        <InlineProductForm onAdd={onAdd} />
         <Divider />
         <ProductListEditor />
         <div className={`${styles.bottomAction}`}>
@@ -78,7 +35,12 @@ export default function WarehouseOutboundPage(): ReactElement {
             <Button>Bulk Input</Button>
             <Button>error log</Button>
           </Space>
-          <Button size="large" type="primary">
+          <Button
+            size="large"
+            type="primary"
+            onClick={onSubmit}
+            loading={loading}
+          >
             Submit
           </Button>
         </div>

@@ -211,6 +211,23 @@ export const EDIT_INBOUND = gql`
   }
 `;
 
+export const ADD_OUTBOUND = gql`
+  mutation AddOutbound(
+    $warehouseId: String!
+    $shopId: String!
+    $items: [ProductAmountInput]!
+  ) {
+    addOutbound(warehouseId: $warehouseId, shopId: $shopId, items: $items) {
+      demands {
+        id
+      }
+      outbounds {
+        id
+      }
+    }
+  }
+`;
+
 export const GET_OUTBOUNDS = gql`
   query Outbounds(
     $warehouseId: String!

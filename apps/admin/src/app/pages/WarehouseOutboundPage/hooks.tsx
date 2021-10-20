@@ -1,61 +1,52 @@
 import { useState } from 'react';
+import { ADD_OUTBOUND } from 'app/graph';
+import { useMutation } from '@apollo/client';
 
-interface TransferPageState {
-  handleMenuClickWarehouse: (e: { key: React.SetStateAction<string> }) => void;
-  handleMenuClickShop: (e: { key: React.SetStateAction<string> }) => void;
-  handleVisibleChangeWarehouse: () => void;
-  handleVisibleChangeShop: () => void;
-  showDropDownWarehouse: boolean;
-  showDropDownShop: boolean;
-  selectedWarehouse: string;
-  selectedShop: string;
-  warehouseList: string[];
-  shopList: string[];
+interface OutboundState {
+  setSelectedWarehouse: (warehouseId: string) => void;
+  setSelectedShop: (shopId: string) => void;
+  onAdd: (data: Data) => void;
+  onSubmit(): void;
+  loading: boolean;
 }
 
-export default function useTranserPageHooks(): TransferPageState {
-  const [showDropDownWarehouse, setShowDropDownWarehouse] = useState(false);
-  const [showDropDownShop, setShowDropDownShop] = useState(false);
-  const [selectedWarehouse, setSelectedWarehouse] = useState('Warehouse A');
-  const [selectedShop, setSelectedShop] = useState('Shop 1');
-  const [warehouseList, setWarehouseList] = useState([
-    'Warehouse A',
-    'Warehouse B',
-    'Warehouse C',
-  ]);
-  const [shopList, setshopList] = useState(['Shop 1', 'Shop 2', 'Shop 3']);
+export type DataList = Data[] | [];
 
-  const handleVisibleChangeWarehouse = () => {
-    setShowDropDownWarehouse(!showDropDownWarehouse);
-  };
-  const handleVisibleChangeShop = () => {
-    setShowDropDownShop(!showDropDownShop);
-  };
+type Data = {
+  id: string;
+  name: string;
+  amount: number;
+};
 
-  const handleMenuClickWarehouse = (e: {
-    key: React.SetStateAction<string>;
-  }) => {
-    setshopList(warehouseList.filter((warehouse) => warehouse !== e.key));
-    setSelectedWarehouse(e.key);
-    setShowDropDownWarehouse(false);
+export default function useOutboundHooks(): OutboundState {
+  const [selectedWarehouse, setSelectedWarehouse] = useState('');
+  const [selectedShop, setSelectedShop] = useState('');
+  const [dataList, setDataList] = useState<DataList>([]);
+  const [addOutbound, { loading }] = useMutation(ADD_OUTBOUND);
+
+  const onAdd = (data: Data) => {
+    setDataList((prev) => [...prev, data]);
   };
 
-  const handleMenuClickShop = (e: { key: React.SetStateAction<string> }) => {
-    setShowDropDownShop(false);
-    setWarehouseList(warehouseList.filter((warehouse) => warehouse !== e.key));
-    setSelectedShop(e.key);
+  const onSubmit = () => {
+    const dataSubmit = dataList.map((datum) => ({
+      productId: datum.id,
+      amount: datum.amount,
+    }));
+    addOutbound({
+      variables: {
+        warehouseId: selectedWarehouse,
+        shopId: selectedShop,
+        items: dataSubmit,
+      },
+    });
   };
 
   return {
-    handleMenuClickWarehouse,
-    handleMenuClickShop,
-    handleVisibleChangeWarehouse,
-    handleVisibleChangeShop,
-    showDropDownWarehouse,
-    showDropDownShop,
-    selectedWarehouse,
-    selectedShop,
-    warehouseList,
-    shopList,
+    setSelectedWarehouse,
+    setSelectedShop,
+    onAdd,
+    onSubmit,
+    loading,
   };
 }
