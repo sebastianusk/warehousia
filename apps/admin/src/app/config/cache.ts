@@ -7,8 +7,14 @@ export const cache: InMemoryCache = new InMemoryCache({
     Query: {
       fields: {
         productLog: {
-          read(existing, { args: { offset, limit } }) {
-            return existing && existing.slice(offset, offset + limit);
+          read(existing, { args }) {
+            if (args) {
+              return (
+                existing &&
+                existing.slice(args.offset, args.offset + args.limit)
+              );
+            }
+            return existing;
           },
           ...offsetLimitPagination(),
         },
