@@ -41,13 +41,6 @@ export default function useModalAddWarehouseHooks(
       refetchQueries: [
         {
           query: GET_WAREHOUSES,
-          variables: {
-            query: '',
-            pagination: {
-              offset: 0,
-              limit: 10,
-            },
-          },
         },
       ],
     });

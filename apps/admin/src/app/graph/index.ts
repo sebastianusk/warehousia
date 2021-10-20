@@ -71,8 +71,8 @@ export const CHANGE_PASSWORD = gql`
 `;
 
 export const GET_WAREHOUSES = gql`
-  query warehouses($query: String, $pagination: PaginationInput) {
-    warehouses(query: $query, pagination: $pagination) {
+  query warehouses($query: String, $offset: Int, $limit: Int) {
+    warehouses(query: $query, offset: $offset, limit: $limit) {
       data {
         id
         name

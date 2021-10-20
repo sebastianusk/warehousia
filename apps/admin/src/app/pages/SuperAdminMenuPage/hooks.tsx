@@ -20,15 +20,7 @@ type WarehouseType = {
 
 export default function useSuperAdminMenuHooks(): SuperAdminMenuState {
   const [showModalAdd, setShowModalAdd] = useState(false);
-  const { loading, error, data } = useQuery(GET_WAREHOUSES, {
-    variables: {
-      query: '',
-      pagination: {
-        offset: 0,
-        limit: 10,
-      },
-    },
-  });
+  const { loading, error, data } = useQuery(GET_WAREHOUSES);
 
   const onSearch = (val: any) => {
     // eslint-disable-next-line no-console
@@ -40,7 +32,7 @@ export default function useSuperAdminMenuHooks(): SuperAdminMenuState {
     setShowModalAdd,
     loading,
     error,
-    data: data?.warehouses?.data,
+    data: data?.warehouses,
     onSearch,
   };
 }

@@ -64,13 +64,6 @@ export default function useModalEditWarehouseHooks({
       refetchQueries: [
         {
           query: GET_WAREHOUSES,
-          variables: {
-            query: '',
-            pagination: {
-              offset: 0,
-              limit: 10,
-            },
-          },
         },
       ],
     });

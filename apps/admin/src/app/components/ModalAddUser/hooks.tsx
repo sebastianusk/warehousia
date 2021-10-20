@@ -57,16 +57,9 @@ export default function useModalAddUserHooks(
   };
 
   const { loading: loadingDataWarehouses } = useQuery(GET_WAREHOUSES, {
-    variables: {
-      query: '',
-      pagination: {
-        offset: 0,
-        limit: 10,
-      },
-    },
     onCompleted(dataWarehouses) {
       const temp: WarehousesOptions = [];
-      dataWarehouses.warehouses?.data.map((warehouse: WarehouseType) =>
+      dataWarehouses.warehouses.map((warehouse: WarehouseType) =>
         temp.push({
           label: warehouse.name,
           value: warehouse.id,

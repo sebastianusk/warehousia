@@ -35,16 +35,8 @@ export default function useProductsPageHooks(): ProductsPageState {
   >();
 
   const { loading, error, data } = useQuery(GET_WAREHOUSES, {
-    variables: {
-      query: '',
-      pagination: {
-        offset: 0,
-        limit: 10,
-      },
-    },
     onCompleted(response) {
-      if (response?.warehouses?.data[0])
-        setSelectedWarehouse(response.warehouses.data[0]);
+      if (response?.warehouses[0]) setSelectedWarehouse(response.warehouses[0]);
     },
   });
 
@@ -61,7 +53,7 @@ export default function useProductsPageHooks(): ProductsPageState {
   };
 
   const handleMenuClick = (e: { key: React.SetStateAction<string> }) => {
-    data.warehouses.data.forEach((wh: Warehouse) => {
+    data.warehouses.forEach((wh: Warehouse) => {
       if (wh.id === e.key) {
         setSelectedWarehouse(wh);
         setShowDropDown(false);
@@ -80,7 +72,7 @@ export default function useProductsPageHooks(): ProductsPageState {
     handleVisibleDropdown,
     showDropDown,
     selectedWarehouse,
-    warehouseList: data?.warehouses?.data,
+    warehouseList: data?.warehouses,
     loading,
     error,
   };
