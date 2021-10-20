@@ -1,4 +1,5 @@
 import { useMutation } from '@apollo/client';
+import {message} from 'antd';
 import { useState } from 'react';
 import { ADD_INBOUND } from '../../graph';
 
@@ -39,6 +40,9 @@ export default function useInboundHooks(): InboundState {
         warehouseId: selectedWarehouse,
         items: dataSubmit,
       },
+    }).then(() => {
+      setDataList([]);
+      message.info('Successfully upload inbounds');
     });
   };
 

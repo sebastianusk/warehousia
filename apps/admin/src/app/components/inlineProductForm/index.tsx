@@ -20,8 +20,8 @@ export default function InlineProductForm({
         onFinish={(value: { product: string; amount: number }) => {
           form.resetFields();
           onAdd({
-            id: value.product.split('-')[0],
-            name: value.product.split('-')[1],
+            id: value.product.split('-')[0].trim(),
+            name: value.product.split('-')[1].trim(),
             amount: value.amount,
           });
         }}

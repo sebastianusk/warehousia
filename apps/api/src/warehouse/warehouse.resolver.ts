@@ -14,7 +14,6 @@ import {
   ProductAmountInput,
   TransferList,
   Warehouse,
-  WarehouseList,
 } from '../graphql';
 import WarehouseModel, { Feature } from './warehouse.dto';
 import WarehouseGuard from './warehouse.guard';

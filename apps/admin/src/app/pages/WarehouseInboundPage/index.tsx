@@ -9,6 +9,7 @@ import useInboundHooks from './hooks';
 
 export default function WarehouseInboundPage(): React.ReactElement {
   const {
+    selectedWarehouse,
     setSelectedWarehouse,
     dataList,
     setDataList,
@@ -46,6 +47,7 @@ export default function WarehouseInboundPage(): React.ReactElement {
           <Button
             size="large"
             type="primary"
+            disabled={!selectedWarehouse || dataList.length === 0}
             onClick={onSubmit}
             loading={loading}
           >
