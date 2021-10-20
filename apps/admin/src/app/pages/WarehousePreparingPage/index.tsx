@@ -40,32 +40,35 @@ export default function WarehousePreparingPage(): ReactElement {
       {(user: any) => (
         <>
           <Card className={styles.card}>
-            <div className={`${styles.flexContainer}`}>
+            <div>
               <h2 className={styles.title}>Preparing</h2>
-              <div>
-                <div>Warehouse ID:</div>
-                <Dropdown
-                  overlay={menu({
-                    list: user.warehouses,
-                    onClick: handleMenuClick,
-                  })}
-                  onVisibleChange={onChangeVisibleWHMenu}
-                  visible={showDropDown}
-                >
-                  <Button size="large" onClick={(e) => e.preventDefault()}>
-                    {selectedWarehouse || setDefaultWarehouse(user.warehouses)}
-                    <DownOutlined />
-                  </Button>
-                </Dropdown>
-              </div>
-              <div>
-                <div>Select Shop(s):</div>
+              <div className={styles.flexContainer}>
                 <div>
-                  <Checkbox.Group
-                    onChange={onChangeSelectShops}
-                    value={selectedShops}
-                    options={shopsOption}
-                  />
+                  <div>Warehouse ID:</div>
+                  <Dropdown
+                    overlay={menu({
+                      list: user.warehouses,
+                      onClick: handleMenuClick,
+                    })}
+                    onVisibleChange={onChangeVisibleWHMenu}
+                    visible={showDropDown}
+                  >
+                    <Button size="large" onClick={(e) => e.preventDefault()}>
+                      {selectedWarehouse ||
+                        setDefaultWarehouse(user.warehouses)}
+                      <DownOutlined />
+                    </Button>
+                  </Dropdown>
+                </div>
+                <div className={styles.shopSelectorContainer}>
+                  <div>Select Shop(s):</div>
+                  <div>
+                    <Checkbox.Group
+                      onChange={onChangeSelectShops}
+                      value={selectedShops}
+                      options={shopsOption}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

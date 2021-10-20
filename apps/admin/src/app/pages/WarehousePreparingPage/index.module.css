@@ -8,6 +8,10 @@
 .flexContainer {
   display: flex;
   align-items: center;
+  justify-content:space-around;
+}
+.shopSelectorContainer {
+  margin-left: 10px;
 }
 .bottomAction {
   display: flex;
