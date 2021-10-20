@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Table, Popconfirm } from 'antd';
 import {
   EditableTableProps,
@@ -89,6 +89,7 @@ function InboundListEditor(
         dataSource={props.dataList.map((item) => ({ ...item, key: item.id }))}
         columns={columns as ColumnTypes}
         pagination={false}
+        scroll={{ y: 400 }}
         {...props}
       />
     </div>
