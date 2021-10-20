@@ -7,7 +7,7 @@ type Query {
   products(warehouseId: String!, query: String, pagination: PaginationInput): ProductList
   productStock(productId: String!): ProductStock
   searchProduct(query: String, pagination: PaginationInput): ProductAutoFillList
-  productLog(productId: String, limit: Int, offset: Int): ProductLogList
+  productLog(productId: String, limit: Int, offset: Int): [ProductLog!]
   outbounds(warehouseId: String!, shopId: String!, pagination: PaginationInput): OutboundList
   demands(warehouseId: String, shopId: String, pagination: PaginationInput): DemandList
   preparations(query: String, warehouseId: String): PreparationList

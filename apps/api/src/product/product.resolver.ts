@@ -12,7 +12,7 @@ import {
   ProductAutoFillList,
   ProductInput,
   ProductList,
-  ProductLogList,
+  ProductLog,
   ProductStock,
   StockProductInput,
 } from '../graphql';
@@ -29,15 +29,13 @@ export default class ProductResolver {
     @Args('productId') productId: string,
     @Args('offset') offset: number,
     @Args('limit') limit: number
-  ): Promise<ProductLogList> {
+  ): Promise<ProductLog[]> {
     const data = await this.productService.getProductLog(
       productId,
       limit,
       offset
     );
-    return {
-      data: data.map((item) => item.toResponse()),
-    };
+    return data.map((item) => item.toResponse());
   }
 
   @Query()
