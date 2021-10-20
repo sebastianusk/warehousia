@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { ADD_OUTBOUND } from 'app/graph';
 import { useMutation } from '@apollo/client';
+import { message } from 'antd';
+import { ADD_OUTBOUND } from 'app/graph';
 
 interface OutboundState {
+  selectedShop: string;
+  selectedWarehouse: string;
   setSelectedWarehouse: (warehouseId: string) => void;
   setSelectedShop: (shopId: string) => void;
   onAdd: (data: Data) => void;
@@ -24,7 +27,15 @@ export default function useOutboundHooks(): OutboundState {
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
   const [selectedShop, setSelectedShop] = useState('');
   const [dataList, setDataList] = useState<DataList>([]);
-  const [addOutbound, { loading }] = useMutation(ADD_OUTBOUND);
+  const [addOutbound, { loading }] = useMutation(ADD_OUTBOUND,{
+    // onCompleted: (data) => {
+    //   console.log(data, 'ini isinya dataaa');
+      // if (data) {
+      //   setDataList([]);
+      //   message.info('Successfully upload inbounds');
+      // }
+    // },
+  });
 
   const onAdd = (data: Data) => {
     setDataList((prev) => [...prev, data]);
@@ -41,10 +52,19 @@ export default function useOutboundHooks(): OutboundState {
         shopId: selectedShop,
         items: dataSubmit,
       },
+    }).then((resp) => {
+      if (!resp.errors) {
+        setDataList([]);
+        message.info('Successfully upload inbounds');
+      } else {
+        console.log(resp.errors);
+      }
     });
   };
 
   return {
+    selectedWarehouse,
+    selectedShop,
     setSelectedWarehouse,
     setSelectedShop,
     onAdd,

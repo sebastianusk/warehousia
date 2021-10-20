@@ -4,13 +4,16 @@ import WarehouseSelector from 'app/components/WarehousesSelector';
 import ShopsSelector from 'app/components/ShopsSelector';
 import InboundListEditor from 'app/components/InboundListEditor';
 import InlineProductForm from 'app/components/inlineProductForm';
+import ExcelInput from 'app/components/ExcelInput';
 import useOutboundHooks from './hooks';
 
 import styles from './index.module.css';
 
 export default function WarehouseOutboundPage(): ReactElement {
   const {
+    selectedShop,
     setSelectedShop,
+    selectedWarehouse,
     setSelectedWarehouse,
     onAdd,
     onSubmit,
@@ -39,12 +42,24 @@ export default function WarehouseOutboundPage(): ReactElement {
         <InboundListEditor dataList={dataList} setData={setDataList} />
         <div className={`${styles.bottomAction}`}>
           <Space size="middle">
-            <Button>Bulk Input</Button>
-            <Button>error log</Button>
+            <ExcelInput
+              onDataInput={(data) => {
+                const result = data.map((item) => ({
+                  id: item[0],
+                  name: '',
+                  amount: parseInt(item[1], 10),
+                }));
+                setDataList([...dataList, ...result]);
+              }}
+            />
+            <Button>Error log</Button>
           </Space>
           <Button
             size="large"
             type="primary"
+            disabled={
+              !selectedShop || !selectedWarehouse || dataList.length === 0
+            }
             onClick={onSubmit}
             loading={loading}
           >
