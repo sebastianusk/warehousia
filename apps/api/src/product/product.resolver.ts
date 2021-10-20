@@ -28,7 +28,7 @@ export default class ProductResolver {
   async productLog(
     @Args('productId') productId: string,
     @Args('offset') offset: number,
-    @Args('limit') limit: number,
+    @Args('limit') limit: number
   ): Promise<ProductLogList> {
     const data = await this.productService.getProductLog(
       productId,
