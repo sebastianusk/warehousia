@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { message } from 'antd';
 import createPdf from 'app/lib/JsPdf';
-import { ADD_PREPARATION, GET_OUTBOUNDS, GET_SHOPS } from '../../graph';
+import { ADD_PREPARATION, GET_OUTBOUNDS, GET_SHOPS } from 'app/graph';
 
 interface PreparingState {
   onSelectWarehouse: (warehouseId: string) => void;
@@ -127,7 +127,7 @@ export default function usePreparingHooks(): PreparingState {
           ],
           resp.data.addPreparation.id
         );
-        message.info('Successfully upload inbounds');
+        message.info('Successfully create Preparation');
 
         setDataOutbounds([]);
         setDataSource([]);

@@ -8,6 +8,7 @@ type Columns = {
 
 export default function createPdf(data: any, columns: Columns, id: string) {
   const doc = new JsPDF();
+  doc.text(`Preparing Id: ${id}`, 10, 10);
   autoTable(doc, {
     body: data,
     columns,

@@ -47,7 +47,7 @@ export default function useOutboundHooks(): OutboundState {
     }).then((resp) => {
       if (!resp.errors) {
         setDataList([]);
-        message.info('Successfully upload inbounds');
+        message.info('Successfully create Outbound');
       } else {
         console.log(resp.errors);
       }

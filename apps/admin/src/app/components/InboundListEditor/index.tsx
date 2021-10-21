@@ -23,7 +23,10 @@ function InboundListEditor(
   const handleSave = (row: DataType) => {
     const newData = props.dataList.map((datum) => {
       if (datum.id === row.id) {
-        return row;
+        return {
+          ...row,
+          amount: Number(row.amount),
+        };
       }
       return datum;
     });
