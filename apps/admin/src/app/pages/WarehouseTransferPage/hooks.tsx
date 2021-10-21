@@ -1,62 +1,42 @@
 import { useState } from 'react';
 
 interface TransferPageState {
-  handleMenuClickFrom: (e: { key: React.SetStateAction<string> }) => void;
-  handleMenuClickTo: (e: { key: React.SetStateAction<string> }) => void;
-  handleVisibleChangeFrom: () => void;
-  handleVisibleChangeTo: () => void;
-  showDropDownFrom: boolean;
-  showDropDownTo: boolean;
-  selectedWarehouseFrom: string;
-  selectedWarehouseTo: string;
-  warehouseListFrom: string[];
-  warehouseListTo: string[];
+  warehouseFrom: string;
+  setWarehouseFrom: (id: string) => void;
+  warehouseTo: string;
+  setWarehouseTo: (id: string) => void;
+  dataList: { id: string; name: string; amount: number }[];
+  setData: React.Dispatch<React.SetStateAction<Data[]>>;
+  onAdd: (data: Data) => void;
+  error: { id: string }[];
+  setError: (data: { id: string }[]) => void;
 }
 
-const warehouseList = ['Warehouse A', 'Warehouse B', 'Warehouse C'];
+type Data = {
+  id: string;
+  name: string;
+  amount: number;
+};
 
 export default function useTranserPageHooks(): TransferPageState {
-  const [showDropDownFrom, setShowDropDownFrom] = useState(false);
-  const [showDropDownTo, setShowDropDownTo] = useState(false);
-  const [selectedWarehouseFrom, setSelectedWarehouseFrom] =
-    useState('Warehouse A');
-  const [selectedWarehouseTo, setSelectedWarehouseTo] = useState('Warehouse B');
-  const [warehouseListFrom, setWarehouseListFrom] = useState(warehouseList);
-  const [warehouseListTo, setWarehouseListTo] = useState(warehouseList);
+  const [warehouseFrom, setWarehouseFrom] = useState('');
+  const [warehouseTo, setWarehouseTo] = useState('');
+  const [error, setError] = useState<{ id: string }[]>([]);
+  const [dataList, setData] = useState<Data[]>([]);
 
-  const handleVisibleChangeFrom = () => {
-    setShowDropDownFrom(!showDropDownFrom);
-  };
-  const handleVisibleChangeTo = () => {
-    setShowDropDownTo(!showDropDownFrom);
-  };
-
-  const handleMenuClickFrom = (e: { key: React.SetStateAction<string> }) => {
-    setWarehouseListTo(
-      warehouseList.filter((warehouse) => warehouse !== e.key)
-    );
-    setSelectedWarehouseFrom(e.key);
-    setShowDropDownFrom(false);
-  };
-
-  const handleMenuClickTo = (e: { key: React.SetStateAction<string> }) => {
-    setShowDropDownTo(false);
-    setWarehouseListFrom(
-      warehouseList.filter((warehouse) => warehouse !== e.key)
-    );
-    setSelectedWarehouseTo(e.key);
+  const onAdd = (newData: Data) => {
+    setData((prev) => [...prev, newData]);
   };
 
   return {
-    handleMenuClickFrom,
-    handleMenuClickTo,
-    handleVisibleChangeFrom,
-    handleVisibleChangeTo,
-    showDropDownFrom,
-    showDropDownTo,
-    selectedWarehouseFrom,
-    selectedWarehouseTo,
-    warehouseListFrom,
-    warehouseListTo,
+    warehouseFrom,
+    setWarehouseFrom,
+    warehouseTo,
+    setWarehouseTo,
+    dataList,
+    setData,
+    onAdd,
+    error,
+    setError,
   };
 }

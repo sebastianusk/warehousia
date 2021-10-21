@@ -4,11 +4,11 @@ import WarehouseSelector from 'app/components/WarehousesSelector';
 import ExcelInput from 'app/components/ExcelInput';
 import { useApolloClient } from '@apollo/client';
 import { SEARCH_PRODUCT } from 'app/graph';
+import ErrorLogModal from 'app/components/ErrorLogModal';
 import styles from './index.module.css';
 import InlineProductForm from '../../components/inlineProductForm';
 import InboundListEditor from '../../components/InboundListEditor';
 import useInboundHooks from './hooks';
-import ErrorLogModal from 'app/components/ErrorLogModal';
 
 export default function WarehouseInboundPage(): React.ReactElement {
   const {
