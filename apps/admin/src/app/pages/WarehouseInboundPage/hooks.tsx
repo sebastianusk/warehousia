@@ -6,6 +6,8 @@ import { ADD_INBOUND } from '../../graph';
 interface InboundState {
   selectedWarehouse: string;
   setSelectedWarehouse: (warehouseId: string) => void;
+  error: { id: string }[];
+  setError: (data: { id: string }[]) => void;
   dataList: DataList;
   setDataList: React.Dispatch<React.SetStateAction<DataList>>;
   onSubmit(): void;
@@ -23,6 +25,7 @@ type Data = {
 
 export default function useInboundHooks(): InboundState {
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
+  const [error, setError] = useState<{ id: string }[]>([]);
   const [dataList, setDataList] = useState<DataList>([]);
   const [addInbound, { loading }] = useMutation(ADD_INBOUND);
 
@@ -49,6 +52,8 @@ export default function useInboundHooks(): InboundState {
   return {
     selectedWarehouse,
     setSelectedWarehouse,
+    error,
+    setError,
     dataList,
     setDataList,
     onSubmit,
