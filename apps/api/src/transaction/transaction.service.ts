@@ -24,6 +24,22 @@ export default class TransactionService {
     items: { productId: string; amount: number }[]
   ): Promise<{ demands: string[]; outbounds: string[] }> {
     await auth.log(this.db, 'createOutbound', { warehouseId, shopId, items });
+
+    const products = await Promise.all(
+      items.map(async ({ productId, amount }) => {
+        const product = await this.db.product.findUnique({
+          where: { id: productId },
+        });
+        return { productId, amount, notFound: !product };
+      })
+    );
+
+    const notFound = products.filter((item) => item.notFound);
+
+    if (notFound.length !== 0) {
+      throw new ProductsNotFound(notFound.map((item) => item.productId));
+    }
+
     const stocks = await Promise.all(
       items.map(async ({ productId, amount }) => {
         const stock = await this.db.stock.findUnique({
@@ -35,19 +51,18 @@ export default class TransactionService {
           },
         });
         if (!stock) {
-          return { productId, stock: undefined, amount };
+          await this.db.stock.create({
+            data: {
+              warehouse_id: warehouseId,
+              product_id: productId,
+              stock: 0,
+            },
+          });
+          return { productId, stock: 0, amount };
         }
         return { productId, stock: stock.stock, amount };
       })
     );
-
-    const error = stocks
-      .filter((item) => !item.stock)
-      .map((item) => item.productId);
-
-    if (error.length !== 0) {
-      throw new ProductsNotFound(error);
-    }
 
     const data = stocks.map((stock) => {
       if (stock.stock > stock.amount) {
