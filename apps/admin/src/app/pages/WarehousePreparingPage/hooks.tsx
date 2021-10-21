@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
+import { message } from 'antd';
 
+import createPdf from 'app/components/JsPDF';
 import { ADD_PREPARATION, GET_OUTBOUNDS, GET_SHOPS } from '../../graph';
-
 interface PreparingState {
   onSelectWarehouse: (warehouseId: string) => void;
   selectedWarehouse: string;
@@ -116,6 +117,24 @@ export default function usePreparingHooks(): PreparingState {
         warehouseId: selectedWarehouse,
         shopId: selectedShops,
       },
+    }).then((resp) => {
+      if (!resp.errors) {
+        createPdf(
+          dataSource,
+          [
+            { header: 'Product Id', dataKey: 'productId' },
+            { header: 'Amount', dataKey: 'actual' },
+          ],
+          resp.data.addPreparation.id
+        );
+        message.info('Successfully upload inbounds');
+
+        setDataOutbounds([]);
+        setDataSource([]);
+        setSelectedShops([]);
+      } else {
+        console.log(resp.errors);
+      }
     });
   };
 
