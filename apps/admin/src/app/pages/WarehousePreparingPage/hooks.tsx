@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { message } from 'antd';
-
-import createPdf from 'app/components/JsPDF';
+import createPdf from 'app/lib/JsPdf';
 import { ADD_PREPARATION, GET_OUTBOUNDS, GET_SHOPS } from '../../graph';
+
 interface PreparingState {
   onSelectWarehouse: (warehouseId: string) => void;
   selectedWarehouse: string;
