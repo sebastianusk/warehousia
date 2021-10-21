@@ -1,3 +1,5 @@
+import {useMutation} from '@apollo/client';
+import {ADD_TRANSFER} from 'app/graph';
 import { useState } from 'react';
 
 interface TransferPageState {
@@ -10,6 +12,8 @@ interface TransferPageState {
   onAdd: (data: Data) => void;
   error: { id: string }[];
   setError: (data: { id: string }[]) => void;
+  onSubmit: () => void;
+  loading: boolean;
 }
 
 type Data = {
@@ -23,6 +27,18 @@ export default function useTranserPageHooks(): TransferPageState {
   const [warehouseTo, setWarehouseTo] = useState('');
   const [error, setError] = useState<{ id: string }[]>([]);
   const [dataList, setData] = useState<Data[]>([]);
+
+  const [submitTransfer, { loading }] = useMutation(ADD_TRANSFER);
+
+  const onSubmit = () => {
+    submitTransfer({
+      variables: {
+        warehouseId: warehouseFrom,
+        destinationId: warehouseTo,
+        items: dataList.map(({ id, amount }) => ({ id, amount })),
+      },
+    });
+  };
 
   const onAdd = (newData: Data) => {
     setData((prev) => [...prev, newData]);
@@ -38,5 +54,7 @@ export default function useTranserPageHooks(): TransferPageState {
     onAdd,
     error,
     setError,
+    onSubmit,
+    loading,
   };
 }

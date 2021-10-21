@@ -339,3 +339,19 @@ export const SEARCH_PRODUCT = gql`
     }
   }
 `;
+
+export const ADD_TRANSFER = gql`
+  mutation AddTransfer(
+    $warehouseId: String!
+    $destinationId: String!
+    $items: [ProductAmountInput]!
+  ) {
+    addTransfer(
+      warehouseId: $warehouseId
+      destinationId: $destinationId
+      items: $items
+    ) {
+      id
+    }
+  }
+`;

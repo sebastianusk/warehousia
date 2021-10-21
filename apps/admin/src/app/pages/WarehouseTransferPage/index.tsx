@@ -6,19 +6,22 @@ import InboundListEditor from 'app/components/InboundListEditor';
 import ExcelInput from 'app/components/ExcelInput';
 import { useApolloClient } from '@apollo/client';
 import { SEARCH_PRODUCT } from 'app/graph';
+import ErrorLogModal from 'app/components/ErrorLogModal';
 import styles from './index.module.css';
 import useTransferPageHooks from './hooks';
-import ErrorLogModal from 'app/components/ErrorLogModal';
 
 export default function WarehouseTransferPage(): React.ReactElement {
   const {
     setWarehouseFrom,
+    warehouseFrom,
     setWarehouseTo,
+    warehouseTo,
     onAdd,
     dataList,
     setData,
     error,
     setError,
+    onSubmit,
   } = useTransferPageHooks();
   const client = useApolloClient();
 
@@ -79,7 +82,12 @@ export default function WarehouseTransferPage(): React.ReactElement {
               }))}
             />
           </Space>
-          <Button size="large" type="primary">
+          <Button
+            size="large"
+            type="primary"
+            onClick={onSubmit}
+            disabled={!warehouseTo || !warehouseFrom || dataList.length === 0}
+          >
             Submit
           </Button>
         </div>
