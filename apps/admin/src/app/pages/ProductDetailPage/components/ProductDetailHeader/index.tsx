@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Card, Descriptions, PageHeader, Spin, Table } from 'antd';
 import { useQuery } from '@apollo/client';
@@ -6,6 +6,7 @@ import { GET_PRODUCT_STOCK } from 'app/graph';
 import Column from 'antd/lib/table/Column';
 
 import { useHistory } from 'react-router-dom';
+import UserContext from 'app/components/UserContext';
 import styles from './index.module.css';
 import ProductEditModal from '../ProductEditModal';
 import useProductEditStockModal from '../ProductEditStockModal';
@@ -26,6 +27,8 @@ export default function ProductDetailHeader(props: {
 
   const { contextHolder, showEditStockModal } = useProductEditStockModal();
   const history = useHistory();
+
+  const user = useContext(UserContext);
 
   return (
     <Card className={styles.card} key="header">
@@ -86,27 +89,29 @@ export default function ProductDetailHeader(props: {
               key="amount"
               width="30%"
             />
-            <Column
-              title="Edit"
-              key="edit"
-              render={(
-                _text: any,
-                record: { warehouseId: string; amount: number }
-              ) => (
-                <a
-                  onClick={() => {
-                    showEditStockModal(
-                      props.productId,
-                      record.warehouseId,
-                      record.amount
-                    );
-                  }}
-                  role="presentation"
-                >
-                  Edit
-                </a>
-              )}
-            />
+            {user?.role === 'SUPER_ADMIN' ? (
+              <Column
+                title="Edit"
+                key="edit"
+                render={(
+                  _text: any,
+                  record: { warehouseId: string; amount: number }
+                ) => (
+                  <a
+                    onClick={() => {
+                      showEditStockModal(
+                        props.productId,
+                        record.warehouseId,
+                        record.amount
+                      );
+                    }}
+                    role="presentation"
+                  >
+                    Edit
+                  </a>
+                )}
+              />
+            ) : undefined}
           </Table>
         </div>
       )}
