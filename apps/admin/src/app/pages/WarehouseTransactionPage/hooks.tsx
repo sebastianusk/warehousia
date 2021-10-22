@@ -1,96 +1,68 @@
 import { useEffect, useState } from 'react';
-import { useMutation, useQuery, useApolloClient } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { message } from 'antd';
 
+import createPdf from 'app/lib/JsPdf';
 import { ADD_TRANSACTION, GET_PREPARATION } from '../../graph';
 
-type Preparation = {
-  id: string;
-  warehouseId: string;
-  items: {
-    productId: string;
-    expected: number;
-    actual: number;
-  }[];
-};
+type Preparation =
+  | {
+      id: string;
+      warehouseId: string;
+      items: {
+        productId: string;
+        expected: number;
+        actual: number;
+      }[];
+    }
+  | undefined;
 
 interface TransactionState {
-  handleMenuClick: (e: { key: React.SetStateAction<string> }) => void;
-  onChangeVisibleWHMenu: () => void;
-  showDropDown: boolean;
   selectedWarehouse: string;
-  onSubmit(): void;
-  loading: boolean;
-  setDefaultWarehouse(whList: any): string;
-  prepIdList: string[];
+  onSelectWarehouse: (warehouseId: string) => void;
+  dataSource: DataSource;
   selectedPrep: Preparation | undefined;
-  handleMenuPrepClick: (e: { key: React.SetStateAction<string> }) => void;
-  onChangeVisiblePrepMenu: () => void;
+  onSelectPreparation: (id: string) => void;
+  loading: boolean;
+  onSubmit(): void;
 }
 
 export type DataSource = Preparation[] | [];
 
 export default function useTransactionHooks(): TransactionState {
-  const [showDropDown, setShowDropDown] = useState(false);
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
-  const [showDropDownPrep, setShowDropDownPrep] = useState(false);
-  const [prepIdList, setPrepIdList] = useState(['']);
   const [dataSource, setDataSource] = useState<DataSource>([]);
-  const [selectedPrep, setSelectedPrep] = useState<Preparation | undefined>();
+  const [selectedPrep, setSelectedPrep] = useState<Preparation>();
   const [addTransaction, { loading }] = useMutation(ADD_TRANSACTION);
-  const client = useApolloClient();
 
-  useQuery(GET_PREPARATION, {
+  const { refetch } = useQuery(GET_PREPARATION, {
     variables: {
       warehouseId: selectedWarehouse,
     },
     onCompleted(response) {
       if (response?.preparations?.data.length > 0) {
-        const newData = response.preparations.data.map(
-          (datum: any) => datum.id
-        );
         setDataSource(response.preparations.data);
-        setPrepIdList(newData);
         setSelectedPrep(response.preparations.data[0]);
       }
     },
   });
 
   useEffect(() => {
-    client.refetchQueries({
-      include: ['preparations'],
+    refetch({
+      warehouseId: selectedWarehouse,
     });
-  }, [client, selectedWarehouse]);
+  }, [refetch, selectedWarehouse]);
 
-  const onChangeVisibleWHMenu = () => {
-    setShowDropDown(!showDropDown);
+  const onSelectWarehouse = (warehouseId: string) => {
+    setSelectedWarehouse(warehouseId);
   };
 
-  const onChangeVisiblePrepMenu = () => {
-    setShowDropDownPrep(!showDropDownPrep);
-  };
-
-  const handleMenuClick = (e: { key: React.SetStateAction<string> }) => {
-    setSelectedWarehouse(e.key);
-    setShowDropDown(false);
-  };
-
-  const handleMenuPrepClick = (e: { key: React.SetStateAction<string> }) => {
-    setShowDropDownPrep(false);
+  const onSelectPreparation = (e: string) => {
     dataSource.forEach((datum) => {
-      if (datum.id === e.key) {
+      if (datum?.id === e) {
         setSelectedPrep({ ...datum });
       }
     });
-  };
-
-  const setDefaultWarehouse = (whList: any) => {
-    if (whList.length > 0) {
-      setSelectedWarehouse(whList[0]);
-      return whList[0];
-    }
-    message.error('you dont have any warehouse assigned');
-    return 'No Warehouse';
   };
 
   const onSubmit = () => {
@@ -98,20 +70,34 @@ export default function useTransactionHooks(): TransactionState {
       variables: {
         preparationId: selectedPrep?.id,
       },
+    }).then((resp) => {
+      if (!resp.errors) {
+        createPdf(
+          selectedPrep?.items,
+          [
+            { header: 'Product Id', dataKey: 'productId' },
+            { header: 'Amount', dataKey: 'actual' },
+          ],
+          'Transaction',
+          resp.data.addTransaction.data[0].id
+        );
+        message.info('Successfully create Transaction');
+
+        setDataSource([]);
+        setSelectedPrep(undefined);
+      } else {
+        console.log(resp.errors);
+      }
     });
   };
 
   return {
-    handleMenuClick,
-    onChangeVisibleWHMenu,
-    showDropDown,
     selectedWarehouse,
+    onSelectWarehouse,
+    dataSource,
+    selectedPrep,
+    onSelectPreparation,
     onSubmit,
     loading,
-    setDefaultWarehouse,
-    prepIdList,
-    selectedPrep,
-    handleMenuPrepClick,
-    onChangeVisiblePrepMenu,
   };
 }

@@ -6,12 +6,17 @@ type Columns = {
   dataKey: string;
 }[];
 
-export default function createPdf(data: any, columns: Columns, id: string) {
+export default function createPdf(
+  data: any,
+  columns: Columns,
+  type: string,
+  id: string
+) {
   const doc = new JsPDF();
-  doc.text(`Preparing Id: ${id}`, 10, 10);
+  doc.text(`Type: ${type} ---  Id: ${id}`, 30, 10);
   autoTable(doc, {
     body: data,
     columns,
   });
-  doc.save(`${id}.pdf`);
+  doc.save(`${type}_${id}.pdf`);
 }

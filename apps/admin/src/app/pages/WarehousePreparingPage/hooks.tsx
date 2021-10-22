@@ -125,6 +125,7 @@ export default function usePreparingHooks(): PreparingState {
             { header: 'Product Id', dataKey: 'productId' },
             { header: 'Amount', dataKey: 'actual' },
           ],
+          'Preparation',
           resp.data.addPreparation.id
         );
         message.info('Successfully create Preparation');
