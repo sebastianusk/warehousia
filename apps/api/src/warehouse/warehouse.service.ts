@@ -261,6 +261,20 @@ export default class WarehouseService {
           },
         },
       });
+      if (!check) {
+        await this.db.stock.create({
+          data: {
+            stock: 0,
+            product_id: item.productId,
+            warehouse_id: warehouseId,
+          },
+        });
+        return {
+          productId: item.productId,
+          expected: item.amount,
+          actual: 0,
+        };
+      }
       if (check.stock < item.amount) {
         return {
           productId: item.productId,
@@ -289,7 +303,7 @@ export default class WarehouseService {
       'transfer',
       AuthWrapper.structRemarks(warehouseId, { destinationId })
     );
-    const sources = await this.db.$transaction(
+    await this.db.$transaction(
       items.map((item) =>
         this.db.stock.update({
           data: {
