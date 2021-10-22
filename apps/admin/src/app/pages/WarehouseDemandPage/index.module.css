@@ -6,3 +6,6 @@
   display: flex;
   align-items: center;
 }
+.title {
+  margin: 0 20px 0 0;
+}
