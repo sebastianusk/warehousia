@@ -21,7 +21,7 @@ type DataType = {
 const LIMIT = 5;
 
 export default function ProductListComponent(props: {
-  selectedWarehouse: Warehouse | undefined;
+  selectedWarehouse: string;
 }): React.ReactElement {
   const history = useHistory();
   const [page, setPage] = useState(1);
@@ -29,7 +29,7 @@ export default function ProductListComponent(props: {
   const client = useApolloClient();
   const { loading, error, data, fetchMore } = useQuery(GET_PRODUCTS, {
     variables: {
-      warehouseId: props.selectedWarehouse?.id,
+      warehouseId: props.selectedWarehouse,
       query: '',
       offset: (page - 1) * LIMIT,
       limit: LIMIT,
@@ -39,7 +39,7 @@ export default function ProductListComponent(props: {
     client.refetchQueries({
       include: ['products'],
     });
-  }, [client, props.selectedWarehouse?.id, search]);
+  }, [client, props.selectedWarehouse, search]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error.toString()}</div>;

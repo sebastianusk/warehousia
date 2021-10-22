@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button, Card, Menu, Dropdown } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { Button, Card } from 'antd';
 import ProductListComponent from 'app/components/ProductListComponent';
+import WarehouseSelector from 'app/components/WarehousesSelector';
 import ModalAddProduct from '../../components/ModalAddProduct';
 import useProductsPageHooks from './hooks';
-import type { WarehouseList } from './hooks';
 import ModalAddProductBulk from '../../components/ModalAddProductBulk';
 
 import styles from './index.module.css';
@@ -17,24 +16,9 @@ export default function ProductsPage(): React.ReactElement {
     showBulkModal,
     setShowBulkModal,
     openBulkModal,
-    handleMenuClick,
-    handleVisibleDropdown,
-    selectedWarehouse,
-    warehouseList,
-    loading,
-    error,
-    showDropDown,
+    warehouse,
+    setWarehouse,
   } = useProductsPageHooks();
-
-  const menu = (list: WarehouseList | undefined) => (
-    <Menu onClick={handleMenuClick}>
-      {list &&
-        list.map((item) => <Menu.Item key={item.id}>{item.name}</Menu.Item>)}
-    </Menu>
-  );
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error.toString()}</div>;
 
   return (
     <>
@@ -42,15 +26,7 @@ export default function ProductsPage(): React.ReactElement {
         <div className={`${styles.flexContainer}`}>
           <div>
             <h2>PRODUCTS</h2>
-            <Dropdown
-              overlay={menu(warehouseList)}
-              onVisibleChange={handleVisibleDropdown}
-              visible={showDropDown}
-            >
-              <Button size="large" onClick={(e) => e.preventDefault()}>
-                {selectedWarehouse?.name} <DownOutlined />
-              </Button>
-            </Dropdown>
+            <WarehouseSelector onSelectWarehouse={setWarehouse} all />
           </div>
           <div>
             <Button className={styles.buttonAddOne} onClick={openModal}>
@@ -60,8 +36,10 @@ export default function ProductsPage(): React.ReactElement {
           </div>
         </div>
       </Card>
-      {selectedWarehouse && (
-        <ProductListComponent selectedWarehouse={selectedWarehouse} />
+      {warehouse ? (
+        <ProductListComponent selectedWarehouse={warehouse} />
+      ) : (
+        <div />
       )}
       <ModalAddProduct visible={showModal} setVisible={setShowModal} />
       <ModalAddProductBulk

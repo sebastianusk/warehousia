@@ -1,6 +1,4 @@
 import { useState, Dispatch, SetStateAction } from 'react';
-import { useQuery, ApolloError } from '@apollo/client';
-import { GET_WAREHOUSES } from '../../graph/index';
 
 export type Warehouse = {
   id: string;
@@ -17,29 +15,14 @@ interface ProductsPageState {
   showBulkModal: boolean;
   setShowBulkModal: Dispatch<SetStateAction<boolean>>;
   openBulkModal: () => void;
-  handleMenuClick: (e: { key: React.SetStateAction<string> }) => void;
-  handleVisibleDropdown: () => void;
-  selectedWarehouse: Warehouse | undefined;
-  showDropDown: boolean;
-  warehouseList: WarehouseList | undefined;
-  loading: boolean;
-  error: ApolloError | undefined;
+  warehouse: string | undefined;
+  setWarehouse: (warehouse: string) => void;
 }
 
 export default function useProductsPageHooks(): ProductsPageState {
   const [showModal, setShowModal] = useState(false);
   const [showBulkModal, setShowBulkModal] = useState(false);
-  const [showDropDown, setShowDropDown] = useState(false);
-  const [selectedWarehouse, setSelectedWarehouse] = useState<
-    Warehouse | undefined
-  >();
-
-  const { loading, error, data } = useQuery(GET_WAREHOUSES, {
-    onCompleted(response) {
-      if (response?.warehouses?.length !== 0)
-        setSelectedWarehouse(response.warehouses[0]);
-    },
-  });
+  const [warehouse, setWarehouse] = useState<string | undefined>();
 
   const openModal = () => {
     setShowModal(true);
@@ -49,19 +32,6 @@ export default function useProductsPageHooks(): ProductsPageState {
     setShowBulkModal(true);
   };
 
-  const handleVisibleDropdown = () => {
-    setShowDropDown(!showDropDown);
-  };
-
-  const handleMenuClick = (e: { key: React.SetStateAction<string> }) => {
-    data.warehouses.forEach((wh: Warehouse) => {
-      if (wh.id === e.key) {
-        setSelectedWarehouse(wh);
-        setShowDropDown(false);
-      }
-    });
-  };
-
   return {
     showModal,
     setShowModal,
@@ -69,12 +39,7 @@ export default function useProductsPageHooks(): ProductsPageState {
     showBulkModal,
     setShowBulkModal,
     openBulkModal,
-    handleMenuClick,
-    handleVisibleDropdown,
-    showDropDown,
-    selectedWarehouse,
-    warehouseList: data?.warehouses,
-    loading,
-    error,
+    warehouse,
+    setWarehouse,
   };
 }
