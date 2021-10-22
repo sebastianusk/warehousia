@@ -200,7 +200,7 @@ export default class WarehouseService {
           this.db.demand.update({
             where: { id: demand.id },
             data: {
-              fulfiled_at: Date.now().toString(),
+              fulfiled_at: new Date(),
               fulfiled_outbound: {
                 create: {
                   amount: demand.amount,
