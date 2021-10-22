@@ -3,6 +3,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
 import AuthWrapper from '../auth/auth.wrapper';
 import {
+  Demand,
   DemandList,
   IdPayload,
   Outbound,
@@ -58,17 +59,16 @@ export default class TransactionResolver {
   async demands(
     @Args('warehouseId') warehouseId: string,
     @Args('shopId') shopId: string,
-    @Args('pagination') pagination: PaginationInput
-  ): Promise<DemandList> {
+    @Args('offset') offset: number,
+    @Args('limit') limit: number
+  ): Promise<Demand[]> {
     const data = await this.transactionService.getDemands(
       warehouseId,
       shopId,
-      pagination.limit,
-      pagination.offset
+      limit,
+      offset
     );
-    return {
-      data: data.map((item) => item.toResponse()),
-    };
+    return data.map((item) => item.toResponse());
   }
 
   @Mutation()

@@ -155,7 +155,7 @@ export default class TransactionService {
     offset: number = 0
   ): Promise<DemandModel[]> {
     const demands = await this.db.demand.findMany({
-      skip: offset * limit,
+      skip: offset,
       take: limit,
       where: {
         warehouse_id: warehouseId,
