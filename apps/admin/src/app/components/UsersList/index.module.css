@@ -1,17 +1,22 @@
 .cardUser {
   border-radius: 10px;
   min-height: 125px;
-  box-shadow: 0 1px 6px 0 rgba(49,53,59,0.12);
-  border: 1px solid rgba(49,53,59,0.12);
+  box-shadow: 0 1px 6px 0 rgba(49, 53, 59, 0.12);
+  border: 1px solid rgba(49, 53, 59, 0.12);
   margin-bottom: 10px;
 }
-.editButton {
-  position: absolute;
-  top: 10px;
-  right: 20px;
+.userContainer {
+  display: flex;
+  flex-direction: row;
+}
+.userInfo {
+  flex-grow: 5;
+}
+.userIcon {
+  margin: 5px;
   width: 30px;
   height: 30px;
-  border: 1px solid rgba(49,53,59,0.12);
+  border: 1px solid rgba(49, 53, 59, 0.12);
   border-radius: 50%;
   z-index: 2;
   display: flex;

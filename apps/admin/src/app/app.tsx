@@ -12,6 +12,7 @@ import WarehousePreparingPage from './pages/WarehousePreparingPage';
 import WarehouseTransactionPage from './pages/WarehouseTransactionPage';
 import SuperAdminMenuPage from './pages/SuperAdminMenuPage';
 import AccountPage from './pages/AccountPage';
+import UserDetail from './components/UserDetail';
 
 export default function App() {
   return (
@@ -117,6 +118,16 @@ export default function App() {
               render={() =>
                 localStorage.access_token ? (
                   <SuperAdminMenuPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/admin-detail/:id"
+              render={() =>
+                localStorage.access_token ? (
+                  <UserDetail />
                 ) : (
                   <Redirect to="/login" />
                 )
