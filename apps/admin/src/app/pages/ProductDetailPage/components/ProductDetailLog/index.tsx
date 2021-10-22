@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, Table } from 'antd';
+import { Card, Table } from 'antd';
 import Column from 'antd/lib/table/Column';
 import { useQuery } from '@apollo/client';
 
@@ -32,10 +32,20 @@ export default function ProductDetailLog(props: {
         }))}
         pagination={false}
       >
-        <Column title="Time" dataIndex="createdAt" key="createdAt" />
-        <Column title="Warehouse" dataIndex="warehouse" key="warehouse" />
-        <Column title="Action" dataIndex="action" key="action" />
-        <Column title="Amount" dataIndex="amount" key="amount" />
+        <Column
+          title="Time"
+          dataIndex="createdAt"
+          key="createdAt"
+          width="30%"
+        />
+        <Column
+          title="Warehouse"
+          dataIndex="warehouse"
+          key="warehouse"
+          width="15%"
+        />
+        <Column title="Action" dataIndex="action" key="action" width="15%" />
+        <Column title="Amount" dataIndex="amount" key="amount" width="15%" />
         <Column title="By" dataIndex="createdBy" key="createdBy" />
       </Table>
       <Page
