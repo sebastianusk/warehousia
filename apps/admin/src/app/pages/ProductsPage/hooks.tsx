@@ -36,7 +36,8 @@ export default function useProductsPageHooks(): ProductsPageState {
 
   const { loading, error, data } = useQuery(GET_WAREHOUSES, {
     onCompleted(response) {
-      if (response?.warehouses[0]) setSelectedWarehouse(response.warehouses[0]);
+      if (response?.warehouses?.length !== 0)
+        setSelectedWarehouse(response.warehouses[0]);
     },
   });
 

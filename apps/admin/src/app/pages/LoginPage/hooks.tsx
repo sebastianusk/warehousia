@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useMutation, ApolloError } from '@apollo/client';
+import { useMutation, ApolloError, useApolloClient } from '@apollo/client';
 
 import { POST_LOGIN } from '../../graph';
 
@@ -15,11 +15,13 @@ interface LoginState {
 export default function useCheckLogin(): LoginState {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const client = useApolloClient();
   const history = useHistory();
 
   const [postLogin, { loading, error }] = useMutation(POST_LOGIN, {
     onCompleted({ login }) {
       if (login) {
+        client.clearStore();
         localStorage.access_token = login.session;
         history.push('home');
       }
