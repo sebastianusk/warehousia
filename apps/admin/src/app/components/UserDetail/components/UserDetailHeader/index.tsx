@@ -2,7 +2,9 @@ import { useQuery } from '@apollo/client';
 import { Card, Descriptions, PageHeader, Tag } from 'antd';
 import { GET_ADMINS } from 'app/graph';
 import React from 'react';
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+
+import styles from './index.module.css';
 
 export default function UserDetailHeader(props: {
   id: string;
@@ -13,7 +15,7 @@ export default function UserDetailHeader(props: {
   const history = useHistory();
 
   return data?.admins[0] ? (
-    <Card>
+    <Card className={styles.card}>
       <PageHeader
         title={data.admins[0].username}
         onBack={() => history.push('/super-admin-menu')}

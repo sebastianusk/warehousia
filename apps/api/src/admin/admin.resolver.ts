@@ -9,11 +9,10 @@ import { FieldEmpty, LoginError } from '../common/errors';
 import {
   AddAdminInput,
   Admin,
-  AdminLogList,
+  AdminLog,
   AdminPayload,
   ChangeMyPasswordInput,
   EditAdminInput,
-  PaginationInput,
 } from '../graphql';
 import { AdminModel } from './admin.dto';
 import AdminService from './admin.service';
@@ -63,14 +62,11 @@ export default class AdminResolver {
   @Query()
   async adminLogs(
     @Args('username') username: string,
-    @Args('pagination') pagination: PaginationInput
-  ): Promise<AdminLogList> {
-    const data = await this.adminService.getLogs(
-      username,
-      pagination ? pagination.limit : undefined,
-      pagination ? pagination.offset : undefined
-    );
-    return { data: data.map((item) => item.toResponse()) };
+    @Args('limit') limit: number,
+    @Args('offset') offset: number
+  ): Promise<AdminLog[]> {
+    const data = await this.adminService.getLogs(username, limit, offset);
+    return data.map((item) => item.toResponse());
   }
 
   @Mutation()

@@ -61,6 +61,7 @@ export class AdminModel {
 
 export class AdminLogModel {
   constructor(
+    public id: string,
     public action: string,
     public createdAt: Date,
     public remarks: any
@@ -68,6 +69,7 @@ export class AdminLogModel {
 
   toResponse(): AdminLog {
     return {
+      id: this.id,
       action: this.action,
       createdAt: this.createdAt.toISOString(),
       remarks: JSON.stringify(this.remarks),
@@ -75,7 +77,12 @@ export class AdminLogModel {
   }
 
   static fromDB(data: adminlog): AdminLogModel {
-    return new AdminLogModel(data.action, data.created_at, data.remarks);
+    return new AdminLogModel(
+      data.id,
+      data.action,
+      data.created_at,
+      data.remarks
+    );
   }
 }
 

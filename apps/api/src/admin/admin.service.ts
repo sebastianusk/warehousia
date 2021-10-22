@@ -118,7 +118,7 @@ export default class AdminService {
   ): Promise<AdminLogModel[]> {
     const data = await this.db.adminlog.findMany({
       take: limit,
-      skip: offset * limit,
+      skip: offset,
       where: {
         username: {
           equals: username,

@@ -1,6 +1,6 @@
 type Query {
   admins(query: String, offset: Int, limit: Int): [Admin]
-  adminLogs(username: String, pagination: PaginationInput): AdminLogList
+  adminLogs(username: String, offset: Int, limit: Int): [AdminLog]
   me: Admin
   warehouses(query: String, offset: Int, limit: Int): [Warehouse]
   shops(query: String, pagination: PaginationInput): ShopList
@@ -114,6 +114,7 @@ type AdminLogList {
 }
 
 type AdminLog {
+  id: String!
   action: String!
   createdAt: String!
   remarks: String

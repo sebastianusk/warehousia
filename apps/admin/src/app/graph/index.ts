@@ -50,13 +50,12 @@ export const EDIT_ADMIN = gql`
 `;
 
 export const GET_ADMIN_LOG = gql`
-  query adminLog($username: String, $pagination: PaginationInput) {
-    adminLogs(username: $username, pagination: $pagination) {
-      data {
-        action
-        createdAt
-        remarks
-      }
+  query AdminLog($username: String, $limit: Int, $offset: Int) {
+    adminLogs(username: $username, limit: $limit, offset: $offset) {
+      id
+      action
+      createdAt
+      remarks
     }
   }
 `;
