@@ -15,7 +15,11 @@ export default function WarehouseDemandPage(): React.ReactElement {
           <WarehouseSelector onSelectWarehouse={setWarehouse} />
         </div>
       </Card>
-      {warehouse ? <WarehouseDemandTable warehouse={warehouse} /> : <div />}
+      {warehouse ? (
+        <WarehouseDemandTable warehouse={warehouse} shopId="shopee1" />
+      ) : (
+        <div />
+      )}
     </div>
   );
 }
