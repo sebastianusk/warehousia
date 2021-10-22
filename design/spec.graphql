@@ -1,5 +1,5 @@
 type Query {
-  admins(query: String, pagination: PaginationInput): AdminList
+  admins(query: String, offset: Int, limit: Int): [Admin]
   adminLogs(username: String, pagination: PaginationInput): AdminLogList
   me: Admin
   warehouses(query: String, offset: Int, limit: Int): [Warehouse]

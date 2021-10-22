@@ -22,10 +22,6 @@ export default function useUsersManagerHooks(): UsersManagerState {
   const { loading, error, data } = useQuery(GET_ADMINS, {
     variables: {
       query: '',
-      pagination: {
-        offset: 0,
-        limit: 10,
-      },
     },
   });
 
@@ -34,6 +30,6 @@ export default function useUsersManagerHooks(): UsersManagerState {
     setShowModalAdd,
     loading,
     error,
-    data: data?.admins?.data,
+    data: data?.admins,
   };
 }

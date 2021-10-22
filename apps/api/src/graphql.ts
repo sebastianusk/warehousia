@@ -93,7 +93,7 @@ export class AddTransactionInput {
 }
 
 export abstract class IQuery {
-    abstract admins(query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<AdminList> | Promise<Nullable<AdminList>>;
+    abstract admins(query?: Nullable<string>, offset?: Nullable<number>, limit?: Nullable<number>): Nullable<Nullable<Admin>[]> | Promise<Nullable<Nullable<Admin>[]>>;
 
     abstract adminLogs(username?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<AdminLogList> | Promise<Nullable<AdminLogList>>;
 

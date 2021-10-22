@@ -80,7 +80,7 @@ export default class AdminService {
     offset: number = 0
   ): Promise<AdminModel[]> {
     const data = await this.db.admin.findMany({
-      skip: offset * limit,
+      skip: offset,
       take: limit,
       where: {
         username: {

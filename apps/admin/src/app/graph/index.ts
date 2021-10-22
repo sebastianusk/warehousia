@@ -22,14 +22,13 @@ export const GET_ME = gql`
 `;
 
 export const GET_ADMINS = gql`
-  query admins($query: String, $pagination: PaginationInput) {
-    admins(query: $query, pagination: $pagination) {
-      data {
-        username
-        role
-        warehouses
-        active
-      }
+  query Admins($query: String, $limit: Int, $offset: Int) {
+    admins(query: $query, limit: $limit, offset: $offset) {
+      username
+      role
+      warehouses
+      active
+      updatedAt
     }
   }
 `;

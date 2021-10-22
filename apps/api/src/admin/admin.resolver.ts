@@ -9,7 +9,6 @@ import { FieldEmpty, LoginError } from '../common/errors';
 import {
   AddAdminInput,
   Admin,
-  AdminList,
   AdminLogList,
   AdminPayload,
   ChangeMyPasswordInput,
@@ -54,16 +53,11 @@ export default class AdminResolver {
   )
   async admins(
     @Args('query') query: string,
-    @Args('pagination') pagination: PaginationInput
-  ): Promise<AdminList> {
-    const list = await this.adminService.getList(
-      query,
-      pagination?.limit,
-      pagination?.offset
-    );
-    return {
-      data: list.map((item) => item.toResponse()),
-    };
+    @Args('limit') limit: number,
+    @Args('offset') offset: number
+  ): Promise<Admin[]> {
+    const list = await this.adminService.getList(query, limit, offset);
+    return list.map((item) => item.toResponse());
   }
 
   @Query()
