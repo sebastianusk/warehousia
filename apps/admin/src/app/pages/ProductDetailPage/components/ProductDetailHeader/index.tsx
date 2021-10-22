@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { EditOutlined } from '@ant-design/icons';
-import { Button, Card, Descriptions, Spin, Table } from 'antd';
+import { Button, Card, Descriptions, PageHeader, Spin, Table } from 'antd';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCT_STOCK } from 'app/graph';
 import Column from 'antd/lib/table/Column';
 
+import { useHistory } from 'react-router-dom';
 import styles from './index.module.css';
 import ProductEditModal from '../ProductEditModal';
 import useProductEditStockModal from '../ProductEditStockModal';
@@ -24,6 +25,7 @@ export default function ProductDetailHeader(props: {
   } = data?.productStock;
 
   const { contextHolder, showEditStockModal } = useProductEditStockModal();
+  const history = useHistory();
 
   return (
     <Card className={styles.card} key="header">
@@ -45,9 +47,10 @@ export default function ProductDetailHeader(props: {
           ) : undefined}
 
           <div className={`${styles.flexContainer}`}>
-            <h2>
-              {props.productId}&nbsp;-&nbsp;{data.productStock.name}
-            </h2>
+            <PageHeader
+              title={props.productId}
+              onBack={() => history.push('/products')}
+            />
             <Button
               size="small"
               icon={<EditOutlined />}
@@ -57,10 +60,11 @@ export default function ProductDetailHeader(props: {
             </Button>
           </div>
           <div style={{ margin: '30px 0px' }}>
-            <Descriptions bordered>
+            <Descriptions bordered column={1}>
               <Descriptions.Item label="Price">
                 {data.productStock.price}
               </Descriptions.Item>
+              <Descriptions.Item label="Name">{item.name}</Descriptions.Item>
             </Descriptions>
           </div>
           <Table

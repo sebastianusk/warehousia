@@ -29,6 +29,8 @@ export default function useProductEditStockModal(): ProductEditStockModalState {
   ) => {
     modal.confirm({
       title: 'Change Product Stock',
+      width: 400,
+      icon: false,
       okButtonProps: { loading },
       onOk: (close: () => void) => {
         const values = form.getFieldsValue();
@@ -46,19 +48,14 @@ export default function useProductEditStockModal(): ProductEditStockModalState {
         });
       },
       content: (
-        <Form labelCol={{ span: 10 }} form={form}>
-          <Form.Item name="productId" label="Product ID" key="productId">
+        <Form labelCol={{ span: 8 }} labelAlign="left" form={form}>
+          <Form.Item label="Product ID" key="productId">
             {productId}
           </Form.Item>
-          <Form.Item name="warehouseId" label="Warehouse ID" key="warehouseId">
+          <Form.Item label="Warehouse ID" key="warehouseId">
             {warehouseId}
           </Form.Item>
-          <Form.Item
-            name="amount"
-            label="Stock"
-            key="amount"
-            initialValue={amount}
-          >
+          <Form.Item label="Stock" key="amount" initialValue={amount}>
             <Input type="number" />
           </Form.Item>
         </Form>

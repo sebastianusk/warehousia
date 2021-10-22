@@ -23,18 +23,21 @@ export default function ModalAddProductBulk(props: {
       dataIndex: 'id',
       key: 'id',
       editable: true,
+      width: 150,
     },
     {
       title: 'Nama Produk',
       dataIndex: 'name',
       key: 'name',
       editable: true,
+      width: 300,
     },
     {
       title: 'Harga',
       dataIndex: 'price',
       key: 'price',
       editable: true,
+      width: 150,
     },
   ].map(
     mapEditableColumn((record: EditableColumnTypes<ProductData>) => {
@@ -54,6 +57,7 @@ export default function ModalAddProductBulk(props: {
       onCancel={() => props.setVisible(false)}
       onOk={uploadData}
       okButtonProps={{ disabled: data.length === 0, loading }}
+      width={700}
     >
       <div>
         <ExcelInput onDataInput={handleFile} />
