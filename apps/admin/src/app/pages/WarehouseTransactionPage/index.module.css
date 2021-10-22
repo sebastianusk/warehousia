@@ -23,5 +23,8 @@
   margin-right: 15px;
 }
 .select {
-  width: 350px;
+  max-width: 350px;
+}
+.prepSelector {
+  margin-left: 16px;
 }

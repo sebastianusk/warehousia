@@ -25,7 +25,7 @@ export default function WarehouseTransactionPage(): ReactElement {
             <div>Warehouse ID:</div>
             <WarehouseSelector onSelectWarehouse={onSelectWarehouse} />
           </div>
-          <div>
+          <div className={styles.prepSelector}>
             <div>Preparation ID:</div>
             <Select className={styles.select} onChange={onSelectPreparation}>
               {dataSource?.map((item: any) => (
