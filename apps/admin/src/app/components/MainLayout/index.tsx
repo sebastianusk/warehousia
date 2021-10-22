@@ -46,6 +46,7 @@ const MainLayout: React.FC = ({ children }) => {
             icon={<HomeOutlined />}
             title="Warehouse"
           >
+            <Menu.Item key="warehouse-demand">Demand</Menu.Item>
             <Menu.Item key="warehouse-inbound">Inbound</Menu.Item>
             <Menu.Item key="warehouse-transfer">Transfer</Menu.Item>
             <Menu.Item key="warehouse-outbound">Outbound</Menu.Item>

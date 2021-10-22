@@ -13,6 +13,7 @@ import WarehouseTransactionPage from './pages/WarehouseTransactionPage';
 import SuperAdminMenuPage from './pages/SuperAdminMenuPage';
 import AccountPage from './pages/AccountPage';
 import UserDetail from './components/UserDetail';
+import WarehouseDemandPage from './pages/WarehouseDemandPage';
 
 export default function App() {
   return (
@@ -88,6 +89,16 @@ export default function App() {
               render={() =>
                 localStorage.access_token ? (
                   <WarehouseOutboundPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/warehouse-demand"
+              render={() =>
+                localStorage.access_token ? (
+                  <WarehouseDemandPage />
                 ) : (
                   <Redirect to="/login" />
                 )

@@ -1,0 +1,19 @@
+import React, { useState } from 'react';
+import { Card } from 'antd';
+import WarehouseSelector from 'app/components/WarehousesSelector';
+
+import styles from './index.module.css';
+
+export default function WarehouseDemandPage(): React.ReactElement {
+  const [warehouse, setWarehouse] = useState<string | undefined>();
+  return (
+    <div>
+      <Card className={styles.card}>
+        <div className={styles.flexContainer}>
+          <h2 className={styles.title}>INBOUND</h2>
+          <WarehouseSelector onSelectWarehouse={setWarehouse} />
+        </div>
+      </Card>
+    </div>
+  );
+}
