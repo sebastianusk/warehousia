@@ -62,15 +62,15 @@ export default function usePreparingHooks(): PreparingState {
 
   const [getOutbounds] = useLazyQuery(GET_OUTBOUNDS, {
     onCompleted(response) {
-      if (response?.outbounds?.data.length > 0) {
-        const newData = response.outbounds.data.map((datum: any) => ({
+      if (response?.outbounds.length > 0) {
+        const newData = response.outbounds.map((datum: any) => ({
           productId: datum.productId,
           actual: datum.amount,
         }));
         setDataOutbounds((prev: any) => [
           ...prev,
           {
-            shopId: response.outbounds.data[0].shopId,
+            shopId: response.outbounds[0].shopId,
             products: newData,
           },
         ]);
@@ -101,10 +101,6 @@ export default function usePreparingHooks(): PreparingState {
           variables: {
             warehouseId: selectedWarehouse,
             shopId,
-            pagination: {
-              limit: 10,
-              offset: 0,
-            },
           },
         });
       }

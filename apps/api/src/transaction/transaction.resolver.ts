@@ -5,10 +5,10 @@ import AuthWrapper from '../auth/auth.wrapper';
 import {
   DemandList,
   IdPayload,
+  Outbound,
   OutboundList,
   OutboundResponse,
   PaginationInput,
-  Preparation,
   PreparationList,
   ProductAmountInput,
   TransactionList,
@@ -44,18 +44,13 @@ export default class TransactionResolver {
   @UseGuards(JwtAuthGuard)
   async outbounds(
     @Args('warehouseId') warehouseId: string,
-    @Args('shopId') shopId: string,
-    @Args('pagination') pagination: PaginationInput
-  ): Promise<OutboundList> {
+    @Args('shopId') shopId: string
+  ): Promise<Outbound[]> {
     const data = await this.transactionService.getOutbounds(
       warehouseId,
-      shopId,
-      pagination.offset,
-      pagination.limit
+      shopId
     );
-    return {
-      data: data.map((item) => item.toResponse()),
-    };
+    return data.map((item) => item.toResponse());
   }
 
   @Query()

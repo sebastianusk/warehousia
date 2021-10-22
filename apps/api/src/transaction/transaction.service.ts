@@ -169,13 +169,9 @@ export default class TransactionService {
 
   async getOutbounds(
     warehouseId: string,
-    shopId: string,
-    offset: number = 0,
-    limit: number = 10
+    shopId: string
   ): Promise<OutboundModel[]> {
     const outbounds = await this.db.outbound_item.findMany({
-      skip: offset * limit,
-      take: limit,
       where: {
         warehouse_id: warehouseId,
         shop_id: shopId,

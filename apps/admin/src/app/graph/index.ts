@@ -227,25 +227,15 @@ export const ADD_OUTBOUND = gql`
 `;
 
 export const GET_OUTBOUNDS = gql`
-  query Outbounds(
-    $warehouseId: String!
-    $shopId: String!
-    $pagination: PaginationInput
-  ) {
-    outbounds(
-      warehouseId: $warehouseId
-      shopId: $shopId
-      pagination: $pagination
-    ) {
-      data {
-        id
-        createdAt
-        createdBy
-        amount
-        productId
-        shopId
-        warehouseId
-      }
+  query Outbounds($warehouseId: String!, $shopId: String!) {
+    outbounds(warehouseId: $warehouseId, shopId: $shopId) {
+      id
+      createdAt
+      createdBy
+      amount
+      productId
+      shopId
+      warehouseId
     }
   }
 `;
