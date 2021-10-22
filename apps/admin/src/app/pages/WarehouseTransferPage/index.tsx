@@ -68,19 +68,19 @@ export default function WarehouseTransferPage(): React.ReactElement {
                 );
                 const notFound = result.filter((item) => !item.name);
                 if (notFound.length !== 0) {
-                  setError(notFound.map((item) => ({ id: item.id })));
+                  setError(
+                    notFound.map((item) => ({
+                      id: item.id,
+                      message: 'product not found',
+                    }))
+                  );
                   message.error('item not found, check log');
                 } else {
                   setData([...dataList, ...result]);
                 }
               }}
             />
-            <ErrorLogModal
-              errors={error.map((data) => ({
-                ...data,
-                message: 'product not found',
-              }))}
-            />
+            <ErrorLogModal errors={error} />
           </Space>
           <Button
             size="large"

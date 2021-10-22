@@ -29,6 +29,7 @@ export default function ErrorLogModal(
                   { title: 'field', key: 'field', dataIndex: 'id' },
                   { title: 'message', key: 'message', dataIndex: 'message' },
                 ]}
+                pagination={false}
               />
             ),
           })
