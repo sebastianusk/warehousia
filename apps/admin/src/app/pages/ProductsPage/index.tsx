@@ -1,5 +1,5 @@
-import React, { ReactElement } from 'react';
-import { Button, Input, Card, Menu, Dropdown } from 'antd';
+import React from 'react';
+import { Button, Card, Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import ProductListComponent from 'app/components/ProductListComponent';
 import ModalAddProduct from '../../components/ModalAddProduct';
@@ -9,7 +9,7 @@ import ModalAddProductBulk from '../../components/ModalAddProductBulk';
 
 import styles from './index.module.css';
 
-export default function ProductsPage(): ReactElement {
+export default function ProductsPage(): React.ReactElement {
   const {
     showModal,
     setShowModal,

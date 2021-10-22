@@ -21,7 +21,7 @@ export default function useCheckLogin(): LoginState {
   const [postLogin, { loading, error }] = useMutation(POST_LOGIN, {
     onCompleted({ login }) {
       if (login) {
-        client.clearStore();
+        client.resetStore();
         localStorage.access_token = login.session;
         history.push('home');
       }

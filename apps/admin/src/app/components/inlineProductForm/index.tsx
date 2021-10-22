@@ -11,7 +11,9 @@ export default function InlineProductForm({
 }: {
   onAdd(data: { id: string; name: string; amount: number }): void;
 }): React.ReactElement {
-  const [getProduct, { data }] = useLazyQuery(SEARCH_PRODUCT);
+  const [getProduct, { data }] = useLazyQuery(SEARCH_PRODUCT, {
+    fetchPolicy: 'no-cache',
+  });
   const [form] = useForm();
   const search = _.debounce((value) => {
     getProduct({ variables: { query: value } });
