@@ -271,6 +271,15 @@ export const ADD_TRANSACTION = gql`
     addTransaction(preparationId: $preparationId) {
       data {
         id
+        shopId
+        warehouseId
+        createdAt
+        createdBy
+        items {
+          id
+          productId
+          amount
+        }
       }
       failed {
         shopId

@@ -35,20 +35,27 @@ export default function WarehouseTransactionPage(): ReactElement {
           </div>
         </div>
       </Card>
-      <Card className={styles.card}>
-        <TablePreparation data={selectedPrep?.items} />
-        <div className={`${styles.bottomAction}`}>
-          <Button
-            size="large"
-            type="primary"
-            onClick={onSubmit}
-            loading={loading}
-            disabled={!selectedWarehouse || !selectedPrep}
-          >
-            Submit
-          </Button>
-        </div>
-      </Card>
+      {selectedPrep && (
+        <Card className={styles.card}>
+          <h4>Created By: {selectedPrep?.createdBy}</h4>
+          <h4>
+            Created At:&nbsp;
+            {new Date(selectedPrep?.createdAt!).toLocaleDateString('en-GB')}
+          </h4>
+          <TablePreparation data={selectedPrep?.items} />
+          <div className={`${styles.bottomAction}`}>
+            <Button
+              size="large"
+              type="primary"
+              onClick={onSubmit}
+              loading={loading}
+              disabled={!selectedWarehouse || !selectedPrep}
+            >
+              Submit
+            </Button>
+          </div>
+        </Card>
+      )}
     </>
   );
 }

@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { message } from 'antd';
 
-import createPdf from 'app/lib/JsPdf';
+import createTransactionPdf from './Pdf';
 import { ADD_TRANSACTION, GET_PREPARATION } from '../../graph';
 
 type Preparation =
   | {
       id: string;
       warehouseId: string;
+      createdAt: string;
+      createdBy: string;
       items: {
         productId: string;
         expected: number;
@@ -71,15 +73,9 @@ export default function useTransactionHooks(): TransactionState {
       },
     }).then((resp) => {
       if (!resp.errors) {
-        createPdf(
-          selectedPrep?.items,
-          [
-            { header: 'Product Id', dataKey: 'productId' },
-            { header: 'Amount', dataKey: 'actual' },
-          ],
-          'Transaction',
-          resp.data.addTransaction.data[0].id
-        );
+        resp.data.addTransaction.data.forEach((datum: any) => {
+          createTransactionPdf(datum);
+        });
         message.info('Successfully create Transaction');
 
         setDataSource([]);
