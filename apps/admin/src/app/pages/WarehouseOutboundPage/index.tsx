@@ -26,7 +26,7 @@ export default function WarehouseOutboundPage(): ReactElement {
     <>
       <Card className={styles.card}>
         <div className={`${styles.flexContainer}`}>
-          <h2 className={styles.title}>OUTBOUND</h2>
+          <h2 className={styles.title}>CREATE OUTBOUND</h2>
         </div>
         <Space size="middle" className={styles.warehousePicker}>
           <span>FROM</span>

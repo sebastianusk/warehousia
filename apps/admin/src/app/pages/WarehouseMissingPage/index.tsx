@@ -22,7 +22,7 @@ export default function WarehouseMissingPage(): ReactElement {
     <>
       <Card className={styles.card}>
         <div>
-          <h2 className={styles.title}>MISSING FORM</h2>
+          <h2 className={styles.title}>MISSING ITEM FORM</h2>
           <div className={styles.flexContainer}>
             <div className={styles.selectContainer}>
               <div>Warehouse ID:</div>

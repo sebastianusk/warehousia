@@ -13,7 +13,7 @@ export default function WarehouseDemandPage(): React.ReactElement {
     <div>
       <Card className={styles.card}>
         <div className={styles.flexContainer}>
-          <h2 className={styles.title}>DEMAND</h2>
+          <h2 className={styles.title}>VIEW DEMAND</h2>
           <WarehouseSelector onSelectWarehouse={setWarehouse} />
           <ShopsSelector onSelectShop={setShop} />
         </div>

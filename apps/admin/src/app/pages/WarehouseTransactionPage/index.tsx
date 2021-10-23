@@ -21,7 +21,7 @@ export default function WarehouseTransactionPage(): ReactElement {
     <>
       <Card className={styles.card}>
         <div className={`${styles.flexContainer}`}>
-          <h2 className={styles.title}>TRANSACTION</h2>
+          <h2 className={styles.title}>CREATE TRANSACTION</h2>
           <div>
             <div>Warehouse ID:</div>
             <WarehouseSelector onSelectWarehouse={onSelectWarehouse} />

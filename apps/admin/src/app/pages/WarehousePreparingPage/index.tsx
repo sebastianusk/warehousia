@@ -23,7 +23,7 @@ export default function WarehousePreparingPage(): ReactElement {
     <>
       <Card className={styles.card}>
         <div>
-          <h2 className={styles.title}>Preparing</h2>
+          <h2 className={styles.title}>CREATE PREPARING</h2>
           <div className={styles.flexContainer}>
             <div>
               <div>Warehouse ID:</div>
