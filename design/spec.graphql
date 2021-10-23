@@ -318,8 +318,17 @@ input AddTransactionInput {
 }
 
 type TransactionResponse {
-  data: [IdPayload]
+  data: [Transaction]
   failed: [ShopFailed]
+}
+
+type Transaction {
+  id: String!
+  shopId: String!
+  warehouseId: String!
+  createdAt: String!
+  createdBy: String!
+  items: [TransactionItem]
 }
 
 type ShopFailed {
@@ -336,14 +345,10 @@ type TransactionList {
   data: [Transaction]
 }
 
-type Transaction {
+type TransactionItem {
   id: String!
-  shopId: String!
-  warehouseId: String!
   productId: String!
   amount: Int!
-  createdAt: String!
-  createdBy: String!
 }
 
 

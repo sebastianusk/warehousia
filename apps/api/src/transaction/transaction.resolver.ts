@@ -4,10 +4,8 @@ import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
 import AuthWrapper from '../auth/auth.wrapper';
 import {
   Demand,
-  DemandList,
   IdPayload,
   Outbound,
-  OutboundList,
   OutboundResponse,
   PaginationInput,
   PreparationList,
@@ -131,7 +129,16 @@ export default class TransactionResolver {
       remarks
     );
     return {
-      data: data.transactions.map((id) => ({ id })),
+      data: data.transactions.map(
+        ({ id, shopId, warehouseId, items, createdAt, createdBy }) => ({
+          id,
+          warehouseId,
+          createdBy,
+          shopId,
+          createdAt: createdAt.toISOString(),
+          items,
+        })
+      ),
       failed: data.failed,
     };
   }

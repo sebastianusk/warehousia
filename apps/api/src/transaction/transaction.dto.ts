@@ -103,21 +103,19 @@ export class TransactionModel {
     public id: string,
     public shopId: string,
     public warehouseId: string,
-    public productId: string,
-    public amount: number,
     public createdAt: Date,
-    public createdBy: string
+    public createdBy: string,
+    public items: { id: string; productId: string; amount: number }[]
   ) {}
 
   toResponse(): Transaction {
     return {
       id: this.id,
-      amount: this.amount,
-      productId: this.productId,
       shopId: this.shopId,
       warehouseId: this.warehouseId,
       createdAt: this.createdAt.toISOString(),
       createdBy: this.createdBy,
+      items: this.items,
     };
   }
 }

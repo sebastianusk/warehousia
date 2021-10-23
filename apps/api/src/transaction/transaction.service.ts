@@ -288,7 +288,14 @@ export default class TransactionService {
     preparationId: string,
     remarks: string
   ): Promise<{
-    transactions: string[];
+    transactions: {
+      id: string;
+      shopId: string;
+      warehouseId: string;
+      createdAt: Date;
+      createdBy: string;
+      items: { id: string; productId: string; amount: number }[];
+    }[];
     failed: {
       shopId: string;
       items: { productId: string; amount: number }[];
@@ -384,11 +391,25 @@ export default class TransactionService {
               },
             },
           },
+          include: { items: true },
         });
       })
     );
     return {
-      transactions: data.map((item) => item.id),
+      transactions: data.map(
+        ({ id, shop_id, created_at, created_by, items }) => ({
+          id,
+          shopId: shop_id,
+          warehouseId: warehouse_id,
+          createdAt: created_at,
+          createdBy: created_by,
+          items: items.map((item) => ({
+            productId: item.product_id,
+            amount: item.amount,
+            id: item.id,
+          })),
+        })
+      ),
       failed: Object.entries(perShop.failed).map(([shopId, items]) => ({
         shopId,
         items,
@@ -397,31 +418,35 @@ export default class TransactionService {
   }
 
   async getTransactions(
-    productId: string,
+    transactionId: string,
     warehouseId: string,
     shopId: string,
     offset: number = 0,
     limit: number = 10
   ): Promise<TransactionModel[]> {
-    const transactions = await this.db.transaction_item.findMany({
+    const transactions = await this.db.transaction.findMany({
       take: limit,
       skip: offset * limit,
       where: {
-        product_id: productId,
-        transaction: { warehouse_id: warehouseId, shop_id: shopId },
+        id: transactionId,
+        warehouse_id: warehouseId,
+        shop_id: shopId,
       },
-      include: { transaction: true },
+      include: { items: true },
     });
     return transactions.map(
-      (item) =>
+      ({ id, shop_id, warehouse_id, created_at, created_by, items }) =>
         new TransactionModel(
-          item.id,
-          item.transaction.shop_id,
-          item.transaction.warehouse_id,
-          item.product_id,
-          item.amount,
-          item.transaction.created_at,
-          item.transaction.created_by
+          id,
+          shop_id,
+          warehouse_id,
+          created_at,
+          created_by,
+          items.map((item) => ({
+            id: item.id,
+            amount: item.amount,
+            productId: item.product_id,
+          }))
         )
     );
   }

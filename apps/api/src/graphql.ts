@@ -341,8 +341,17 @@ export class PreparationItem {
 }
 
 export class TransactionResponse {
-    data?: Nullable<Nullable<IdPayload>[]>;
+    data?: Nullable<Nullable<Transaction>[]>;
     failed?: Nullable<Nullable<ShopFailed>[]>;
+}
+
+export class Transaction {
+    id: string;
+    shopId: string;
+    warehouseId: string;
+    createdAt: string;
+    createdBy: string;
+    items?: Nullable<Nullable<TransactionItem>[]>;
 }
 
 export class ShopFailed {
@@ -359,14 +368,10 @@ export class TransactionList {
     data?: Nullable<Nullable<Transaction>[]>;
 }
 
-export class Transaction {
+export class TransactionItem {
     id: string;
-    shopId: string;
-    warehouseId: string;
     productId: string;
     amount: number;
-    createdAt: string;
-    createdBy: string;
 }
 
 export class InboundList {
