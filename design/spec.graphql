@@ -11,7 +11,7 @@ type Query {
   outbounds(warehouseId: String!, shopId: String!): [Outbound]
   demands(warehouseId: String, shopId: String, limit: Int, offset: Int): [Demand]
   preparations(query: String, warehouseId: String): PreparationList
-  transactions(productId: String, warehouseId: String, shopId: String, pagination: PaginationInput): TransactionList
+  transactions(query: String, productId: String, warehouseId: String, shopId: String, limit: Int, offset: Int): [Transaction]
   inbounds(warehouseId: String!, pagination: PaginationInput): InboundList
   transfers(warehouseId: String!, destinationId: String!, pagination: PaginationInput): TransferList
 }

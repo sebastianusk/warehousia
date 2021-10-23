@@ -7,10 +7,9 @@ import {
   IdPayload,
   Outbound,
   OutboundResponse,
-  PaginationInput,
   PreparationList,
   ProductAmountInput,
-  TransactionList,
+  Transaction,
   TransactionResponse,
 } from '../graphql';
 import TransactionService from './transaction.service';
@@ -147,18 +146,19 @@ export default class TransactionResolver {
   @UseGuards(JwtAuthGuard)
   async transactions(
     @CurrentAuth() auth: AuthWrapper,
-    @Args('productId') productId: string,
+    @Args('query') query: string,
     @Args('warehouseId') warehouseId: string,
     @Args('shopId') shopId: string,
-    @Args('pagination') pagination: PaginationInput = { limit: 10, offset: 0 }
-  ): Promise<TransactionList> {
+    @Args('limit') limit: number,
+    @Args('offset') offset: number
+  ): Promise<Transaction[]> {
     const data = await this.transactionService.getTransactions(
-      productId,
+      query,
       warehouseId,
       shopId,
-      pagination.offset,
-      pagination.limit
+      offset,
+      limit
     );
-    return { data: data.map((item) => item.toResponse()) };
+    return data.map((item) => item.toResponse());
   }
 }

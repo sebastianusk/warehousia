@@ -418,7 +418,7 @@ export default class TransactionService {
   }
 
   async getTransactions(
-    transactionId: string,
+    query: string,
     warehouseId: string,
     shopId: string,
     offset: number = 0,
@@ -428,9 +428,13 @@ export default class TransactionService {
       take: limit,
       skip: offset * limit,
       where: {
-        id: transactionId,
-        warehouse_id: warehouseId,
-        shop_id: shopId,
+        OR: [
+          {
+            warehouse_id: warehouseId,
+            shop_id: shopId,
+          },
+          { id: { contains: query } },
+        ],
       },
       include: { items: true },
     });
