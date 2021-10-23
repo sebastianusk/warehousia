@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { message } from 'antd';
+import { message, notification, Table } from 'antd';
 
 import createTransactionPdf from './Pdf';
 import { ADD_TRANSACTION, GET_PREPARATION } from '../../graph';
@@ -77,9 +77,38 @@ export default function useTransactionHooks(): TransactionState {
           createTransactionPdf(datum);
         });
         message.info('Successfully create Transaction');
-
-        setDataSource([]);
-        setSelectedPrep(undefined);
+        if (resp.data.addTransaction.failed.length > 0) {
+          resp.data.addTransaction.failed.forEach((el: any) => {
+            const columns = [
+              {
+                title: 'Product ID',
+                dataIndex: 'productId',
+                key: 'productId',
+              },
+              {
+                title: 'Amount',
+                dataIndex: 'amount',
+                key: 'amount',
+              },
+            ];
+            const description = (
+              <Table
+                dataSource={el.items}
+                columns={columns}
+                pagination={false}
+              />
+            );
+            notification.info({
+              message: `Failed Items on Shop ${el.shopId}`,
+              description,
+              placement: 'bottomRight',
+              duration: 7,
+            });
+          });
+        }
+        refetch({
+          warehouseId: selectedWarehouse,
+        });
       } else {
         console.log(resp.errors);
       }

@@ -55,7 +55,6 @@ export default function useMissingHooks(): MissingState {
           const a = newData.find(
             (el: { id: string | undefined }) => el.id === prev?.id
           );
-          console.log(a);
           return a;
         });
       }

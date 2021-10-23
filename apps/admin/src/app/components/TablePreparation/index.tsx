@@ -16,13 +16,13 @@ export default function TablePreparation({
 }: TablePrepProps): ReactElement {
   return (
     <>
-      <Table size="middle" dataSource={data}>
+      <Table
+        size="middle"
+        dataSource={data}
+        pagination={false}
+        scroll={{ y: 400 }}
+      >
         <Column title="Product Code" dataIndex="productId" key="productId" />
-        {/* <Column
-          title="Product Name"
-          dataIndex="productName"
-          key="productName"
-        /> */}
         <Column title="Amount" dataIndex="actual" key="actual" />
       </Table>
     </>

@@ -8,7 +8,7 @@ interface PrepSelectorProps {
   dataSource: any;
 }
 
-export default function ShopSelector(
+export default function PrepSelector(
   props: PrepSelectorProps
 ): React.ReactElement {
   return (
