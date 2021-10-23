@@ -51,6 +51,7 @@ const MainLayout: React.FC = ({ children }) => {
             <Menu.Item key="warehouse-transfer">Transfer</Menu.Item>
             <Menu.Item key="warehouse-outbound">Outbound</Menu.Item>
             <Menu.Item key="warehouse-preparing">Preparing</Menu.Item>
+            <Menu.Item key="warehouse-missing">Missing</Menu.Item>
             <Menu.Item key="warehouse-transaction">Transaction</Menu.Item>
           </SubMenu>
           {userData?.role === 'SUPER_ADMIN' ? (

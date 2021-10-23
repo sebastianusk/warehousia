@@ -1,5 +1,5 @@
 .title {
-  margin: 0 20px 0 0;
+  margin: 0 20px 20px 0;
 }
 .card {
   margin-top: 30px;
@@ -7,7 +7,8 @@
 }
 .flexContainer {
   display: flex;
-  align-items: center;
+  justify-content: left;
+  margin-bottom: 30px;
 }
 .bottomAction {
   display: flex;
@@ -15,8 +16,10 @@
   margin-top: 40px;
 }
 .select {
+  min-width: 100px;
   max-width: 350px;
 }
-.prepSelector {
-  margin-left: 16px;
+.selectContainer {
+  margin: 0 16px;
+  width: 350px;
 }

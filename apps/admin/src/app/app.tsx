@@ -9,6 +9,7 @@ import WarehouseInboundPage from './pages/WarehouseInboundPage';
 import WarehouseTransferPage from './pages/WarehouseTransferPage';
 import WarehouseOutboundPage from './pages/WarehouseOutboundPage';
 import WarehousePreparingPage from './pages/WarehousePreparingPage';
+import WarehouseMissingPage from './pages/WarehouseMissingPage';
 import WarehouseTransactionPage from './pages/WarehouseTransactionPage';
 import SuperAdminMenuPage from './pages/SuperAdminMenuPage';
 import AccountPage from './pages/AccountPage';
@@ -115,6 +116,16 @@ export default function App() {
               }
             />
             <Route
+              path="/warehouse-missing"
+              render={() =>
+                localStorage.access_token ? (
+                  <WarehouseMissingPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
               path="/warehouse-transaction"
               render={() =>
                 localStorage.access_token ? (
@@ -144,10 +155,7 @@ export default function App() {
                 )
               }
             />
-            {/* <Route path="/warehouse-preparing" component={MainLayout} /> */}
-            {/* <Route path="/admin-menu" component={MainLayout} /> */}
             <Route path="/account" component={AccountPage} />
-            {/* <Route path="/" component={MainLayout} /> */}
           </Switch>
         </MainLayout>
       </Switch>

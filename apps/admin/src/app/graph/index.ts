@@ -367,3 +367,19 @@ export const GET_DEMANDS = gql`
     }
   }
 `;
+
+export const ADD_MISSING = gql`
+  mutation AddMissing(
+    $preparationId: String!
+    $productId: String!
+    $amount: Int!
+  ) {
+    addMissing(
+      preparationId: $preparationId
+      productId: $productId
+      amount: $amount
+    ) {
+      id
+    }
+  }
+`;
