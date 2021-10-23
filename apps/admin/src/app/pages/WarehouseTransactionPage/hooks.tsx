@@ -42,7 +42,6 @@ export default function useTransactionHooks(): TransactionState {
     onCompleted(response) {
       if (response?.preparations?.data.length > 0) {
         setDataSource(response.preparations.data);
-        setSelectedPrep(response.preparations.data[0]);
       }
     },
   });

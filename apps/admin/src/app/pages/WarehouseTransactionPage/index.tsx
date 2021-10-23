@@ -1,8 +1,9 @@
 import React, { ReactElement } from 'react';
-import { Card, Button, Select } from 'antd';
+import { Card, Button } from 'antd';
 import WarehouseSelector from 'app/components/WarehousesSelector';
+import TablePreparation from 'app/components/TablePreparation';
+import PreparationsSelector from 'app/components/PreparationsSelector';
 import useTransactionHooks from './hooks';
-import TablePreparation from '../../components/TablePreparation';
 import styles from './index.module.css';
 
 export default function WarehouseTransactionPage(): ReactElement {
@@ -27,14 +28,10 @@ export default function WarehouseTransactionPage(): ReactElement {
           </div>
           <div className={styles.prepSelector}>
             <div>Preparation ID:</div>
-            <Select className={styles.select} onChange={onSelectPreparation}>
-              {dataSource?.map((item: any) => (
-                <Select.Option
-                  value={item.id}
-                  key={item.id}
-                >{`${item.id}`}</Select.Option>
-              ))}
-            </Select>
+            <PreparationsSelector
+              onSelectPrep={onSelectPreparation}
+              dataSource={dataSource}
+            />
           </div>
         </div>
       </Card>
