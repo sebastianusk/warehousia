@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
-import { NotEnoughItems } from '../common/errors';
+import { FieldEmpty, NotEnoughItems } from '../common/errors';
 import DBService from '../db/db.service';
 import { InboundModel, TransferModel } from './stock.dto';
 import WarehouseModel, { Feature } from './warehouse.dto';
@@ -82,6 +82,7 @@ export default class WarehouseService {
     id: string,
     items: { productid: string; amount: number }[]
   ): Promise<string> {
+    if (items.length === 0) throw new FieldEmpty('items');
     await auth.log(this.db, 'inbound', { id });
     const inbound = await this.db.inbound.create({
       data: {
@@ -252,6 +253,7 @@ export default class WarehouseService {
   ): Promise<{
     errors: { productId: string; expected: number; actual: number }[];
   }> {
+    if (items.length === 0) throw new FieldEmpty('items');
     const status = items.map(async (item) => {
       const check = await this.db.stock.findUnique({
         where: {

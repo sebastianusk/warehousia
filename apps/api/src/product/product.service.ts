@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
-import { ProductsNotFound } from '../common/errors';
+import { FieldEmpty, ProductsNotFound } from '../common/errors';
 import DBService from '../db/db.service';
 import {
   ProductLogModel,
@@ -16,6 +16,7 @@ export default class ProductService {
     auth: AuthWrapper,
     products: { id: string; name?: string; price?: number }[]
   ): Promise<number> {
+    if (products.length === 0) throw new FieldEmpty('products');
     const result = await this.db.$transaction([
       ...products.map(({ id, name, price }) =>
         this.db.product.upsert({

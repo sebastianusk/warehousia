@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
 import {
+  FieldEmpty,
   PreparationNotFound,
   ProductsNotFound,
   WrongMissingAmount,
@@ -23,6 +24,10 @@ export default class TransactionService {
     shopId: string,
     items: { productId: string; amount: number }[]
   ): Promise<{ demands: string[]; outbounds: string[] }> {
+    if (items.length === 0) {
+      throw new FieldEmpty('items');
+    }
+
     await auth.log(this.db, 'createOutbound', { warehouseId, shopId, items });
 
     const products = await Promise.all(
@@ -187,6 +192,10 @@ export default class TransactionService {
     warehouseId: string,
     shopId: string[]
   ): Promise<string> {
+    if (shopId.length === 0) {
+      throw new FieldEmpty('shopId');
+    }
+    if (shopId.length === 0) throw new FieldEmpty('shopId');
     await auth.log(this.db, 'createPreparation', { warehouseId, shopId });
     const { id } = await this.db.preparation.create({
       data: {
@@ -211,8 +220,14 @@ export default class TransactionService {
   ): Promise<PreparationModel[]> {
     const data = await this.db.preparation.findMany({
       where: {
-        OR: [{ id: { contains: id } }, { warehouse_id: warehouseId }],
-        transaction: undefined,
+        AND: [
+          {
+            OR: [{ id: { contains: id } }, { warehouse_id: warehouseId }],
+          },
+          {
+            transaction: undefined,
+          },
+        ],
       },
       include: { outbound: true, missing: true },
     });
