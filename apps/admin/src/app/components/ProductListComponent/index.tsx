@@ -68,15 +68,15 @@ export default function ProductListComponent(props: {
       width: '10%',
     },
     {
-      title: 'Total',
-      dataIndex: ['stock', 'all'],
-      key: 'total',
+      title: 'Current WH Stock',
+      dataIndex: ['stock', 'amount'],
+      key: 'currentStock',
       width: '7%',
     },
     {
-      title: 'Stock',
-      dataIndex: ['stock', 'amount'],
-      key: 'currentStock',
+      title: 'Total',
+      dataIndex: ['stock', 'all'],
+      key: 'total',
       width: '7%',
     },
     {
