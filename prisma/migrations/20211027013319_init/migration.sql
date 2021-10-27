@@ -140,6 +140,7 @@ CREATE TABLE "preparation" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" TEXT NOT NULL,
     "warehouse_id" TEXT NOT NULL,
+    "transaction_id" TEXT,
 
     CONSTRAINT "preparation_pkey" PRIMARY KEY ("id")
 );
@@ -178,7 +179,6 @@ CREATE TABLE "transaction" (
     "id" TEXT NOT NULL,
     "warehouse_id" TEXT NOT NULL,
     "shop_id" TEXT NOT NULL,
-    "preparation_id" TEXT NOT NULL,
     "remarks" JSONB NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" TEXT NOT NULL,
@@ -197,6 +197,20 @@ CREATE TABLE "transaction_item" (
 );
 
 -- CreateTable
+CREATE TABLE "failed" (
+    "id" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "shop_id" TEXT NOT NULL,
+    "warehouse_id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_by" TEXT NOT NULL,
+    "transaction_id" TEXT NOT NULL,
+
+    CONSTRAINT "failed_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_admin_access" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
@@ -204,6 +218,9 @@ CREATE TABLE "_admin_access" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "stock_product_id_warehouse_id_key" ON "stock"("product_id", "warehouse_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "preparation_transaction_id_unique" ON "preparation"("transaction_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "demand_fulfiled_outbound_id_unique" ON "demand"("fulfiled_outbound_id");
@@ -245,6 +262,9 @@ ALTER TABLE "transfer_item" ADD CONSTRAINT "transfer_item_product_id_fkey" FOREI
 ALTER TABLE "outbound_item" ADD CONSTRAINT "outbound_item_preparation_id_fkey" FOREIGN KEY ("preparation_id") REFERENCES "preparation"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "preparation" ADD CONSTRAINT "preparation_transaction_id_fkey" FOREIGN KEY ("transaction_id") REFERENCES "transaction"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "demand" ADD CONSTRAINT "demand_fulfiled_outbound_id_fkey" FOREIGN KEY ("fulfiled_outbound_id") REFERENCES "outbound_item"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -254,10 +274,10 @@ ALTER TABLE "demand" ADD CONSTRAINT "demand_previous_demand_id_fkey" FOREIGN KEY
 ALTER TABLE "missing" ADD CONSTRAINT "missing_preparation_id_fkey" FOREIGN KEY ("preparation_id") REFERENCES "preparation"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "transaction" ADD CONSTRAINT "transaction_preparation_id_fkey" FOREIGN KEY ("preparation_id") REFERENCES "preparation"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "transaction_item" ADD CONSTRAINT "transaction_item_transaction_id_fkey" FOREIGN KEY ("transaction_id") REFERENCES "transaction"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "transaction_item" ADD CONSTRAINT "transaction_item_transaction_id_fkey" FOREIGN KEY ("transaction_id") REFERENCES "transaction"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "failed" ADD CONSTRAINT "failed_transaction_id_fkey" FOREIGN KEY ("transaction_id") REFERENCES "transaction"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_admin_access" ADD FOREIGN KEY ("A") REFERENCES "admin"("username") ON DELETE CASCADE ON UPDATE CASCADE;
