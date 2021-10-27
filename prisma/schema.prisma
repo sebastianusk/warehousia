@@ -133,13 +133,14 @@ model outbound_item {
 }
 
 model preparation {
-  id           String          @id @default(uuid())
-  created_at   DateTime        @default(now())
-  created_by   String
-  warehouse_id String
-  transaction  transaction[]
-  outbound     outbound_item[]
-  missing      missing[]
+  id             String          @id @default(uuid())
+  created_at     DateTime        @default(now())
+  created_by     String
+  warehouse_id   String
+  transaction    transaction?    @relation(fields: [transaction_id], references: [id])
+  transaction_id String?
+  outbound       outbound_item[]
+  missing        missing[]
 }
 
 model demand {
@@ -170,21 +171,33 @@ model missing {
 }
 
 model transaction {
-  id             String             @id @default(uuid())
-  warehouse_id   String
-  shop_id        String
-  preparation    preparation        @relation(fields: [preparation_id], references: [id])
-  preparation_id String
-  remarks        Json
-  created_at     DateTime           @default(now())
-  created_by     String
-  items          transaction_item[] @relation
+  id           String             @id @default(uuid())
+  warehouse_id String
+  shop_id      String
+  preparation  preparation?
+  remarks      Json
+  created_at   DateTime           @default(now())
+  created_by   String
+  items        transaction_item[] @relation
+  failed       failed[]           @relation
 }
 
 model transaction_item {
   id             String      @id @default(uuid())
   product_id     String
   amount         Int
+  transaction    transaction @relation(fields: [transaction_id], references: [id])
+  transaction_id String
+}
+
+model failed {
+  id             String      @id @default(uuid())
+  product_id     String
+  amount         Int
+  shop_id        String
+  warehouse_id   String
+  created_at     DateTime    @default(now())
+  created_by     String
   transaction    transaction @relation(fields: [transaction_id], references: [id])
   transaction_id String
 }

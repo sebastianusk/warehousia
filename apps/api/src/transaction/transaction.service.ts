@@ -225,7 +225,7 @@ export default class TransactionService {
             OR: [{ id: { contains: id } }, { warehouse_id: warehouseId }],
           },
           {
-            transaction: undefined,
+            transaction_id: null,
           },
         ],
       },
