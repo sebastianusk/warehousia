@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { message, notification, Table } from 'antd';
 
-import createTransactionPdf from './Pdf';
-import { ADD_TRANSACTION, GET_PREPARATION } from '../../graph';
+import createTransactionXlsx from 'app/lib/xlsx/transactionXlsx';
+import { ADD_TRANSACTION, GET_PREPARATION } from 'app/graph';
 
 type Preparation =
   | {
@@ -74,7 +74,7 @@ export default function useTransactionHooks(): TransactionState {
     }).then((resp) => {
       if (!resp.errors) {
         resp.data.addTransaction.forEach((datum: any) => {
-          createTransactionPdf(datum);
+          createTransactionXlsx(datum);
         });
         message.info('Successfully create Transaction');
         const failed = resp.data.addTransaction.reduce(

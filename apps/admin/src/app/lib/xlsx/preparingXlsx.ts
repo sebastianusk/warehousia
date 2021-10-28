@@ -1,6 +1,6 @@
 import XLSX from 'xlsx';
 
-export default function JsonAsXlsx(
+export default function preparingXlsx(
   dataSource: any,
   id: string,
   warehouseId: string,
