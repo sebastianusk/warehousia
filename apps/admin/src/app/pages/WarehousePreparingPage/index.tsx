@@ -36,6 +36,7 @@ export default function WarehousePreparingPage(): ReactElement {
                   onChange={onChangeSelectShops}
                   value={selectedShops}
                   options={shopsOption}
+                  disabled={!selectedWarehouse}
                 />
               </div>
             </div>
