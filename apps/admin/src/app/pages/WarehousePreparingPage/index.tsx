@@ -50,7 +50,11 @@ export default function WarehousePreparingPage(): ReactElement {
             type="primary"
             onClick={onSubmit}
             loading={loading}
-            disabled={selectedShops.length < 1 || !selectedWarehouse}
+            disabled={
+              selectedShops.length < 1 ||
+              !selectedWarehouse ||
+              dataSource.length < 1
+            }
           >
             Submit
           </Button>
