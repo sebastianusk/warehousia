@@ -77,6 +77,7 @@ export default function usePreparingHooks(): PreparingState {
         setDataSource((prev: any) => [...prev, ...newData]);
       }
     },
+    fetchPolicy: 'no-cache',
   });
 
   const onSelectWarehouse = (warehouseId: string) => {
