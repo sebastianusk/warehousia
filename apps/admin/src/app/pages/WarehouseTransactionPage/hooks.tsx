@@ -107,31 +107,33 @@ export default function useTransactionHooks(): TransactionState {
         );
         if (failed.length > 0) {
           failed.forEach((el: any) => {
-            const columns = [
-              {
-                title: 'Product ID',
-                dataIndex: 'productId',
-                key: 'productId',
-              },
-              {
-                title: 'Amount',
-                dataIndex: 'amount',
-                key: 'amount',
-              },
-            ];
-            const description = (
-              <Table
-                dataSource={el.items}
-                columns={columns}
-                pagination={false}
-              />
-            );
-            notification.info({
-              message: `Failed Items on Shop ${el.shopId}`,
-              description,
-              placement: 'bottomRight',
-              duration: 7,
-            });
+            if (el.items > 0) {
+              const columns = [
+                {
+                  title: 'Product ID',
+                  dataIndex: 'productId',
+                  key: 'productId',
+                },
+                {
+                  title: 'Amount',
+                  dataIndex: 'amount',
+                  key: 'amount',
+                },
+              ];
+              const description = (
+                <Table
+                  dataSource={el.items}
+                  columns={columns}
+                  pagination={false}
+                />
+              );
+              notification.info({
+                message: `Failed Items on Shop ${el.shopId}`,
+                description,
+                placement: 'bottomRight',
+                duration: 7,
+              });
+            }
           });
         }
         refetch({
