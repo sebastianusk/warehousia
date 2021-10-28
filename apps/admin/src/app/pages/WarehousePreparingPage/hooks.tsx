@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { message } from 'antd';
-import createPdf from 'app/lib/JsPdf';
 import { ADD_PREPARATION, GET_OUTBOUNDS, GET_SHOPS } from 'app/graph';
+import preparingXlsx from 'app/lib/xlsx/preparingxlsx';
 
 interface PreparingState {
   onSelectWarehouse: (warehouseId: string) => void;
@@ -115,14 +115,11 @@ export default function usePreparingHooks(): PreparingState {
       },
     }).then((resp) => {
       if (!resp.errors) {
-        createPdf(
+        preparingXlsx(
           dataSource,
-          [
-            { header: 'Product Id', dataKey: 'productId' },
-            { header: 'Amount', dataKey: 'actual' },
-          ],
-          'Preparation',
-          resp.data.addPreparation.id
+          resp.data.addPreparation.id,
+          selectedWarehouse,
+          selectedShops
         );
         message.info('Successfully create Preparation');
 
