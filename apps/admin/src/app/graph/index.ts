@@ -269,24 +269,19 @@ export const GET_PREPARATION = gql`
 export const ADD_TRANSACTION = gql`
   mutation AddTransaction($preparationId: String!) {
     addTransaction(preparationId: $preparationId) {
-      data {
+      id
+      shopId
+      warehouseId
+      createdAt
+      createdBy
+      items {
         id
-        shopId
-        warehouseId
-        createdAt
-        createdBy
-        items {
-          id
-          productId
-          amount
-        }
+        productId
+        amount
       }
       failed {
-        shopId
-        items {
-          amount
-          productId
-        }
+        amount
+        productId
       }
     }
   }

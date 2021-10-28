@@ -105,7 +105,8 @@ export class TransactionModel {
     public warehouseId: string,
     public createdAt: Date,
     public createdBy: string,
-    public items: { id: string; productId: string; amount: number }[]
+    public items: { id: string; productId: string; amount: number }[],
+    public failed: { id: string; productId: string; amount: number }[]
   ) {}
 
   toResponse(): Transaction {
@@ -116,6 +117,7 @@ export class TransactionModel {
       createdAt: this.createdAt.toISOString(),
       createdBy: this.createdBy,
       items: this.items,
+      failed: this.failed,
     };
   }
 }

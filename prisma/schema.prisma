@@ -194,10 +194,6 @@ model failed {
   id             String      @id @default(uuid())
   product_id     String
   amount         Int
-  shop_id        String
-  warehouse_id   String
-  created_at     DateTime    @default(now())
-  created_by     String
   transaction    transaction @relation(fields: [transaction_id], references: [id])
   transaction_id String
 }

@@ -10,7 +10,6 @@ import {
   PreparationList,
   ProductAmountInput,
   Transaction,
-  TransactionResponse,
 } from '../graphql';
 import TransactionService from './transaction.service';
 
@@ -121,25 +120,23 @@ export default class TransactionResolver {
     @CurrentAuth() auth: AuthWrapper,
     @Args('preparationId') preparationId: string,
     @Args('remarks') remarks: string = ''
-  ): Promise<TransactionResponse> {
+  ): Promise<Transaction[]> {
     const data = await this.transactionService.createTransaction(
       auth,
       preparationId,
       remarks
     );
-    return {
-      data: data.transactions.map(
-        ({ id, shopId, warehouseId, items, createdAt, createdBy }) => ({
-          id,
-          warehouseId,
-          createdBy,
-          shopId,
-          createdAt: createdAt.toISOString(),
-          items,
-        })
-      ),
-      failed: data.failed,
-    };
+    return data.map(
+      ({ id, shopId, warehouseId, items, createdAt, createdBy, failed }) => ({
+        id,
+        warehouseId,
+        createdBy,
+        shopId,
+        createdAt: createdAt.toISOString(),
+        items,
+        failed,
+      })
+    );
   }
 
   @Query()

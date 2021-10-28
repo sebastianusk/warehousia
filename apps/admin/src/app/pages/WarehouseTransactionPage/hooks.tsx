@@ -73,12 +73,40 @@ export default function useTransactionHooks(): TransactionState {
       },
     }).then((resp) => {
       if (!resp.errors) {
-        resp.data.addTransaction.data.forEach((datum: any) => {
+        resp.data.addTransaction.forEach((datum: any) => {
           createTransactionPdf(datum);
         });
         message.info('Successfully create Transaction');
-        if (resp.data.addTransaction.failed.length > 0) {
-          resp.data.addTransaction.failed.forEach((el: any) => {
+        const failed = resp.data.addTransaction.reduce(
+          (
+            prev: {
+              shopId: string;
+              items: { productId: string; amount: number }[];
+            }[],
+            items: {
+              shopId: string;
+              failed: { id: string; productId: string; amount: number }[];
+            }
+          ) => {
+            const next = [...prev];
+            if (items.failed) {
+              next.push({
+                shopId: items.shopId,
+                items: items.failed.map(({ productId, amount }) => ({
+                  productId,
+                  amount,
+                })),
+              });
+            }
+            return next;
+          },
+          [] as {
+            shopId: string;
+            items: { productId: string; amount: string };
+          }[]
+        );
+        if (failed.length > 0) {
+          failed.forEach((el: any) => {
             const columns = [
               {
                 title: 'Product ID',

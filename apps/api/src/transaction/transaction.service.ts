@@ -302,20 +302,17 @@ export default class TransactionService {
     auth: AuthWrapper,
     preparationId: string,
     remarks: string
-  ): Promise<{
-    transactions: {
+  ): Promise<
+    {
       id: string;
       shopId: string;
       warehouseId: string;
       createdAt: Date;
       createdBy: string;
       items: { id: string; productId: string; amount: number }[];
-    }[];
-    failed: {
-      shopId: string;
-      items: { productId: string; amount: number }[];
-    }[];
-  }> {
+      failed: { id: string; productId: string; amount: number }[];
+    }[]
+  > {
     await auth.log(this.db, 'createTransaction', { preparationId });
     const preparation = await this.db.preparation.findUnique({
       where: { id: preparationId },
@@ -341,55 +338,51 @@ export default class TransactionService {
     }, {} as { [key: string]: number });
 
     const perShop = outbound.reduce<{
-      transaction: { [key: string]: { productId: string; amount: number }[] };
-      failed: { [key: string]: { productId: string; amount: number }[] };
-    }>(
-      (prev, item) => {
-        const { transaction, failed } = prev;
-        const shopId = item.shop_id;
-        if (!transaction[shopId]) {
-          transaction[shopId] = [];
+      [key: string]: {
+        items: { productId: string; amount: number }[];
+        failed: { productId: string; amount: number }[];
+      };
+    }>((prev, item) => {
+      const next = { ...prev };
+      const shopId = item.shop_id;
+      if (!next[shopId]) {
+        next[shopId] = { items: [], failed: [] };
+      }
+      const productId = item.product_id;
+      const notFoundAmount = notFounds[productId];
+      if (notFoundAmount) {
+        if (!next[shopId].failed[shopId]) {
+          next[shopId].failed[shopId] = [];
         }
-        const productId = item.product_id;
-        const notFoundAmount = notFounds[productId];
-        if (notFoundAmount) {
-          if (!failed[shopId]) {
-            failed[shopId] = [];
-          }
-          if (notFoundAmount < item.amount) {
-            transaction[shopId].push({
-              productId: item.product_id,
-              amount: item.amount - notFoundAmount,
-            });
-            failed[shopId].push({
-              productId: item.product_id,
-              amount: notFoundAmount,
-            });
-            notFounds[productId] = undefined;
-          } else {
-            failed[shopId].push({
-              productId: item.product_id,
-              amount: item.amount,
-            });
-            notFounds[productId] = notFoundAmount - item.amount;
-          }
+        if (notFoundAmount < item.amount) {
+          next[shopId].items.push({
+            productId: item.product_id,
+            amount: item.amount - notFoundAmount,
+          });
+          next[shopId].failed.push({
+            productId: item.product_id,
+            amount: notFoundAmount,
+          });
+          notFounds[productId] = undefined;
         } else {
-          transaction[shopId].push({
+          next[shopId].failed.push({
             productId: item.product_id,
             amount: item.amount,
           });
+          notFounds[productId] = notFoundAmount - item.amount;
         }
-        return { transaction, failed };
-      },
-      {
-        transaction: {},
-        failed: {},
+      } else {
+        next[shopId].items.push({
+          productId: item.product_id,
+          amount: item.amount,
+        });
       }
-    );
+      return next;
+    }, {});
     const data = await Promise.all(
-      Object.entries(perShop.transaction).map(async (transaction) => {
+      Object.entries(perShop).map(async (transaction) => {
         const shopId = transaction[0];
-        const items = transaction[1];
+        const { items, failed } = transaction[1];
         return this.db.transaction.create({
           data: {
             preparation: { connect: { id: preparationId } },
@@ -405,31 +398,38 @@ export default class TransactionService {
                 })),
               },
             },
+            failed: {
+              createMany: {
+                data: failed.map(({ productId, amount }) => ({
+                  product_id: productId,
+                  amount,
+                })),
+              },
+            },
           },
-          include: { items: true },
+          include: { items: true, failed: true },
         });
       })
     );
-    return {
-      transactions: data.map(
-        ({ id, shop_id, created_at, created_by, items }) => ({
-          id,
-          shopId: shop_id,
-          warehouseId: warehouse_id,
-          createdAt: created_at,
-          createdBy: created_by,
-          items: items.map((item) => ({
-            productId: item.product_id,
-            amount: item.amount,
-            id: item.id,
-          })),
-        })
-      ),
-      failed: Object.entries(perShop.failed).map(([shopId, items]) => ({
-        shopId,
-        items,
-      })),
-    };
+    return data.map(
+      ({ id, shop_id, created_at, created_by, items, failed }) => ({
+        id,
+        shopId: shop_id,
+        warehouseId: warehouse_id,
+        createdAt: created_at,
+        createdBy: created_by,
+        items: items.map((item) => ({
+          productId: item.product_id,
+          amount: item.amount,
+          id: item.id,
+        })),
+        failed: failed.map((item) => ({
+          productId: item.product_id,
+          amount: item.amount,
+          id: item.id,
+        })),
+      })
+    );
   }
 
   async getTransactions(
@@ -451,10 +451,10 @@ export default class TransactionService {
           { id: { contains: query } },
         ],
       },
-      include: { items: true },
+      include: { items: true, failed: true },
     });
     return transactions.map(
-      ({ id, shop_id, warehouse_id, created_at, created_by, items }) =>
+      ({ id, shop_id, warehouse_id, created_at, created_by, items, failed }) =>
         new TransactionModel(
           id,
           shop_id,
@@ -462,6 +462,11 @@ export default class TransactionService {
           created_at,
           created_by,
           items.map((item) => ({
+            id: item.id,
+            amount: item.amount,
+            productId: item.product_id,
+          })),
+          failed.map((item) => ({
             id: item.id,
             amount: item.amount,
             productId: item.product_id,
