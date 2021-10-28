@@ -17,7 +17,7 @@ export default function InlineProductForm({
   const [form] = useForm();
   const search = _.debounce((value) => {
     getProduct({ variables: { query: value } });
-  }, 1000);
+  }, 250);
   return (
     <div className={styles.formContainer}>
       <Form
