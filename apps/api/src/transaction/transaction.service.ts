@@ -187,6 +187,14 @@ export default class TransactionService {
     return outbounds.map((data) => OutboundModel.fromDB(data));
   }
 
+  static generatePreparationId(warehouseId: string): string {
+    const date = new Date();
+    const code = warehouseId.substring(0, 3).toUpperCase();
+    return `${code}-${
+      date.getFullYear() % 100
+    }${date.getMonth()}${date.getDate()}-${date.getHours()}${date.getMinutes()}${date.getSeconds()}`;
+  }
+
   async createPreparation(
     auth: AuthWrapper,
     warehouseId: string,
@@ -197,8 +205,10 @@ export default class TransactionService {
     }
     if (shopId.length === 0) throw new FieldEmpty('shopId');
     await auth.log(this.db, 'createPreparation', { warehouseId, shopId });
+    const preparationId = TransactionService.generatePreparationId(warehouseId);
     const { id } = await this.db.preparation.create({
       data: {
+        id: preparationId,
         created_by: auth.username,
         warehouse_id: warehouseId,
       },
