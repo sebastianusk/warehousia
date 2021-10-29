@@ -182,7 +182,8 @@ export default class WarehouseService {
           available = available > demand.amount ? available - demand.amount : 0;
         }
 
-        if (stock.amount === available || updatedDemands.length === 0) return available;
+        if (stock.amount === available || updatedDemands.length === 0)
+          return available;
 
         const newStock = this.db.stock.update({
           where: {
