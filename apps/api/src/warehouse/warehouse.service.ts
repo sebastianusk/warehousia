@@ -152,7 +152,11 @@ export default class WarehouseService {
     return Promise.all(
       stocks.map(async (stock) => {
         const demands = await this.db.demand.findMany({
-          where: { warehouse_id: id, product_id: stock.productId },
+          where: {
+            warehouse_id: id,
+            product_id: stock.productId,
+            fulfiled_outbound_id: null,
+          },
           orderBy: { created_at: 'asc' },
         });
 
@@ -177,6 +181,8 @@ export default class WarehouseService {
           });
           available = available > demand.amount ? available - demand.amount : 0;
         }
+
+        if (stock.amount === available || updatedDemands.length === 0) return available;
 
         const newStock = this.db.stock.update({
           where: {
