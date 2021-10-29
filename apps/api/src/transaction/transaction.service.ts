@@ -28,8 +28,6 @@ export default class TransactionService {
       throw new FieldEmpty('items');
     }
 
-    await auth.log(this.db, 'createOutbound', { warehouseId, shopId, items });
-
     const products = await Promise.all(
       items.map(async ({ productId, amount }) => {
         const product = await this.db.product.findUnique({
@@ -147,6 +145,22 @@ export default class TransactionService {
       )
     );
 
+    await auth.log(this.db, 'createOutbound', {
+      warehouseId,
+      shopId,
+      items,
+      demands: demands.map(({ product_id, shop_id, amount }) => ({
+        productId: product_id,
+        shopId: shop_id,
+        amount,
+      })),
+      outbounds: outbounds.map(({ product_id, shop_id, amount }) => ({
+        productId: product_id,
+        shopId: shop_id,
+        amount,
+      })),
+    });
+
     return {
       demands: demands.map((item) => item.id),
       outbounds: outbounds.map((item) => item.id),
@@ -204,7 +218,6 @@ export default class TransactionService {
       throw new FieldEmpty('shopId');
     }
     if (shopId.length === 0) throw new FieldEmpty('shopId');
-    await auth.log(this.db, 'createPreparation', { warehouseId, shopId });
     const preparationId = TransactionService.generatePreparationId(warehouseId);
     const { id } = await this.db.preparation.create({
       data: {
@@ -220,6 +233,11 @@ export default class TransactionService {
         preparation_id: null,
       },
       data: { preparation_id: id },
+    });
+    await auth.log(this.db, 'createPreparation', {
+      warehouseId,
+      shopId,
+      preparation: id,
     });
     return id;
   }
@@ -323,7 +341,6 @@ export default class TransactionService {
       failed: { id: string; productId: string; amount: number }[];
     }[]
   > {
-    await auth.log(this.db, 'createTransaction', { preparationId });
     const preparation = await this.db.preparation.findUnique({
       where: { id: preparationId },
       include: {
@@ -421,6 +438,12 @@ export default class TransactionService {
         });
       })
     );
+
+    await auth.log(this.db, 'createTransaction', {
+      preparationId,
+      transactions: data.map(({ id }) => id),
+    });
+
     return data.map(
       ({ id, shop_id, created_at, created_by, items, failed }) => ({
         id,

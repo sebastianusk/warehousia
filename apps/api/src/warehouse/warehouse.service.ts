@@ -83,7 +83,6 @@ export default class WarehouseService {
     items: { productid: string; amount: number }[]
   ): Promise<string> {
     if (items.length === 0) throw new FieldEmpty('items');
-    await auth.log(this.db, 'inbound', { id });
     const inbound = await this.db.inbound.create({
       data: {
         warehouse: id,
@@ -131,7 +130,7 @@ export default class WarehouseService {
       )
     );
 
-    await this.checkDemands(
+    const fulfilledDemands = await this.checkDemands(
       stocks.map((stock) => ({
         productId: stock.product_id,
         amount: stock.stock,
@@ -140,6 +139,12 @@ export default class WarehouseService {
       auth,
       { source: 'inbound', id: inbound.id }
     );
+
+    await auth.log(this.db, 'inbound', {
+      id,
+      items,
+      fulfilledDemands: fulfilledDemands.filter(({ amount }) => amount !== 0),
+    });
     return inbound.id;
   }
 
@@ -148,7 +153,7 @@ export default class WarehouseService {
     id: string,
     auth: AuthWrapper,
     remarks: any
-  ): Promise<number[]> {
+  ): Promise<{ productId: string; amount: number }[]> {
     return Promise.all(
       stocks.map(async (stock) => {
         const demands = await this.db.demand.findMany({
@@ -183,7 +188,7 @@ export default class WarehouseService {
         }
 
         if (stock.amount === available || updatedDemands.length === 0)
-          return available;
+          return { productId: stock.productId, amount: 0 };
 
         const newStock = this.db.stock.update({
           where: {
@@ -233,8 +238,8 @@ export default class WarehouseService {
             },
           })
         );
-        const data = await this.db.$transaction([newStock, ...newDemands]);
-        return data[0].stock;
+        await this.db.$transaction([newStock, ...newDemands]);
+        return { productId: stock.productId, amount: stock.amount - available };
       })
     );
   }
@@ -307,11 +312,7 @@ export default class WarehouseService {
     if (errors.errors.length !== 0) {
       throw new NotEnoughItems(errors);
     }
-    await auth.log(
-      this.db,
-      'transfer',
-      AuthWrapper.structRemarks(warehouseId, { destinationId })
-    );
+    await auth.log(this.db, 'transfer', { warehouseId, destinationId, items });
     await this.db.$transaction(
       items.map((item) =>
         this.db.stock.update({
