@@ -35,7 +35,7 @@ export default class WarehouseResolver {
   }
 
   @Mutation()
-  @UseGuards(JwtAuthGuard, WarehouseGuard, PoliciesGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies((ability: AppAbility) =>
     ability.can(Action.Create, WarehouseModel)
   )
