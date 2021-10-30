@@ -110,7 +110,7 @@ export default class WarehouseResolver {
   @Mutation()
   @UseGuards(JwtAuthGuard, WarehouseGuard, PoliciesGuard)
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Create, Feature.INBOUND)
+    ability.can(Action.Create, Feature.TRANSFER)
   )
   async addTransfer(
     @Args('warehouseId') warehouseId: string,

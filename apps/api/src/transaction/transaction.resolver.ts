@@ -2,6 +2,9 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentAuth, JwtAuthGuard } from '../auth/auth.guard';
 import AuthWrapper from '../auth/auth.wrapper';
+import { CheckPolicies } from '../auth/policy.decorator';
+import { Action, AppAbility } from '../auth/policy.factory';
+import PoliciesGuard from '../auth/policy.guard';
 import {
   Demand,
   IdPayload,
@@ -11,6 +14,8 @@ import {
   ProductAmountInput,
   Transaction,
 } from '../graphql';
+import { Feature } from '../warehouse/warehouse.dto';
+import WarehouseGuard from '../warehouse/warehouse.guard';
 import TransactionService from './transaction.service';
 
 @Resolver('Transaction')
@@ -18,7 +23,10 @@ export default class TransactionResolver {
   constructor(private transactionService: TransactionService) {}
 
   @Mutation()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, WarehouseGuard, PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Create, Feature.OUTBOUND)
+  )
   async addOutbound(
     @CurrentAuth() auth: AuthWrapper,
     @Args('warehouseId') warehouseId: string,
