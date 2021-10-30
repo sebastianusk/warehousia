@@ -43,15 +43,9 @@ export default function usePreparingHooks(): PreparingState {
   const [addPreparation, { loading }] = useMutation(ADD_PREPARATION);
 
   useQuery(GET_SHOPS, {
-    variables: {
-      pagination: {
-        limit: 10,
-        offset: 0,
-      },
-    },
     onCompleted: (response) => {
-      if (response?.shops?.data.length > 0) {
-        const newOptions = response.shops.data.map((datum: any) => ({
+      if (response?.shops?.length > 0) {
+        const newOptions = response.shops.map((datum: any) => ({
           label: datum.name,
           value: datum.id,
         }));

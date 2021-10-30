@@ -14,13 +14,6 @@ interface ShopsManagerState {
 export default function useShopsManagerHooks(): ShopsManagerState {
   const [showModalAdd, setShowModalAdd] = useState(false);
   const { loading, error, data } = useQuery(GET_SHOPS, {
-    variables: {
-      query: '',
-      pagination: {
-        offset: 0,
-        limit: 10,
-      },
-    },
     onCompleted() {
       console.log(data);
     },
@@ -31,6 +24,6 @@ export default function useShopsManagerHooks(): ShopsManagerState {
     setShowModalAdd,
     loading,
     error,
-    data: data?.shops?.data,
+    data: data?.shops,
   };
 }

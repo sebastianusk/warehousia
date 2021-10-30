@@ -36,19 +36,20 @@ export default class ShopService {
     return result[0].id;
   }
 
-  async getList(
-    query: string,
-    limit: number,
-    offset: number
-  ): Promise<ShopModel[]> {
+  async getList(query: string): Promise<ShopModel[]> {
     const result = await this.db.shop.findMany({
-      take: limit,
-      skip: offset * limit,
-      where: {
-        name: {
-          startsWith: query,
-        },
-      },
+      where: query
+        ? {
+            OR: [
+              {
+                name: { contains: query, mode: 'insensitive' },
+              },
+              {
+                id: { contains: query, mode: 'insensitive' },
+              },
+            ],
+          }
+        : undefined,
     });
     return result.map((item) => ShopModel.fromDb(item));
   }

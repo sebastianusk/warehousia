@@ -37,13 +37,6 @@ export default function useModalEditShopHooks(
       refetchQueries: [
         {
           query: GET_SHOPS,
-          variables: {
-            query: '',
-            pagination: {
-              offset: 0,
-              limit: 10,
-            },
-          },
         },
       ],
     });

@@ -98,13 +98,11 @@ export const EDIT_WAREHOUSE = gql`
 `;
 
 export const GET_SHOPS = gql`
-  query shops($query: String, $pagination: PaginationInput) {
-    shops(query: $query, pagination: $pagination) {
-      data {
-        id
-        name
-        active
-      }
+  query shops($query: String) {
+    shops(query: $query) {
+      id
+      name
+      active
     }
   }
 `;

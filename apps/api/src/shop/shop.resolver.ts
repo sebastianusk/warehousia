@@ -5,13 +5,7 @@ import AuthWrapper from '../auth/auth.wrapper';
 import { CheckPolicies } from '../auth/policy.decorator';
 import { AppAbility, Action } from '../auth/policy.factory';
 import PoliciesGuard from '../auth/policy.guard';
-import {
-  AddShopInput,
-  EditShopInput,
-  IdPayload,
-  PaginationInput,
-  ShopList,
-} from '../graphql';
+import { AddShopInput, EditShopInput, IdPayload, Shop } from '../graphql';
 import ShopModel from './shop.dto';
 import ShopService from './shop.service';
 
@@ -48,17 +42,8 @@ export default class ShopResolver {
 
   @Query()
   @UseGuards(JwtAuthGuard)
-  async shops(
-    @Args('query') query: string,
-    @Args('pagination') pagination: PaginationInput
-  ): Promise<ShopList> {
-    const data = await this.shopService.getList(
-      query,
-      pagination?.limit,
-      pagination?.offset
-    );
-    return {
-      data: data.map((item) => item.toResponse()),
-    };
+  async shops(@Args('query') query: string): Promise<Shop[]> {
+    const data = await this.shopService.getList(query);
+    return data.map((item) => item.toResponse());
   }
 }

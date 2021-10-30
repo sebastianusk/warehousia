@@ -101,7 +101,7 @@ export abstract class IQuery {
 
     abstract warehouses(query?: Nullable<string>, offset?: Nullable<number>, limit?: Nullable<number>): Nullable<Nullable<Warehouse>[]> | Promise<Nullable<Nullable<Warehouse>[]>>;
 
-    abstract shops(query?: Nullable<string>, pagination?: Nullable<PaginationInput>): Nullable<ShopList> | Promise<Nullable<ShopList>>;
+    abstract shops(query?: Nullable<string>): Nullable<Nullable<Shop>[]> | Promise<Nullable<Nullable<Shop>[]>>;
 
     abstract products(warehouseId: string, query?: Nullable<string>, limit?: Nullable<number>, offset?: Nullable<number>): Nullable<Nullable<Product>[]> | Promise<Nullable<Nullable<Product>[]>>;
 

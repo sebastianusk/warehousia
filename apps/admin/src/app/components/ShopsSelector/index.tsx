@@ -13,15 +13,12 @@ interface ShopSelectorProps {
 export default function ShopSelector(
   props: ShopSelectorProps
 ): React.ReactElement {
-  const { data } = useQuery(GET_SHOPS, {
-    variables: {
-      pagination: {
-        limit: 10,
-        offset: 0,
-      },
-    },
-  });
-  const items = data?.shops?.data || [];
+  const { data } = useQuery(GET_SHOPS);
+  const items =
+    data?.shops?.filter((shop: { id: string; active: boolean }) => {
+      if (!shop.active) return false;
+      return true;
+    }) || [];
 
   return (
     <Select

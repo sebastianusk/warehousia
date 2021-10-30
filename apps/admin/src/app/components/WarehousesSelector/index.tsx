@@ -10,19 +10,32 @@ import styles from './index.module.css';
 interface WarehouseSelectorProps {
   onSelectWarehouse: (warehouseId: string) => void;
   all?: boolean;
+  feature?: string | undefined;
 }
 
 export default function WarehouseSelector({
   onSelectWarehouse,
   all,
+  feature,
 }: WarehouseSelectorProps): React.ReactElement {
   const user = useContext(UserContext);
   const { data } = useQuery(GET_WAREHOUSES);
   const items = data?.warehouses
-    ? data?.warehouses.filter((warehouse: any) =>
-        user?.role === 'SUPER_ADMIN' || all
-          ? true
-          : user?.warehouses.includes(warehouse.id)
+    ? data?.warehouses.filter(
+        (warehouse: {
+          id: string;
+          name: string;
+          active: boolean;
+          features: string[];
+        }) => {
+          if (all) return true;
+          if (!warehouse.active) return false;
+          if (user?.role === 'SUPER_ADMIN') return true;
+          if (feature ? !warehouse.features.includes(feature) : false)
+            return false;
+          if (user?.warehouses.includes(warehouse.id)) return false;
+          return true;
+        }
       )
     : [];
 
@@ -43,4 +56,5 @@ export default function WarehouseSelector({
 
 WarehouseSelector.defaultProps = {
   all: false,
+  feature: undefined,
 };
