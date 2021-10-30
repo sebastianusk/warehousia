@@ -30,7 +30,10 @@ export default function WarehouseInboundPage(): React.ReactElement {
       <Card className={styles.card}>
         <div className={`${styles.flexContainer}`}>
           <h2 className={styles.title}>CREATE INBOUND</h2>
-          <WarehouseSelector onSelectWarehouse={setSelectedWarehouse} />
+          <WarehouseSelector
+            onSelectWarehouse={setSelectedWarehouse}
+            feature="INBOUND"
+          />
         </div>
       </Card>
       <Card className={styles.card}>

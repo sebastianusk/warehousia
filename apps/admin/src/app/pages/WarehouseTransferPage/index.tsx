@@ -35,6 +35,7 @@ export default function WarehouseTransferPage(): React.ReactElement {
           <span>FROM</span>
           <WarehouseSelector
             onSelectWarehouse={(warehouseId) => setWarehouseFrom(warehouseId)}
+            feature="TRANSFER"
           />
           <span>TO</span>
           <WarehouseSelector

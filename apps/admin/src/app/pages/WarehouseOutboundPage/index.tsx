@@ -30,7 +30,10 @@ export default function WarehouseOutboundPage(): ReactElement {
         </div>
         <Space size="middle" className={styles.warehousePicker}>
           <span>FROM</span>
-          <WarehouseSelector onSelectWarehouse={setSelectedWarehouse} />
+          <WarehouseSelector
+            onSelectWarehouse={setSelectedWarehouse}
+            feature="OUTBOUND"
+          />
           <span>FOR</span>
           <ShopsSelector onSelectShop={setSelectedShop} />
         </Space>
