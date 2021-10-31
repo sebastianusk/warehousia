@@ -39,7 +39,11 @@ export default function WarehouseInboundPage(): React.ReactElement {
       <Card className={styles.card}>
         <InlineProductForm onAdd={onAdd} />
         <Divider />
-        <InboundListEditor dataList={dataList} setData={setDataList} />
+        <InboundListEditor
+          dataList={dataList}
+          setData={setDataList}
+          selectedWarehouse={selectedWarehouse}
+        />
         <div className={`${styles.bottomAction}`}>
           <Space size="middle">
             <ExcelInput

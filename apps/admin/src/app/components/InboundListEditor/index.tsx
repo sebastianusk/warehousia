@@ -7,6 +7,7 @@ import {
   EditableCell,
 } from '../EditableTable';
 import { DataList } from '../../pages/WarehouseInboundPage/hooks';
+import StockCell from '../StockCell';
 
 type DataType = {
   id: string;
@@ -18,6 +19,7 @@ function InboundListEditor(
   props: EditableTableProps & {
     dataList: DataList;
     setData: React.Dispatch<React.SetStateAction<DataList>>;
+    selectedWarehouse?: string;
   }
 ) {
   const handleSave = (row: DataType) => {
@@ -51,7 +53,29 @@ function InboundListEditor(
       dataIndex: 'name',
     },
     {
-      title: 'Amount',
+      title: 'Current WH Stock',
+      dataIndex: 'Stock',
+      render: (_text: any, record: DataType) => (
+        <StockCell
+          productId={record.id}
+          warehouseId={props.selectedWarehouse}
+          dataToShow="stock"
+        />
+      ),
+    },
+    {
+      title: 'Total Stock',
+      dataIndex: 'Stock',
+      render: (_text: any, record: DataType) => (
+        <StockCell
+          productId={record.id}
+          warehouseId={props.selectedWarehouse}
+          dataToShow="total"
+        />
+      ),
+    },
+    {
+      title: 'Add Amount',
       dataIndex: 'amount',
       editable: true,
       onCell: (record: DataType) => ({
@@ -99,3 +123,7 @@ function InboundListEditor(
   );
 }
 export default InboundListEditor;
+
+InboundListEditor.defaultProps = {
+  selectedWarehouse: '',
+};

@@ -115,7 +115,6 @@ export default function useMissingHooks(): MissingState {
     const selectedItem = selectedPrep?.items.find(
       (val) => val.productId === value
     );
-    console.log(selectedItem, 'apa isinya');
     if (selectedItem) {
       form.setFieldsValue(selectedItem);
     }

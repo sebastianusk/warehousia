@@ -14,7 +14,6 @@ export default function useWarehouseTable(): WarehouseListState {
 
   const handleEdit = (dataToEdit: any) => {
     setDataToBeEdited(dataToEdit);
-    console.log(dataToBeEdited, 'ini dari trigger click edit');
     setShowModalEdit(true);
   };
 

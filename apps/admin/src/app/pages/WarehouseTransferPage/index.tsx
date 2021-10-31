@@ -48,7 +48,11 @@ export default function WarehouseTransferPage(): React.ReactElement {
         <h3>Items to transfer</h3>
         <InlineProductForm onAdd={onAdd} />
         <Divider />
-        <InboundListEditor setData={setData} dataList={dataList} />
+        <InboundListEditor
+          setData={setData}
+          dataList={dataList}
+          selectedWarehouse={warehouseFrom}
+        />
         <div className={`${styles.bottomAction}`}>
           <Space size="middle">
             <ExcelInput
