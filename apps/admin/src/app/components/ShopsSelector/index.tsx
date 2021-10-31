@@ -28,6 +28,7 @@ export default function ShopSelector(
       {items?.map((item: any) => (
         <Select.Option
           value={item.id}
+          key={item.id}
         >{`${item.id} -  ${item.name}`}</Select.Option>
       ))}
     </Select>

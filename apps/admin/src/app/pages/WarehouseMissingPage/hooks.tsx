@@ -49,7 +49,6 @@ export default function useMissingHooks(): MissingState {
         })),
       }));
       setDataSource(newData);
-      console.log('on completed retriggered lho');
       if (selectedPrep) {
         setSelectedPrep((prev) => {
           const a = newData.find(
