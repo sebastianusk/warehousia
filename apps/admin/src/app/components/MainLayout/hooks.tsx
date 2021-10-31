@@ -1,10 +1,10 @@
 import { useQuery, useApolloClient } from '@apollo/client';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { GET_ME } from '../../graph';
+import { GlobalContext } from '../GlobalState';
 
 interface LayoutState {
-  loading: boolean;
   userData: UserDataType;
   collapsed: boolean;
   currentDir: string;
@@ -27,7 +27,13 @@ export type GetMeType = {
 export default function useLayoutHooks(): LayoutState {
   const [collapsed, setCollapsed] = useState(false);
   const [currentDir, setCurrentDir] = useState('');
-  const { data, loading } = useQuery<GetMeType>(GET_ME);
+  const { userData } = useContext(GlobalContext);
+
+  useQuery<GetMeType>(GET_ME, {
+    onCompleted: (resp) => {
+      userData.setUserData(resp.me);
+    },
+  });
   const client = useApolloClient();
 
   const history = useHistory();
@@ -49,8 +55,7 @@ export default function useLayoutHooks(): LayoutState {
   };
 
   return {
-    loading,
-    userData: data?.me,
+    userData: userData.userData,
     collapsed,
     currentDir,
     onCollapse,

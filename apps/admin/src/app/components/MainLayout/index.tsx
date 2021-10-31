@@ -9,7 +9,6 @@ import {
 } from '@ant-design/icons';
 import styles from './index.module.css';
 import useLayoutHooks from './hooks';
-import UserContext from '../UserContext';
 
 const { Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -73,9 +72,7 @@ const MainLayout: React.FC = ({ children }) => {
       </Sider>
       <Layout>
         <Content className={styles.contentLayout}>
-          <UserContext.Provider value={userData}>
-            <div className={styles.pageContainer}>{children}</div>
-          </UserContext.Provider>
+          <div className={styles.pageContainer}>{children}</div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>Warehousia ©2021</Footer>
       </Layout>

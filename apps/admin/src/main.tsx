@@ -4,15 +4,19 @@ import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 
 import './styles.css';
+import { GlobalProvider } from 'app/components/GlobalState';
 import App from './app/app';
 import useGraphQLClient from './app/config/client';
 
 function Initializer(): React.ReactElement {
   const { client, contextHolder } = useGraphQLClient();
+
   return (
     <ApolloProvider client={client}>
       {contextHolder}
-      <App />
+      <GlobalProvider>
+        <App />
+      </GlobalProvider>
     </ApolloProvider>
   );
 }
