@@ -12,7 +12,7 @@ interface WarehouseSelectorProps {
   feature?: string | undefined;
 }
 
-export default function WarehouseSelector({
+export default function WarehouseSelectorTo({
   all,
   feature,
 }: WarehouseSelectorProps): React.ReactElement {
@@ -39,15 +39,15 @@ export default function WarehouseSelector({
     },
   });
 
-  const onSelectWarehouse = (val: string) => {
-    warehouse.setSelectedWarehouse(val);
+  const onSelectWarehouseTo = (val: string) => {
+    warehouse.setSelectedWarehouseTo(val);
   };
 
   return (
     <Select
       className={styles.select}
-      onChange={(value) => onSelectWarehouse((value || '') as string)}
-      value={warehouse.selectedWarehouse}
+      onChange={(value) => onSelectWarehouseTo((value || '') as string)}
+      value={warehouse.selectedWarehouseTo}
     >
       {warehouse.warehousesList?.map((item: any) => (
         <Select.Option
@@ -59,7 +59,7 @@ export default function WarehouseSelector({
   );
 }
 
-WarehouseSelector.defaultProps = {
+WarehouseSelectorTo.defaultProps = {
   all: false,
   feature: undefined,
 };
