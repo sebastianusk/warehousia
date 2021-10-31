@@ -10,7 +10,6 @@ import styles from './index.module.css';
 export default function WarehousePreparingPage(): ReactElement {
   const {
     selectedWarehouse,
-    onSelectWarehouse,
     onSubmit,
     loading,
     shopsOption,
@@ -27,7 +26,7 @@ export default function WarehousePreparingPage(): ReactElement {
           <div className={styles.flexContainer}>
             <div>
               <div>Warehouse ID:</div>
-              <WarehouseSelector onSelectWarehouse={onSelectWarehouse} />
+              <WarehouseSelector />
             </div>
             <div className={styles.shopSelectorContainer}>
               <div>Select Shop(s):</div>

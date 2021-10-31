@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { message } from 'antd';
 import { ADD_PREPARATION, GET_OUTBOUNDS, GET_SHOPS } from 'app/graph';
 import createPreparingXlsx from 'app/lib/xlsx/preparingXlsx';
+import { GlobalContext } from 'app/components/GlobalState';
 
 interface PreparingState {
-  onSelectWarehouse: (warehouseId: string) => void;
   selectedWarehouse: string;
   shopsOption:
     | {
@@ -35,7 +35,7 @@ type DataOutbounds =
   | [];
 
 export default function usePreparingHooks(): PreparingState {
-  const [selectedWarehouse, setSelectedWarehouse] = useState('');
+  const { warehouse } = useContext(GlobalContext);
   const [shopsOption, setShopsOption] = useState([]);
   const [selectedShops, setSelectedShops] = useState([]);
   const [dataOutbounds, setDataOutbounds] = useState<DataOutbounds>([]);
@@ -74,12 +74,11 @@ export default function usePreparingHooks(): PreparingState {
     fetchPolicy: 'no-cache',
   });
 
-  const onSelectWarehouse = (warehouseId: string) => {
+  useEffect(() => {
     setDataOutbounds([]);
     setDataSource([]);
     setSelectedShops([]);
-    setSelectedWarehouse(warehouseId);
-  };
+  }, [warehouse.selectedWarehouse]);
 
   const onChangeSelectShops = (shopIds: any) => {
     setSelectedShops(shopIds);
@@ -94,7 +93,7 @@ export default function usePreparingHooks(): PreparingState {
       } else {
         getOutbounds({
           variables: {
-            warehouseId: selectedWarehouse,
+            warehouseId: warehouse.selectedWarehouse,
             shopId,
           },
         });
@@ -105,7 +104,7 @@ export default function usePreparingHooks(): PreparingState {
   const onSubmit = () => {
     addPreparation({
       variables: {
-        warehouseId: selectedWarehouse,
+        warehouseId: warehouse.selectedWarehouse,
         shopId: selectedShops,
       },
     }).then((resp) => {
@@ -113,7 +112,7 @@ export default function usePreparingHooks(): PreparingState {
         createPreparingXlsx(
           dataSource,
           resp.data.addPreparation.id,
-          selectedWarehouse,
+          warehouse.selectedWarehouse,
           selectedShops
         );
         message.info('Successfully create Preparation');
@@ -128,8 +127,7 @@ export default function usePreparingHooks(): PreparingState {
   };
 
   return {
-    onSelectWarehouse,
-    selectedWarehouse,
+    selectedWarehouse: warehouse.selectedWarehouse,
     shopsOption,
     onChangeSelectShops,
     selectedShops,

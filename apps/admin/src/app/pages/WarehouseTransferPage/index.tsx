@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Divider, Button, Space, message } from 'antd';
 import WarehouseSelector from 'app/components/WarehousesSelector';
+import WarehouseSelectorTo from 'app/components/WarehousesSelectorTo';
 import InlineProductForm from 'app/components/inlineProductForm';
 import InboundListEditor from 'app/components/InboundListEditor';
 import ExcelInput from 'app/components/ExcelInput';
@@ -12,9 +13,7 @@ import useTransferPageHooks from './hooks';
 
 export default function WarehouseTransferPage(): React.ReactElement {
   const {
-    setWarehouseFrom,
     warehouseFrom,
-    setWarehouseTo,
     warehouseTo,
     onAdd,
     dataList,
@@ -33,15 +32,9 @@ export default function WarehouseTransferPage(): React.ReactElement {
         </div>
         <Space size="middle" className={styles.warehousePicker}>
           <span>FROM</span>
-          <WarehouseSelector
-            onSelectWarehouse={(warehouseId) => setWarehouseFrom(warehouseId)}
-            feature="TRANSFER"
-          />
+          <WarehouseSelector feature="TRANSFER" />
           <span>TO</span>
-          <WarehouseSelector
-            onSelectWarehouse={(warehouseId) => setWarehouseTo(warehouseId)}
-            all
-          />
+          <WarehouseSelectorTo all />
         </Space>
       </Card>
       <Card className={styles.card}>

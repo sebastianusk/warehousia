@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { message } from 'antd';
 import { ADD_OUTBOUND } from 'app/graph';
+import { GlobalContext } from 'app/components/GlobalState';
 
 interface OutboundState {
   selectedShop: string;
   selectedWarehouse: string;
-  setSelectedWarehouse: (warehouseId: string) => void;
   setSelectedShop: (shopId: string) => void;
   onAdd: (data: Data) => void;
   onSubmit(): void;
@@ -24,7 +24,7 @@ type Data = {
 };
 
 export default function useOutboundHooks(): OutboundState {
-  const [selectedWarehouse, setSelectedWarehouse] = useState('');
+  const { warehouse } = useContext(GlobalContext);
   const [selectedShop, setSelectedShop] = useState('');
   const [dataList, setDataList] = useState<DataList>([]);
   const [addOutbound, { loading }] = useMutation(ADD_OUTBOUND);
@@ -40,7 +40,7 @@ export default function useOutboundHooks(): OutboundState {
     }));
     addOutbound({
       variables: {
-        warehouseId: selectedWarehouse,
+        warehouseId: warehouse.selectedWarehouse,
         shopId: selectedShop,
         items: dataSubmit,
       },
@@ -55,9 +55,8 @@ export default function useOutboundHooks(): OutboundState {
   };
 
   return {
-    selectedWarehouse,
+    selectedWarehouse: warehouse.selectedWarehouse,
     selectedShop,
-    setSelectedWarehouse,
     setSelectedShop,
     onAdd,
     onSubmit,

@@ -8,7 +8,6 @@ import styles from './index.module.css';
 export default function WarehouseMissingPage(): ReactElement {
   const {
     selectedWarehouse,
-    onSelectWarehouse,
     dataSource,
     selectedPrep,
     onSelectPreparation,
@@ -26,7 +25,7 @@ export default function WarehouseMissingPage(): ReactElement {
           <div className={styles.flexContainer}>
             <div className={styles.selectContainer}>
               <div>Warehouse ID:</div>
-              <WarehouseSelector onSelectWarehouse={onSelectWarehouse} />
+              <WarehouseSelector />
             </div>
             <div className={styles.selectContainer}>
               <div>Preparation ID:</div>

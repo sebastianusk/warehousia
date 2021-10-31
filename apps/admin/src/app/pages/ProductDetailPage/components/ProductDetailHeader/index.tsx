@@ -6,7 +6,7 @@ import { GET_PRODUCT_STOCK } from 'app/graph';
 import Column from 'antd/lib/table/Column';
 
 import { useHistory } from 'react-router-dom';
-import UserContext from 'app/components/UserContext';
+import { GlobalContext } from 'app/components/GlobalState';
 import styles from './index.module.css';
 import ProductEditModal from '../ProductEditModal';
 import useProductEditStockModal from '../ProductEditStockModal';
@@ -28,7 +28,7 @@ export default function ProductDetailHeader(props: {
   const { contextHolder, showEditStockModal } = useProductEditStockModal();
   const history = useHistory();
 
-  const user = useContext(UserContext);
+  const { userData } = useContext(GlobalContext);
 
   return (
     <Card className={styles.card} key="header">
@@ -89,7 +89,7 @@ export default function ProductDetailHeader(props: {
               key="amount"
               width="30%"
             />
-            {user?.role === 'SUPER_ADMIN' ? (
+            {userData.userData?.role === 'SUPER_ADMIN' ? (
               <Column
                 title="Edit"
                 key="edit"

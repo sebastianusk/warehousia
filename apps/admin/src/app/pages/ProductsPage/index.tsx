@@ -16,8 +16,6 @@ export default function ProductsPage(): React.ReactElement {
     showBulkModal,
     setShowBulkModal,
     openBulkModal,
-    warehouse,
-    setWarehouse,
   } = useProductsPageHooks();
 
   return (
@@ -26,7 +24,7 @@ export default function ProductsPage(): React.ReactElement {
         <div className={`${styles.flexContainer}`}>
           <div>
             <h2>PRODUCTS</h2>
-            <WarehouseSelector onSelectWarehouse={setWarehouse} all />
+            <WarehouseSelector all />
           </div>
           <div>
             <Button className={styles.buttonAddOne} onClick={openModal}>
@@ -36,11 +34,7 @@ export default function ProductsPage(): React.ReactElement {
           </div>
         </div>
       </Card>
-      {warehouse ? (
-        <ProductListComponent selectedWarehouse={warehouse} />
-      ) : (
-        <div />
-      )}
+      <ProductListComponent />
       <ModalAddProduct visible={showModal} setVisible={setShowModal} />
       <ModalAddProductBulk
         visible={showBulkModal}

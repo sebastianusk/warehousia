@@ -1,11 +1,11 @@
 import { useMutation } from '@apollo/client';
 import { message } from 'antd';
-import { useState } from 'react';
+import { GlobalContext } from 'app/components/GlobalState';
+import { useContext, useState } from 'react';
 import { ADD_INBOUND } from '../../graph';
 
 interface InboundState {
   selectedWarehouse: string;
-  setSelectedWarehouse: (warehouseId: string) => void;
   error: { id: string }[];
   setError: (data: { id: string }[]) => void;
   dataList: DataList;
@@ -24,10 +24,10 @@ type Data = {
 };
 
 export default function useInboundHooks(): InboundState {
-  const [selectedWarehouse, setSelectedWarehouse] = useState('');
   const [error, setError] = useState<{ id: string }[]>([]);
   const [dataList, setDataList] = useState<DataList>([]);
   const [addInbound, { loading }] = useMutation(ADD_INBOUND);
+  const { warehouse } = useContext(GlobalContext);
 
   const onAdd = (data: Data) => {
     setDataList((prev) => [...prev, data]);
@@ -40,7 +40,7 @@ export default function useInboundHooks(): InboundState {
     }));
     addInbound({
       variables: {
-        warehouseId: selectedWarehouse,
+        warehouseId: warehouse.selectedWarehouse,
         items: dataSubmit,
       },
     }).then(() => {
@@ -50,8 +50,7 @@ export default function useInboundHooks(): InboundState {
   };
 
   return {
-    selectedWarehouse,
-    setSelectedWarehouse,
+    selectedWarehouse: warehouse.selectedWarehouse,
     error,
     setError,
     dataList,

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Card, Input, Table } from 'antd';
 import { useQuery, useApolloClient } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { GET_PRODUCTS } from '../../graph';
-import type { Warehouse } from '../../pages/ProductsPage/hooks';
 import styles from './index.module.css';
 import Page from '../Page';
+import { GlobalContext } from '../GlobalState';
 
 type DataType = {
   id: string;
@@ -20,29 +20,26 @@ type DataType = {
 
 const LIMIT = 5;
 
-export default function ProductListComponent(props: {
-  selectedWarehouse: string;
-}): React.ReactElement {
+export default function ProductListComponent(): React.ReactElement {
   const history = useHistory();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const client = useApolloClient();
+  const { warehouse } = useContext(GlobalContext);
   const { loading, error, data, fetchMore } = useQuery(GET_PRODUCTS, {
     variables: {
-      warehouseId: props.selectedWarehouse,
+      warehouseId: warehouse.selectedWarehouse,
       query: '',
       offset: (page - 1) * LIMIT,
       limit: LIMIT,
     },
+    skip: !warehouse.selectedWarehouse,
   });
   useEffect(() => {
     client.refetchQueries({
       include: ['products'],
     });
-  }, [client, props.selectedWarehouse, search]);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error.toString()}</div>;
+  }, [client, warehouse.selectedWarehouse, search]);
 
   const handleViewDetail = (item: DataType) => {
     history.push(`/product-detail/${item.id}`);
@@ -107,6 +104,9 @@ export default function ProductListComponent(props: {
     },
   ];
 
+  if (!warehouse.selectedWarehouse) return <></>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error.toString()}</div>;
   return (
     <Card className={styles.card}>
       <div>

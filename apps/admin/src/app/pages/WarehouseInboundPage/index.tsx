@@ -13,7 +13,6 @@ import useInboundHooks from './hooks';
 export default function WarehouseInboundPage(): React.ReactElement {
   const {
     selectedWarehouse,
-    setSelectedWarehouse,
     error,
     setError,
     dataList,
@@ -30,10 +29,7 @@ export default function WarehouseInboundPage(): React.ReactElement {
       <Card className={styles.card}>
         <div className={`${styles.flexContainer}`}>
           <h2 className={styles.title}>CREATE INBOUND</h2>
-          <WarehouseSelector
-            onSelectWarehouse={setSelectedWarehouse}
-            feature="INBOUND"
-          />
+          <WarehouseSelector feature="INBOUND" />
         </div>
       </Card>
       <Card className={styles.card}>

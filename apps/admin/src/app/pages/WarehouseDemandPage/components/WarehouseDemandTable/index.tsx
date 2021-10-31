@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Card, Table } from 'antd';
 import { GET_DEMANDS } from 'app/graph';
 import { useQuery } from '@apollo/client';
 import Page from 'app/components/Page';
+import { GlobalContext } from 'app/components/GlobalState';
 
 const LIMIT = 10;
 
 export default function WarehouseDemandTable(props: {
-  warehouse: string;
   shopId: string;
 }): React.ReactElement {
   const [page, setPage] = useState(1);
+  const { warehouse } = useContext(GlobalContext);
+
   const { data, fetchMore } = useQuery(GET_DEMANDS, {
     variables: {
-      warehouseId: props.warehouse,
+      warehouseId: warehouse.selectedWarehouse,
       shopId: props.shopId,
       limit: LIMIT,
       offset: (page - 1) * LIMIT,

@@ -15,14 +15,11 @@ interface ProductsPageState {
   showBulkModal: boolean;
   setShowBulkModal: Dispatch<SetStateAction<boolean>>;
   openBulkModal: () => void;
-  warehouse: string | undefined;
-  setWarehouse: (warehouse: string) => void;
 }
 
 export default function useProductsPageHooks(): ProductsPageState {
   const [showModal, setShowModal] = useState(false);
   const [showBulkModal, setShowBulkModal] = useState(false);
-  const [warehouse, setWarehouse] = useState<string | undefined>();
 
   const openModal = () => {
     setShowModal(true);
@@ -39,7 +36,5 @@ export default function useProductsPageHooks(): ProductsPageState {
     showBulkModal,
     setShowBulkModal,
     openBulkModal,
-    warehouse,
-    setWarehouse,
   };
 }

@@ -9,7 +9,6 @@ import styles from './index.module.css';
 export default function WarehouseTransactionPage(): ReactElement {
   const {
     selectedWarehouse,
-    onSelectWarehouse,
     dataSource,
     selectedPrep,
     onSelectPreparation,
@@ -24,7 +23,7 @@ export default function WarehouseTransactionPage(): ReactElement {
           <h2 className={styles.title}>CREATE TRANSACTION</h2>
           <div>
             <div>Warehouse ID:</div>
-            <WarehouseSelector onSelectWarehouse={onSelectWarehouse} />
+            <WarehouseSelector />
           </div>
           <div className={styles.prepSelector}>
             <div>Preparation ID:</div>

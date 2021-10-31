@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { message, notification, Table } from 'antd';
 
 import createTransactionXlsx from 'app/lib/xlsx/transactionXlsx';
 import { ADD_TRANSACTION, GET_PREPARATION } from 'app/graph';
+import { GlobalContext } from 'app/components/GlobalState';
 
 type Preparation =
   | {
@@ -21,7 +22,6 @@ type Preparation =
 
 interface TransactionState {
   selectedWarehouse: string;
-  onSelectWarehouse: (warehouseId: string) => void;
   dataSource: DataSource;
   selectedPrep: Preparation | undefined;
   onSelectPreparation: (id: string) => void;
@@ -32,14 +32,14 @@ interface TransactionState {
 export type DataSource = Preparation[] | [];
 
 export default function useTransactionHooks(): TransactionState {
-  const [selectedWarehouse, setSelectedWarehouse] = useState('');
+  const { warehouse } = useContext(GlobalContext);
   const [dataSource, setDataSource] = useState<DataSource>([]);
   const [selectedPrep, setSelectedPrep] = useState<Preparation>();
   const [addTransaction, { loading }] = useMutation(ADD_TRANSACTION);
 
   const { refetch } = useQuery(GET_PREPARATION, {
     variables: {
-      warehouseId: selectedWarehouse,
+      warehouseId: warehouse.selectedWarehouse,
     },
     onCompleted(response) {
       if (response?.preparations?.data.length > 0) {
@@ -50,13 +50,9 @@ export default function useTransactionHooks(): TransactionState {
 
   useEffect(() => {
     refetch({
-      warehouseId: selectedWarehouse,
+      warehouseId: warehouse.selectedWarehouse,
     });
-  }, [refetch, selectedWarehouse]);
-
-  const onSelectWarehouse = (warehouseId: string) => {
-    setSelectedWarehouse(warehouseId);
-  };
+  }, [refetch, warehouse.selectedWarehouse]);
 
   const onSelectPreparation = (e: string) => {
     dataSource.forEach((datum) => {
@@ -137,7 +133,7 @@ export default function useTransactionHooks(): TransactionState {
           });
         }
         refetch({
-          warehouseId: selectedWarehouse,
+          warehouseId: warehouse.selectedWarehouse,
         });
       } else {
         console.log(resp.errors);
@@ -146,8 +142,7 @@ export default function useTransactionHooks(): TransactionState {
   };
 
   return {
-    selectedWarehouse,
-    onSelectWarehouse,
+    selectedWarehouse: warehouse.selectedWarehouse,
     dataSource,
     selectedPrep,
     onSelectPreparation,

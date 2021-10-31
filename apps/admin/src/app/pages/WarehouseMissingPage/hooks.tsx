@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { message } from 'antd';
 import { FormInstance, useForm } from 'antd/lib/form/Form';
 
 import { ADD_MISSING, GET_PREPARATION } from 'app/graph';
+import { GlobalContext } from 'app/components/GlobalState';
 
 type Preparation =
   | {
@@ -20,7 +21,6 @@ type Preparation =
 
 interface MissingState {
   selectedWarehouse: string;
-  onSelectWarehouse: (warehouseId: string) => void;
   dataSource: DataSource;
   selectedPrep: Preparation | undefined;
   onSelectPreparation: (id: string) => void;
@@ -33,7 +33,7 @@ interface MissingState {
 export type DataSource = Preparation[] | [];
 
 export default function useMissingHooks(): MissingState {
-  const [selectedWarehouse, setSelectedWarehouse] = useState('');
+  const { warehouse } = useContext(GlobalContext);
   const [dataSource, setDataSource] = useState<DataSource>([]);
   const [selectedPrep, setSelectedPrep] = useState<Preparation>();
   const [addMissing, { loading }] = useMutation(ADD_MISSING);
@@ -63,7 +63,7 @@ export default function useMissingHooks(): MissingState {
 
   const { refetch } = useQuery(GET_PREPARATION, {
     variables: {
-      warehouseId: selectedWarehouse,
+      warehouseId: warehouse.selectedWarehouse,
     },
     onCompleted: onCompletedFetchPrep,
     notifyOnNetworkStatusChange: true,
@@ -71,13 +71,9 @@ export default function useMissingHooks(): MissingState {
 
   useEffect(() => {
     refetch({
-      warehouseId: selectedWarehouse,
+      warehouseId: warehouse.selectedWarehouse,
     });
-  }, [refetch, selectedWarehouse]);
-
-  const onSelectWarehouse = (warehouseId: string) => {
-    setSelectedWarehouse(warehouseId);
-  };
+  }, [refetch, warehouse.selectedWarehouse]);
 
   const onSelectPreparation = (e: string) => {
     dataSource.forEach((datum) => {
@@ -103,7 +99,7 @@ export default function useMissingHooks(): MissingState {
         message.info('Successfully update Missing Item');
         form.resetFields();
         refetch({
-          warehouseId: selectedWarehouse,
+          warehouseId: warehouse.selectedWarehouse,
         });
       } else {
         console.log(resp.errors);
@@ -121,8 +117,7 @@ export default function useMissingHooks(): MissingState {
   };
 
   return {
-    selectedWarehouse,
-    onSelectWarehouse,
+    selectedWarehouse: warehouse.selectedWarehouse,
     dataSource,
     selectedPrep,
     onSelectPreparation,

@@ -1,13 +1,12 @@
 import { useMutation } from '@apollo/client';
 import { message } from 'antd';
+import { GlobalContext } from 'app/components/GlobalState';
 import { ADD_TRANSFER } from 'app/graph';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 interface TransferPageState {
   warehouseFrom: string;
-  setWarehouseFrom: (id: string) => void;
   warehouseTo: string;
-  setWarehouseTo: (id: string) => void;
   dataList: { id: string; name: string; amount: number }[];
   setData: React.Dispatch<React.SetStateAction<Data[]>>;
   onAdd: (data: Data) => void;
@@ -24,8 +23,7 @@ type Data = {
 };
 
 export default function useTranserPageHooks(): TransferPageState {
-  const [warehouseFrom, setWarehouseFrom] = useState('');
-  const [warehouseTo, setWarehouseTo] = useState('');
+  const { warehouse } = useContext(GlobalContext);
   const [error, setError] = useState<{ id: string; message: string }[]>([]);
   const [dataList, setData] = useState<Data[]>([]);
   const [submitTransfer, { loading }] = useMutation(ADD_TRANSFER);
@@ -33,8 +31,8 @@ export default function useTranserPageHooks(): TransferPageState {
   const onSubmit = () => {
     submitTransfer({
       variables: {
-        warehouseId: warehouseFrom,
-        destinationId: warehouseTo,
+        warehouseId: warehouse.selectedWarehouse,
+        destinationId: warehouse.warehouseTo,
         items: dataList.map(({ id, amount }) => ({ productId: id, amount })),
       },
     }).then((data) => {
@@ -57,10 +55,8 @@ export default function useTranserPageHooks(): TransferPageState {
   };
 
   return {
-    warehouseFrom,
-    setWarehouseFrom,
-    warehouseTo,
-    setWarehouseTo,
+    warehouseFrom: warehouse.selectedWarehouse,
+    warehouseTo: warehouse.selectedWarehouseTo,
     dataList,
     setData,
     onAdd,
