@@ -38,8 +38,23 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - "./postgres:/var/lib/postgresql/data"
+      - "./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
   watchtower:
-    image: containrrr/watchtower
+    image: containrrr/watchtower:1.3.0
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command: --interval 900
+  metabase:
+    image: metabase/metabase:v0.41.1
+    ports:
+      - 3000:3000
+    environment:
+      JAVA_OPTS: -Xmx1g
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase
+      MB_DB_PORT: 5432
+      MB_DB_USER: postgres
+      MB_DB_PASS: postgres
+      MB_DB_HOST: postgres
+    depends_on:
+      - "postgres"
