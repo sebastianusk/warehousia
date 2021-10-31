@@ -53,6 +53,7 @@ export default function WarehouseSelectorTo({
         <Select.Option
           key={item.id}
           value={item.id}
+          disabled={item.id === warehouse.selectedWarehouse}
         >{`${item.id} -  ${item.name}`}</Select.Option>
       ))}
     </Select>
