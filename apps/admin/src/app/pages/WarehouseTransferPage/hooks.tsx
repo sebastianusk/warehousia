@@ -32,7 +32,7 @@ export default function useTranserPageHooks(): TransferPageState {
     submitTransfer({
       variables: {
         warehouseId: warehouse.selectedWarehouse,
-        destinationId: warehouse.warehouseTo,
+        destinationId: warehouse.selectedWarehouseTo,
         items: dataList.map(({ id, amount }) => ({ productId: id, amount })),
       },
     }).then((data) => {

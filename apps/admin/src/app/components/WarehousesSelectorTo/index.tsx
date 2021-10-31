@@ -35,7 +35,7 @@ export default function WarehouseSelectorTo({
           return true;
         }
       );
-      warehouse.setWarehousesList(items);
+      warehouse.setWarehousesListTo(items);
     },
   });
 
@@ -49,7 +49,7 @@ export default function WarehouseSelectorTo({
       onChange={(value) => onSelectWarehouseTo((value || '') as string)}
       value={warehouse.selectedWarehouseTo}
     >
-      {warehouse.warehousesList?.map((item: any) => (
+      {warehouse.warehousesListTo?.map((item: any) => (
         <Select.Option
           key={item.id}
           value={item.id}
