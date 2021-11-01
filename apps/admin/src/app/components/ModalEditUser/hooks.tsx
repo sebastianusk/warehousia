@@ -1,24 +1,15 @@
-import { useState, Dispatch, SetStateAction, useEffect } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
+import { message } from 'antd';
+import { FormInstance, useForm } from 'antd/lib/form/Form';
 import { EDIT_ADMIN, GET_ADMINS, GET_WAREHOUSES } from '../../graph';
 
-type UserData = {
-  username: string;
-  role: 'ADMIN' | 'SUPER_ADMIN';
-  warehouses: string[];
-  active: boolean;
-};
-
 interface ModalEditUserState {
-  confirmLoading: boolean;
-  handleOk: () => void;
+  handleOk: (value: any) => void;
   handleCancel: () => void;
-  formData: UserData;
-  onChangeUsername: (e: any) => void;
-  onChangeRole: (e: any) => void;
-  onChangeWarehouses: (e: any) => void;
   loadingDataWarehouses: boolean;
   warehousesOptions: WarehousesOptions;
+  form: FormInstance;
 }
 
 type WarehousesOptions = {
@@ -34,19 +25,12 @@ type WarehouseType = {
 };
 
 export default function useModalEditUserHooks(
-  setVisible: Dispatch<SetStateAction<boolean>>,
-  userData: UserData
+  setVisible: Dispatch<SetStateAction<boolean>>
 ): ModalEditUserState {
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [formData, setFormData] = useState(userData);
-
+  const [form] = useForm();
   const [warehousesOptions, setWarehousesOptions] = useState<WarehousesOptions>(
     []
   );
-
-  useEffect(() => {
-    setFormData(userData);
-  }, [userData]);
 
   const { loading: loadingDataWarehouses } = useQuery(GET_WAREHOUSES, {
     onCompleted(dataWarehouses) {
@@ -63,27 +47,31 @@ export default function useModalEditUserHooks(
 
   const [editAdmin] = useMutation(EDIT_ADMIN, {
     onCompleted() {
-      setConfirmLoading(false);
+      message.info('Success edit user');
       setVisible(false);
     },
-  });
-
-  const handleOk = () => {
-    setConfirmLoading(true);
-    editAdmin({
-      variables: { input: formData },
-      refetchQueries: [
-        {
-          query: GET_ADMINS,
-          variables: {
-            query: '',
-            pagination: {
-              offset: 0,
-              limit: 10,
-            },
+    refetchQueries: [
+      {
+        query: GET_ADMINS,
+        variables: {
+          query: '',
+          pagination: {
+            offset: 0,
+            limit: 10,
           },
         },
-      ],
+      },
+    ],
+  });
+
+  const handleOk = (value: any) => {
+    let input = value;
+    if (!value.password) {
+      const { password, ...noPassword } = value;
+      input = noPassword;
+    }
+    editAdmin({
+      variables: { input },
     });
   };
 
@@ -91,27 +79,11 @@ export default function useModalEditUserHooks(
     setVisible(false);
   };
 
-  const onChangeUsername = (e: any) => {
-    setFormData({ ...formData, username: e.target.value });
-  };
-
-  const onChangeRole = (e: any) => {
-    setFormData({ ...formData, role: e.target.value });
-  };
-
-  const onChangeWarehouses = (e: any) => {
-    setFormData({ ...formData, warehouses: e });
-  };
-
   return {
-    confirmLoading,
     handleOk,
     handleCancel,
-    formData,
-    onChangeUsername,
-    onChangeRole,
-    onChangeWarehouses,
     loadingDataWarehouses,
     warehousesOptions,
+    form,
   };
 }

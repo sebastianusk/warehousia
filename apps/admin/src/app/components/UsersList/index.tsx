@@ -1,11 +1,11 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Card, Col, Row, Tag } from 'antd';
 import { EditOutlined, RightOutlined } from '@ant-design/icons';
 
 import useUserListHook from './hooks';
 import styles from './index.module.css';
 import ModalEditUser from '../ModalEditUser';
-import { useHistory } from 'react-router-dom';
 
 type UsersListProps = {
   data: UsersListType;
@@ -31,6 +31,7 @@ export default function UsersList({
         visible={showModalEdit}
         setVisible={setShowModalEdit}
         userData={dataToEdit}
+        key={dataToEdit.username}
       />
       <Row gutter={16}>
         {data.map((user) => (
@@ -65,7 +66,9 @@ export default function UsersList({
                     onClick={() => {
                       history.push(`/admin-detail/${user.username}`);
                     }}
-                    onKeyUp={() => onClickEdit(user)}
+                    onKeyUp={() => {
+                      history.push(`/admin-detail/${user.username}`);
+                    }}
                   >
                     <RightOutlined />
                   </div>
