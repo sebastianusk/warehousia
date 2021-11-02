@@ -1,66 +1,94 @@
-import React from 'react';
-import { Form, Input, Modal } from 'antd';
+import React, { Dispatch, SetStateAction } from 'react';
+import { Modal, Form, Button, message, InputNumber } from 'antd';
+import { useMutation } from '@apollo/client';
 import { useForm } from 'antd/lib/form/Form';
 import { UPDATE_PRODUCT_STOCK } from 'app/graph';
-import { useApolloClient, useMutation } from '@apollo/client';
 
-interface ProductEditStockModalState {
-  showEditStockModal: (
-    productId: string,
-    warehouseId: string,
-    amount: number
-  ) => void;
-  contextHolder: React.ReactElement;
-}
+type ModalProps = {
+  visible: boolean;
+  setVisible: Dispatch<SetStateAction<boolean>>;
+  dataToEdit: {
+    productId: string;
+    warehouseId: string;
+    amount: number;
+  };
+  key: string;
+};
 
-export default function useProductEditStockModal(): ProductEditStockModalState {
-  const client = useApolloClient();
-  const [modal, contextHolder] = Modal.useModal();
+export default function ModalEditUser({
+  visible,
+  setVisible,
+  dataToEdit,
+  key,
+}: ModalProps) {
   const [form] = useForm();
   const [updateStock, { loading }] = useMutation(UPDATE_PRODUCT_STOCK, {
-    onCompleted: () => {
-      client.refetchQueries({ include: ['ProductStock', 'ProductLog'] });
+    refetchQueries: ['ProductStock', 'ProductLog'],
+    onCompleted() {
+      message.info('Success edit stock');
+      setVisible(false);
     },
   });
-  const showEditStockModal = (
-    productId: string,
-    warehouseId: string,
-    amount: number
-  ) => {
-    modal.confirm({
-      title: 'Change Product Stock',
-      width: 400,
-      icon: false,
-      okButtonProps: { loading },
-      onOk: (close: () => void) => {
-        const values = form.getFieldsValue();
-        updateStock({
-          variables: {
-            input: {
-              id: productId,
-              warehouse: warehouseId,
-              stock: parseInt(values.amount, 10),
-            },
-          },
-          onCompleted: () => {
-            close();
-          },
-        });
+
+  const handleSubmit = () => {
+    updateStock({
+      variables: {
+        input: {
+          id: dataToEdit.productId,
+          warehouse: dataToEdit.warehouseId,
+          stock: form.getFieldValue('amount'),
+        },
       },
-      content: (
-        <Form labelCol={{ span: 8 }} labelAlign="left" form={form}>
-          <Form.Item label="Product ID" key="productId">
-            {productId}
-          </Form.Item>
-          <Form.Item label="Warehouse ID" key="warehouseId">
-            {warehouseId}
-          </Form.Item>
-          <Form.Item label="Stock" key="amount" initialValue={amount}>
-            <Input type="number" />
-          </Form.Item>
-        </Form>
-      ),
     });
   };
-  return { contextHolder, showEditStockModal };
+
+  const handleCancel = () => {
+    form.resetFields();
+    setVisible(false);
+  };
+
+  return (
+    <>
+      <Modal
+        title="Edit Admin"
+        visible={visible}
+        onCancel={handleCancel}
+        key={key}
+        width={400}
+        footer={[
+          <Button
+            type="primary"
+            form="editStockForm"
+            key="submit"
+            htmlType="submit"
+            loading={loading}
+          >
+            Submit
+          </Button>,
+        ]}
+      >
+        <Form
+          id="editStockForm"
+          labelCol={{ span: 8 }}
+          labelAlign="left"
+          form={form}
+          onFinish={handleSubmit}
+        >
+          <Form.Item label="Product ID" name="productId">
+            {dataToEdit.productId}
+          </Form.Item>
+          <Form.Item label="Warehouse ID" name="warehouseId">
+            {dataToEdit.warehouseId}
+          </Form.Item>
+          <Form.Item
+            label="Stock"
+            name="amount"
+            initialValue={dataToEdit.amount}
+          >
+            <InputNumber type="number" min={0} />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </>
+  );
 }

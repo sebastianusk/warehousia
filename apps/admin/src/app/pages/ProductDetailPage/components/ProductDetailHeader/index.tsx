@@ -9,12 +9,20 @@ import { useHistory } from 'react-router-dom';
 import { GlobalContext } from 'app/components/GlobalState';
 import styles from './index.module.css';
 import ProductEditModal from '../ProductEditModal';
-import useProductEditStockModal from '../ProductEditStockModal';
+import ProductEditStockModal from '../ProductEditStockModal';
+
+type DataEditStock = { warehouseId: string; amount: number };
 
 export default function ProductDetailHeader(props: {
   productId: string;
 }): React.ReactElement {
   const [modal, setModal] = useState(false);
+  const [modalStock, setModalStock] = useState(false);
+  const [dataModalStock, setDataModalStock] = useState({
+    productId: '',
+    warehouseId: '',
+    amount: 0,
+  });
   const { loading, data } = useQuery(GET_PRODUCT_STOCK, {
     variables: { productId: props.productId },
   });
@@ -22,13 +30,21 @@ export default function ProductDetailHeader(props: {
   const item: {
     name: string;
     price: number;
-    stocks: { warehouseId: string; amount: number }[];
+    stocks: DataEditStock[];
   } = data?.productStock;
 
-  const { contextHolder, showEditStockModal } = useProductEditStockModal();
   const history = useHistory();
 
   const { userData } = useContext(GlobalContext);
+
+  const onClickEdit = ({ warehouseId, amount }: DataEditStock) => {
+    setDataModalStock({
+      productId: props.productId,
+      warehouseId,
+      amount,
+    });
+    setModalStock(true);
+  };
 
   return (
     <Card className={styles.card} key="header">
@@ -36,7 +52,6 @@ export default function ProductDetailHeader(props: {
         <Spin size="large" />
       ) : (
         <div>
-          {contextHolder}
           {item ? (
             <ProductEditModal
               visible={modal}
@@ -95,15 +110,11 @@ export default function ProductDetailHeader(props: {
                 key="edit"
                 render={(
                   _text: any,
-                  record: { warehouseId: string; amount: number }
+                  { warehouseId, amount }: DataEditStock
                 ) => (
                   <a
                     onClick={() => {
-                      showEditStockModal(
-                        props.productId,
-                        record.warehouseId,
-                        record.amount
-                      );
+                      onClickEdit({ warehouseId, amount });
                     }}
                     role="presentation"
                   >
@@ -113,6 +124,12 @@ export default function ProductDetailHeader(props: {
               />
             ) : undefined}
           </Table>
+          <ProductEditStockModal
+            visible={modalStock}
+            setVisible={setModalStock}
+            dataToEdit={dataModalStock}
+            key={dataModalStock.warehouseId}
+          />
         </div>
       )}
     </Card>

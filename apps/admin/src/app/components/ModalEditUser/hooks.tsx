@@ -76,6 +76,7 @@ export default function useModalEditUserHooks(
   };
 
   const handleCancel = () => {
+    form.resetFields();
     setVisible(false);
   };
 
