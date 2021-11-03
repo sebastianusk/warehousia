@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card } from 'antd';
 import ProductListComponent from 'app/components/ProductListComponent';
-import WarehouseSelector from 'app/components/WarehousesSelector';
+import WarehouseSelectorAll from 'app/components/WarehousesSelectorAll';
 import ModalAddProduct from '../../components/ModalAddProduct';
 import useProductsPageHooks from './hooks';
 import ModalAddProductBulk from '../../components/ModalAddProductBulk';
@@ -24,7 +24,7 @@ export default function ProductsPage(): React.ReactElement {
         <div className={`${styles.flexContainer}`}>
           <div>
             <h2>PRODUCTS</h2>
-            <WarehouseSelector all />
+            <WarehouseSelectorAll />
           </div>
           <div>
             <Button className={styles.buttonAddOne} onClick={openModal}>

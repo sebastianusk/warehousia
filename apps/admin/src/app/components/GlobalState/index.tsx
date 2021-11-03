@@ -9,9 +9,10 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [userData, setUserData] = useState();
   const [warehousesList, setWarehousesList] = useState();
-  const [warehousesListTo, setWarehousesListTo] = useState();
+  const [warehousesListAll, setWarehousesListAll] = useState();
   const [selectedWarehouseTo, setSelectedWarehouseTo] = useState('');
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
+  const [selectedWarehouseAll, setSelectedWarehouseAll] = useState('');
 
   return (
     <GlobalContext.Provider
@@ -22,10 +23,12 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({
           setWarehousesList,
           selectedWarehouse,
           setSelectedWarehouse,
-          warehousesListTo,
-          setWarehousesListTo,
+          warehousesListAll,
+          setWarehousesListAll,
           selectedWarehouseTo,
           setSelectedWarehouseTo,
+          selectedWarehouseAll,
+          setSelectedWarehouseAll,
         },
       }}
     >

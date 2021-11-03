@@ -34,7 +34,7 @@ export default function WarehouseTransferPage(): React.ReactElement {
           <span>FROM</span>
           <WarehouseSelector feature="TRANSFER" />
           <span>TO</span>
-          <WarehouseSelectorTo all />
+          <WarehouseSelectorTo />
         </Space>
       </Card>
       <Card className={styles.card}>
@@ -84,7 +84,12 @@ export default function WarehouseTransferPage(): React.ReactElement {
             size="large"
             type="primary"
             onClick={onSubmit}
-            disabled={!warehouseTo || !warehouseFrom || dataList.length === 0}
+            disabled={
+              !warehouseTo ||
+              !warehouseFrom ||
+              dataList.length === 0 ||
+              warehouseTo === warehouseFrom
+            }
           >
             Submit
           </Button>

@@ -8,12 +8,10 @@ import { GlobalContext } from '../GlobalState';
 import styles from './index.module.css';
 
 interface WarehouseSelectorProps {
-  all?: boolean;
   feature?: string | undefined;
 }
 
 export default function WarehouseSelector({
-  all,
   feature,
 }: WarehouseSelectorProps): React.ReactElement {
   const { userData, warehouse } = useContext(GlobalContext);
@@ -27,7 +25,6 @@ export default function WarehouseSelector({
           active: boolean;
           features: string[];
         }) => {
-          if (all) return true;
           if (!wh.active) return false;
           if (userData.userData?.role === 'SUPER_ADMIN') return true;
           if (feature && !wh.features.includes(feature)) return false;
@@ -60,6 +57,5 @@ export default function WarehouseSelector({
 }
 
 WarehouseSelector.defaultProps = {
-  all: false,
   feature: undefined,
 };

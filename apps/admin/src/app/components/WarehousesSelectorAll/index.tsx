@@ -7,7 +7,7 @@ import { GlobalContext } from '../GlobalState';
 
 import styles from './index.module.css';
 
-export default function WarehouseSelectorTo(): React.ReactElement {
+export default function WarehouseSelectorAll(): React.ReactElement {
   const { userData, warehouse } = useContext(GlobalContext);
   useQuery(GET_WAREHOUSES, {
     skip: !userData.userData,
@@ -41,7 +41,6 @@ export default function WarehouseSelectorTo(): React.ReactElement {
         <Select.Option
           key={item.id}
           value={item.id}
-          disabled={item.id === warehouse.selectedWarehouse}
         >{`${item.id} -  ${item.name}`}</Select.Option>
       ))}
     </Select>
