@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Card, Input, Table } from 'antd';
+import { AutoComplete, Card, Table } from 'antd';
 import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
+import _ from 'lodash';
 import { GET_PRODUCTS } from '../../graph';
 import styles from './index.module.css';
 import Page from '../Page';
@@ -34,12 +35,17 @@ export default function ProductListComponent(): React.ReactElement {
     },
     skip: !warehouse.selectedWarehouseAll,
   });
+
   useEffect(() => {
     refetch({
       warehouseId: warehouse.selectedWarehouseAll,
       query: search,
     });
   }, [refetch, warehouse.selectedWarehouseAll, search]);
+
+  const handleSearch = _.debounce((value) => {
+    setSearch(value);
+  }, 250);
 
   const handleViewDetail = (item: DataType) => {
     history.push(`/product-detail/${item.id}`);
@@ -112,10 +118,11 @@ export default function ProductListComponent(): React.ReactElement {
       <div>
         <h2>Product List</h2>
         <div className={styles.search}>
-          <Input.Search
-            placeholder="search by product name or id"
-            onSearch={(value) => setSearch(value)}
+          <AutoComplete
             style={{ width: 200 }}
+            onSearch={(value) => handleSearch(value)}
+            allowClear
+            placeholder="search by product name or id"
           />
         </div>
 
