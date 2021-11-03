@@ -136,7 +136,7 @@ export default function App() {
               }
             />
             <Route
-              path="/super-admin-menu"
+              path="/super-admin-admins"
               render={() =>
                 localStorage.access_token ? (
                   <SuperAdminMenuPage />
@@ -145,6 +145,27 @@ export default function App() {
                 )
               }
             />
+            <Route
+              path="/super-admin-warehouse"
+              render={() =>
+                localStorage.access_token ? (
+                  <SuperAdminMenuPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/super-admin-shops"
+              render={() =>
+                localStorage.access_token ? (
+                  <SuperAdminMenuPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+
             <Route
               path="/admin-detail/:id"
               render={() =>

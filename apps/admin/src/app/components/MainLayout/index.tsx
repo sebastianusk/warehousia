@@ -55,10 +55,17 @@ const MainLayout: React.FC = ({ children }) => {
               Create Transaction
             </Menu.Item>
           </SubMenu>
+
           {userData?.role === 'SUPER_ADMIN' ? (
-            <Menu.Item key="super-admin-menu" icon={<GroupOutlined />}>
-              Admin Menu
-            </Menu.Item>
+            <SubMenu
+              key="super-admin"
+              icon={<HomeOutlined />}
+              title="Super Admin"
+            >
+              <Menu.Item key="super-admin-admins">Admins</Menu.Item>
+              <Menu.Item key="super-admin-warehouse">Warehouses</Menu.Item>
+              <Menu.Item key="super-admin-shops">Shops</Menu.Item>
+            </SubMenu>
           ) : (
             <></>
           )}
