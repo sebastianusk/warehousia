@@ -27,15 +27,15 @@ export default function WarehouseSelectorAll(): React.ReactElement {
     },
   });
 
-  const onSelectWarehouseTo = (val: string) => {
-    warehouse.setSelectedWarehouseTo(val);
+  const onSelectWarehouseAll = (val: string) => {
+    warehouse.setSelectedWarehouseAll(val);
   };
 
   return (
     <Select
       className={styles.select}
-      onChange={(value) => onSelectWarehouseTo((value || '') as string)}
-      value={warehouse.selectedWarehouseTo}
+      onChange={(value) => onSelectWarehouseAll((value || '') as string)}
+      value={warehouse.selectedWarehouseAll}
     >
       {warehouse.warehousesListAll?.map((item: any) => (
         <Select.Option
