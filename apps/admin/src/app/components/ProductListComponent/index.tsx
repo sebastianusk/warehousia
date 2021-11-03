@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Card, Input, Table } from 'antd';
-import { useQuery, useApolloClient } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { GET_PRODUCTS } from '../../graph';
 import styles from './index.module.css';
@@ -24,22 +24,22 @@ export default function ProductListComponent(): React.ReactElement {
   const history = useHistory();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
-  const client = useApolloClient();
   const { warehouse } = useContext(GlobalContext);
-  const { loading, error, data, fetchMore } = useQuery(GET_PRODUCTS, {
+  const { loading, error, data, fetchMore, refetch } = useQuery(GET_PRODUCTS, {
     variables: {
-      warehouseId: warehouse.selectedWarehouse,
+      warehouseId: warehouse.selectedWarehouseAll,
       query: '',
       offset: (page - 1) * LIMIT,
       limit: LIMIT,
     },
-    skip: !warehouse.selectedWarehouse,
+    skip: !warehouse.selectedWarehouseAll,
   });
   useEffect(() => {
-    client.refetchQueries({
-      include: ['products'],
+    refetch({
+      warehouseId: warehouse.selectedWarehouseAll,
+      query: search,
     });
-  }, [client, warehouse.selectedWarehouse, search]);
+  }, [refetch, warehouse.selectedWarehouseAll, search]);
 
   const handleViewDetail = (item: DataType) => {
     history.push(`/product-detail/${item.id}`);
@@ -104,7 +104,7 @@ export default function ProductListComponent(): React.ReactElement {
     },
   ];
 
-  if (!warehouse.selectedWarehouse) return <></>;
+  if (!warehouse.selectedWarehouseAll) return <></>;
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error.toString()}</div>;
   return (
@@ -113,7 +113,7 @@ export default function ProductListComponent(): React.ReactElement {
         <h2>Product List</h2>
         <div className={styles.search}>
           <Input.Search
-            placeholder="search by product name"
+            placeholder="search by product name or id"
             onSearch={(value) => setSearch(value)}
             style={{ width: 200 }}
           />

@@ -32,11 +32,12 @@ export default function InlineProductForm({
           });
         }}
       >
-        <Form.Item label="Product Code" name="product">
+        <Form.Item label="Product" name="product">
           <AutoComplete
             style={{ width: '500px' }}
             onSearch={(value) => search(value)}
             allowClear
+            placeholder="search by product name or id"
           >
             {data?.searchProduct.map((item: { id: string; name: string }) => (
               <AutoComplete.Option
