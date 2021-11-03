@@ -1,20 +1,22 @@
 import React from 'react';
 
-import { Button, Card, Form, Input, Space, Table, Tag } from 'antd';
+import { Button, Card, Input, Space, Table, Tag } from 'antd';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
+import ModalAddWarehouse from 'app/components/ModalAddWarehouse';
 import styles from './index.module.css';
 import useSuperAdminWarehouseHooks, { WarehouseItem } from './hooks';
 import EditWarehouseModal from './components/EditWarehouseModal';
 
 export default function SuperAdminWarehousePage(): React.ReactElement {
-  const { data, editData, setEditData } = useSuperAdminWarehouseHooks();
+  const { data, editData, setEditData, setShowModalAdd, showModalAdd } =
+    useSuperAdminWarehouseHooks();
   return (
     <div>
       <Card className={styles.card}>
         <div className={styles.flexContainer}>
           <h2>WAREHOUSE LIST</h2>
           <div>
-            <Button className={styles.buttonAddOne}>
+            <Button onClick={() => setShowModalAdd(true)}>
               <PlusOutlined />
               Add New Warehouse
             </Button>
@@ -84,6 +86,7 @@ export default function SuperAdminWarehousePage(): React.ReactElement {
         )}
       </Card>
       <EditWarehouseModal setEditData={setEditData} editData={editData} />
+      <ModalAddWarehouse visible={showModalAdd} setVisible={setShowModalAdd} />
     </div>
   );
 }

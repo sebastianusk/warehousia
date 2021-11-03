@@ -1,10 +1,10 @@
 import React from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { useApolloClient, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { Checkbox, Form, Input, Modal, Switch } from 'antd';
 import { EDIT_WAREHOUSE, GET_WAREHOUSES } from 'app/graph';
-import { WarehouseItem } from '../../hooks';
 import { useForm } from 'antd/lib/form/Form';
+import { WarehouseItem } from '../../hooks';
 
 interface EditWahouseModalProps {
   editData: WarehouseItem | undefined;

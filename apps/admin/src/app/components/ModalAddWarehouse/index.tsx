@@ -1,4 +1,4 @@
-import React, { ReactElement, Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Modal, Form, Input, Checkbox } from 'antd';
 import useModalAddWarehouseHooks from './hooks';
 
@@ -10,52 +10,38 @@ type ModalPropsType = {
 export default function ModalAddWarehouse({
   visible,
   setVisible,
-}: ModalPropsType): ReactElement {
-  const {
-    confirmLoading,
-    handleOk,
-    handleCancel,
-    onInputId,
-    onInputName,
-    featureOptions,
-    onChangeFeatures,
-  } = useModalAddWarehouseHooks(setVisible);
+}: ModalPropsType): React.ReactElement {
+  const { form, loading, handleOk } = useModalAddWarehouseHooks(setVisible);
+  const featureOptions = [
+    { label: 'Outbound', value: 'OUTBOUND' },
+    { label: 'Inbound', value: 'INBOUND' },
+    { label: 'Transfer', value: 'TRANSFER' },
+  ];
   return (
     <>
       <Modal
         title="Add New Warehouse"
         visible={visible}
         onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
+        confirmLoading={loading}
+        onCancel={() => setVisible(false)}
       >
-        {confirmLoading ? (
-          <p>Loading...</p>
-        ) : (
-          <>
-            <Form
-              layout="horizontal"
-              labelCol={{ span: 7 }}
-              wrapperCol={{ span: 14 }}
-            >
-              <Form.Item label="Warehouse ID">
-                <Input placeholder="input warehouse ID" onChange={onInputId} />
-              </Form.Item>
-              <Form.Item label="Warehouse Name">
-                <Input
-                  placeholder="input warehouse name"
-                  onChange={onInputName}
-                />
-              </Form.Item>
-              <Form.Item label="Features">
-                <Checkbox.Group
-                  options={featureOptions}
-                  onChange={onChangeFeatures}
-                />
-              </Form.Item>
-            </Form>
-          </>
-        )}
+        <Form
+          form={form}
+          layout="horizontal"
+          labelCol={{ span: 7 }}
+          wrapperCol={{ span: 14 }}
+        >
+          <Form.Item label="Warehouse ID" name="id">
+            <Input placeholder="input warehouse ID" />
+          </Form.Item>
+          <Form.Item label="Warehouse Name" name="name">
+            <Input placeholder="input warehouse name" />
+          </Form.Item>
+          <Form.Item label="Features" name="features">
+            <Checkbox.Group options={featureOptions} />
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   );
