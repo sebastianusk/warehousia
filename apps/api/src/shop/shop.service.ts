@@ -50,6 +50,7 @@ export default class ShopService {
             ],
           }
         : undefined,
+      orderBy: { active: 'desc' },
     });
     return result.map((item) => ShopModel.fromDb(item));
   }

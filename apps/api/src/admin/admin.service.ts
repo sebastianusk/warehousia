@@ -90,6 +90,9 @@ export default class AdminService {
       include: {
         warehouses: true,
       },
+      orderBy: {
+        active: 'desc',
+      },
     });
     return data.map((item) => AdminModel.fromDB(item));
   }

@@ -46,7 +46,7 @@ export default class WarehouseService {
             ],
           }
         : undefined,
-      orderBy: { id: 'asc' },
+      orderBy: [{ active: 'desc' }, { id: 'asc' }],
     });
     return data.map((item) => WarehouseModel.fromDB(item));
   }
