@@ -12,49 +12,29 @@ export default function ModalAddShop({
   visible,
   setVisible,
 }: ModalProps): ReactElement {
-  const {
-    confirmLoading,
-    handleOk,
-    handleCancel,
-    formData,
-    onChangeName,
-    onChangeId,
-  } = useModalAddShopHooks(setVisible);
+  const { form, handleOk, loading } = useModalAddShopHooks(setVisible);
   return (
     <>
       <Modal
         title="Add New Shop"
         visible={visible}
         onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
+        confirmLoading={loading}
+        onCancel={() => setVisible(false)}
       >
-        {confirmLoading ? (
-          <p>Loading...</p>
-        ) : (
-          <>
-            <Form
-              layout="horizontal"
-              labelCol={{ span: 9 }}
-              wrapperCol={{ span: 14 }}
-            >
-              <Form.Item label="ID">
-                <Input
-                  placeholder="input ID"
-                  value={formData.id}
-                  onChange={onChangeId}
-                />
-              </Form.Item>
-              <Form.Item label="Shop Name">
-                <Input
-                  placeholder="input Shop Name"
-                  value={formData.name}
-                  onChange={onChangeName}
-                />
-              </Form.Item>
-            </Form>
-          </>
-        )}
+        <Form
+          form={form}
+          layout="horizontal"
+          labelCol={{ span: 9 }}
+          wrapperCol={{ span: 14 }}
+        >
+          <Form.Item label="ID" name="id">
+            <Input placeholder="input ID" />
+          </Form.Item>
+          <Form.Item label="Shop Name" name="name">
+            <Input placeholder="input Shop Name" />
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   );

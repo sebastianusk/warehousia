@@ -1,73 +1,37 @@
-import { useState, Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { useMutation } from '@apollo/client';
+import { FormInstance, useForm } from 'antd/lib/form/Form';
 import { ADD_SHOP, GET_SHOPS } from '../../graph';
 
 interface ModalAddShopState {
-  confirmLoading: boolean;
+  form: FormInstance;
   handleOk: () => void;
-  handleCancel: () => void;
-  formData: {
-    id: string;
-    name: string;
-  };
-  onChangeName: (e: any) => void;
-  onChangeId: (e: any) => void;
+  loading: boolean;
 }
 
 export default function useModalAddShopHooks(
   setVisible: Dispatch<SetStateAction<boolean>>
 ): ModalAddShopState {
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    id: '',
-    name: '',
-  });
-
-  const [addShop] = useMutation(ADD_SHOP, {
-    onCompleted() {
-      setFormData({
-        id: '',
-        name: '',
-      });
-      setConfirmLoading(false);
-      setVisible(false);
-    },
-  });
+  const [form] = useForm();
+  const [addShop, { loading }] = useMutation(ADD_SHOP);
 
   const handleOk = () => {
-    setConfirmLoading(true);
+    const values = form.getFieldsValue();
     addShop({
-      variables: { input: formData },
+      variables: { input: values },
       refetchQueries: [
         {
           query: GET_SHOPS,
         },
       ],
-    });
-  };
-
-  const handleCancel = () => {
-    setFormData({
-      id: '',
-      name: '',
-    });
-    setVisible(false);
-  };
-
-  const onChangeName = (e: any) => {
-    setFormData({ ...formData, name: e.target.value });
-  };
-
-  const onChangeId = (e: any) => {
-    setFormData({ ...formData, id: e.target.value });
+    })
+      .then(() => setVisible(false))
+      .then(() => form.resetFields());
   };
 
   return {
-    confirmLoading,
+    form,
+    loading,
     handleOk,
-    handleCancel,
-    formData,
-    onChangeName,
-    onChangeId,
   };
 }
