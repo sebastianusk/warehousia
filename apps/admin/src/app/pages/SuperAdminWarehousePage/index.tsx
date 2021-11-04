@@ -8,8 +8,14 @@ import useSuperAdminWarehouseHooks, { WarehouseItem } from './hooks';
 import EditWarehouseModal from './components/EditWarehouseModal';
 
 export default function SuperAdminWarehousePage(): React.ReactElement {
-  const { data, editData, setEditData, setShowModalAdd, showModalAdd } =
-    useSuperAdminWarehouseHooks();
+  const {
+    data,
+    editData,
+    setEditData,
+    setShowModalAdd,
+    showModalAdd,
+    setQuery,
+  } = useSuperAdminWarehouseHooks();
   return (
     <div>
       <Card className={styles.card}>
@@ -20,7 +26,11 @@ export default function SuperAdminWarehousePage(): React.ReactElement {
               <PlusOutlined />
               Add New Warehouse
             </Button>
-            <Input.Search placeholder="search by name" style={{ width: 200 }} />
+            <Input.Search
+              placeholder="search by name"
+              style={{ width: 200 }}
+              onSearch={setQuery}
+            />
           </div>
         </div>
       </Card>
@@ -29,6 +39,7 @@ export default function SuperAdminWarehousePage(): React.ReactElement {
           <Table
             size="middle"
             dataSource={data.map((item) => ({ ...item, key: item.id }))}
+            pagination={false}
           >
             <Table.Column title="ID" dataIndex="id" key="id" />
             <Table.Column title="Warehouse Name" dataIndex="name" key="name" />
