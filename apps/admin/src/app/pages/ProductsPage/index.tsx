@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Card } from 'antd';
 import ProductListComponent from 'app/components/ProductListComponent';
 import WarehouseSelectorAll from 'app/components/WarehousesSelectorAll';
@@ -7,6 +7,7 @@ import useProductsPageHooks from './hooks';
 import ModalAddProductBulk from '../../components/ModalAddProductBulk';
 
 import styles from './index.module.css';
+import { GlobalContext } from 'app/components/GlobalState';
 
 export default function ProductsPage(): React.ReactElement {
   const {
@@ -17,6 +18,7 @@ export default function ProductsPage(): React.ReactElement {
     setShowBulkModal,
     openBulkModal,
   } = useProductsPageHooks();
+  const { warehouse } = useContext(GlobalContext);
 
   return (
     <>
@@ -27,10 +29,19 @@ export default function ProductsPage(): React.ReactElement {
             <WarehouseSelectorAll />
           </div>
           <div>
-            <Button className={styles.buttonAddOne} onClick={openModal}>
+            <Button
+              className={styles.buttonAddOne}
+              onClick={openModal}
+              disabled={!warehouse.selectedWarehouseAll}
+            >
               Add One
             </Button>
-            <Button onClick={openBulkModal}>Bulk Add</Button>
+            <Button
+              onClick={openBulkModal}
+              disabled={!warehouse.selectedWarehouseAll}
+            >
+              Bulk Add
+            </Button>
           </div>
         </div>
       </Card>
