@@ -51,7 +51,7 @@ export default function ModalEditUser({
               key={key}
             >
               <Form.Item label="Username" name="username">
-                <Input placeholder="input username" />
+                <Input placeholder="input username" disabled />
               </Form.Item>
               <Form.Item
                 label="Role"

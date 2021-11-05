@@ -50,18 +50,6 @@ export default function useModalEditUserHooks(
       message.info('Success edit user');
       setVisible(false);
     },
-    refetchQueries: [
-      {
-        query: GET_ADMINS,
-        variables: {
-          query: '',
-          pagination: {
-            offset: 0,
-            limit: 10,
-          },
-        },
-      },
-    ],
   });
 
   const handleOk = (value: any) => {
@@ -72,6 +60,12 @@ export default function useModalEditUserHooks(
     }
     editAdmin({
       variables: { input },
+      refetchQueries: [
+        {
+          query: GET_ADMINS,
+          variables: { query: input.username },
+        },
+      ],
     });
   };
 

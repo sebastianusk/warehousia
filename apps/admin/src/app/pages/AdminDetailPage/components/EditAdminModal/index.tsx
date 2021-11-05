@@ -3,19 +3,24 @@ import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';
 import { Form, Input, Modal, Switch } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-import { EDIT_SHOP, GET_SHOPS } from 'app/graph';
-import { ShopItem } from '../../hooks';
+import { EDIT_ADMIN, GET_ADMINS } from 'app/graph';
+import { AdminModel } from '../../hooks';
 
-interface EditShopsModalProps {
-  editData: ShopItem | undefined;
-  setEditData: (item: ShopItem | undefined) => void;
+interface EditAdminModalProps {
+  editData: AdminModel | undefined;
+  setEditData: (item: AdminModel | undefined) => void;
 }
 
-export default function EditShopModal(
-  props: EditShopsModalProps
+const roleOptions = [
+  { label: 'Admin', value: 'ADMIN' },
+  { label: 'Super Admin', value: 'SUPER_ADMIN' },
+];
+
+export default function EditAdminModal(
+  props: EditAdminModalProps
 ): React.ReactElement {
   const [form] = useForm();
-  const [editShop] = useMutation(EDIT_SHOP);
+  const [editAdmin] = useMutation(EDIT_ADMIN);
   return (
     <Modal
       visible={props.editData !== undefined}
@@ -25,11 +30,11 @@ export default function EditShopModal(
       }}
       onOk={() => {
         const values = form.getFieldsValue();
-        editShop({
+        editAdmin({
           variables: {
             input: values,
           },
-          refetchQueries: [GET_SHOPS],
+          refetchQueries: [GET_ADMINS],
         }).then(() => {
           form.resetFields();
           props.setEditData(undefined);
@@ -47,11 +52,11 @@ export default function EditShopModal(
             value,
           }))}
         >
-          <Form.Item label="ShopId ID" name="id">
+          <Form.Item label="Username" name="username">
             <Input disabled />
           </Form.Item>
-          <Form.Item label="Shop Name" name="name">
-            <Input placeholder="input shop name" />
+          <Form.Item label="Role" name="role">
+            <Input placeholder="input role" />
           </Form.Item>
           <Form.Item label="Status" valuePropName="checked" name="active">
             <Switch

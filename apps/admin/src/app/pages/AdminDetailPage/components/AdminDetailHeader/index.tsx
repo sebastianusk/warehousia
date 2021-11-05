@@ -1,6 +1,5 @@
-import { useQuery } from '@apollo/client';
 import { Button, Card, Descriptions, PageHeader, Tag } from 'antd';
-import { GET_ADMINS } from 'app/graph';
+import ModalEditUser from 'app/components/ModalEditUser';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import useAdminDetailHeaderHooks from './hooks';
@@ -10,7 +9,7 @@ import styles from './index.module.css';
 export default function AdminDetailHeader(props: {
   id: string;
 }): React.ReactElement {
-  const { data } = useAdminDetailHeaderHooks(props.id);
+  const { data, editUser, setEditUser } = useAdminDetailHeaderHooks(props.id);
   const history = useHistory();
 
   return data ? (
@@ -21,8 +20,15 @@ export default function AdminDetailHeader(props: {
           title={data.username}
           onBack={() => history.push('/super-admin-admins')}
         />
-        <Button className={styles.button}>Edit Admin</Button>
-        <Button className={styles.button}>Change Password</Button>
+        <Button className={styles.button} onClick={() => setEditUser(true)}>
+          Edit Admin
+        </Button>
+        <ModalEditUser
+          visible={editUser}
+          userData={data}
+          setVisible={setEditUser}
+          key="editUser"
+        />
       </div>
       <Descriptions bordered column={1}>
         <Descriptions.Item label="User Name">{data.username}</Descriptions.Item>
