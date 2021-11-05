@@ -2,3 +2,17 @@
   margin-top: 30px;
   box-shadow: 0 1px 6px 0 rgba(49, 53, 59, 0.12);
 }
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.title {
+  flex-grow: 2;
+}
+
+.button {
+  margin: 0px 10px;
+}

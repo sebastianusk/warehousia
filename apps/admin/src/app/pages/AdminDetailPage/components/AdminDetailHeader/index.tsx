@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Card, Descriptions, PageHeader, Tag } from 'antd';
+import { Button, Card, Descriptions, PageHeader, Tag } from 'antd';
 import { GET_ADMINS } from 'app/graph';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -15,10 +15,15 @@ export default function AdminDetailHeader(props: {
 
   return data ? (
     <Card className={styles.card}>
-      <PageHeader
-        title={data.username}
-        onBack={() => history.push('/super-admin-admins')}
-      />
+      <div className={styles.header}>
+        <PageHeader
+          className={styles.title}
+          title={data.username}
+          onBack={() => history.push('/super-admin-admins')}
+        />
+        <Button className={styles.button}>Edit Admin</Button>
+        <Button className={styles.button}>Change Password</Button>
+      </div>
       <Descriptions bordered column={1}>
         <Descriptions.Item label="User Name">{data.username}</Descriptions.Item>
         <Descriptions.Item label="Role">{data.role}</Descriptions.Item>
