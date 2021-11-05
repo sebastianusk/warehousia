@@ -11,12 +11,12 @@ import WarehouseOutboundPage from './pages/WarehouseOutboundPage';
 import WarehousePreparingPage from './pages/WarehousePreparingPage';
 import WarehouseMissingPage from './pages/WarehouseMissingPage';
 import WarehouseTransactionPage from './pages/WarehouseTransactionPage';
-import SuperAdminMenuPage from './pages/SuperAdminMenuPage';
 import AccountPage from './pages/AccountPage';
 import UserDetail from './components/UserDetail';
 import WarehouseDemandPage from './pages/WarehouseDemandPage';
 import SuperAdminWarehousePage from './pages/SuperAdminWarehousePage';
 import SuperAdminShopsPage from './pages/SuperAdminShopsPage';
+import SuperAdminPage from './pages/SuperAdminPage';
 
 export default function App() {
   return (
@@ -141,7 +141,7 @@ export default function App() {
               path="/super-admin-admins"
               render={() =>
                 localStorage.access_token ? (
-                  <SuperAdminMenuPage />
+                  <SuperAdminPage />
                 ) : (
                   <Redirect to="/login" />
                 )
