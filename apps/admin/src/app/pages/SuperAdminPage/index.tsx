@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Card, Input, Space, Table, Tag } from 'antd';
+import { AutoComplete, Button, Card, Input, Space, Table, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import ModalAddUser from 'app/components/ModalAddUser';
 import { useHistory } from 'react-router-dom';
@@ -16,17 +16,15 @@ export default function SuperAdminPage(): React.ReactElement {
       <Card className={styles.card}>
         <div className={styles.flexContainer}>
           <h2>ADMIN LIST</h2>
-          <div>
+          <Space>
             <Button onClick={() => setShowModalAdd(true)}>
               <PlusOutlined />
               Add New Admin
             </Button>
-            <Input.Search
-              placeholder="search by name"
-              style={{ width: 200 }}
-              onSearch={setQuery}
-            />
-          </div>
+            <AutoComplete style={{ width: 200 }} onSearch={setQuery}>
+              <Input.Search placeholder="search by name" />
+            </AutoComplete>
+          </Space>
         </div>
       </Card>
       <Card className={styles.card} loading={!data}>

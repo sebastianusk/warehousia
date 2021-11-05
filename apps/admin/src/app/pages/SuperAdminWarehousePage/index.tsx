@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Card, Input, Space, Table, Tag } from 'antd';
+import { AutoComplete, Button, Card, Input, Space, Table, Tag } from 'antd';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import ModalAddWarehouse from 'app/components/ModalAddWarehouse';
 import styles from './index.module.css';
@@ -21,17 +21,15 @@ export default function SuperAdminWarehousePage(): React.ReactElement {
       <Card className={styles.card}>
         <div className={styles.flexContainer}>
           <h2>WAREHOUSE LIST</h2>
-          <div>
+          <Space>
             <Button onClick={() => setShowModalAdd(true)}>
               <PlusOutlined />
               Add New Warehouse
             </Button>
-            <Input.Search
-              placeholder="search by name"
-              style={{ width: 200 }}
-              onSearch={setQuery}
-            />
-          </div>
+            <AutoComplete style={{ width: 200 }} onSearch={setQuery}>
+              <Input.Search placeholder="search by name" />
+            </AutoComplete>
+          </Space>
         </div>
       </Card>
       <Card className={styles.card} loading={!data}>

@@ -1,6 +1,7 @@
 import { ApolloError, useQuery } from '@apollo/client';
 import { GET_ADMINS } from 'app/graph';
 import { Dispatch, SetStateAction, useState } from 'react';
+import _ from 'lodash';
 
 export interface AdminItem {
   username: string;
@@ -21,7 +22,10 @@ interface SuperAdminState {
 export default function useSuperAdminHooks(): SuperAdminState {
   const [showModalAdd, setShowModalAdd] = useState(false);
   const { data, loading, error, refetch } = useQuery(GET_ADMINS);
-  const setQuery = (query: string) => refetch({ query });
+  const setQuery = _.debounce((query: string) => {
+    refetch({ query });
+  }, 250);
+
   return {
     data: data?.admins,
     loading,

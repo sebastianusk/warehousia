@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AutoComplete, Card, Table } from 'antd';
+import { AutoComplete, Card, Input, Table } from 'antd';
 import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import _ from 'lodash';
@@ -121,9 +121,9 @@ export default function ProductListComponent(): React.ReactElement {
           <AutoComplete
             style={{ width: 200 }}
             onSearch={(value) => handleSearch(value)}
-            allowClear
-            placeholder="search by product name or id"
-          />
+          >
+            <Input.Search placeholder="search by product name or id" />
+          </AutoComplete>
         </div>
 
         <Table

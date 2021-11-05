@@ -1,6 +1,7 @@
 import { ApolloError, useQuery } from '@apollo/client';
 import { GET_WAREHOUSES } from 'app/graph';
 import { Dispatch, SetStateAction, useState } from 'react';
+import _ from 'lodash';
 
 export interface WarehouseItem {
   id: string;
@@ -24,7 +25,10 @@ export default function useSuperAdminWarehouseHooks(): SuperAdminWarehouseState 
   const [showModalAdd, setShowModalAdd] = useState(false);
   const { data, loading, error, refetch } = useQuery(GET_WAREHOUSES);
   const [editData, setEditData] = useState<WarehouseItem | undefined>();
-  const setQuery = (query: string) => refetch({ query });
+  const setQuery = _.debounce((query: string) => {
+    refetch({ query });
+  }, 250);
+
   return {
     data: data?.warehouses,
     loading,
