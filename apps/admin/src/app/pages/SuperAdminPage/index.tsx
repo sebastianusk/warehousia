@@ -76,13 +76,12 @@ export default function SuperAdminPage(): React.ReactElement {
                 <Space size="middle">
                   <Button
                     size="small"
-                    icon={<EditOutlined />}
                     onClick={(e) => {
                       e.stopPropagation();
                       history.push(`/admin-detail/${record.username}`);
                     }}
                   >
-                    Edit
+                    View
                   </Button>
                 </Space>
               )}

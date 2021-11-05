@@ -24,6 +24,7 @@ export default function EditWarehouseModal(
   const [editWarehouse] = useMutation(EDIT_WAREHOUSE);
   return (
     <Modal
+      title="Edit Warehouse"
       visible={props.editData !== undefined}
       onCancel={() => {
         props.setEditData(undefined);

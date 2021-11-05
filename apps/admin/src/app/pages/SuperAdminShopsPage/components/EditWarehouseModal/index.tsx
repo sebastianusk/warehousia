@@ -18,6 +18,7 @@ export default function EditShopModal(
   const [editShop] = useMutation(EDIT_SHOP);
   return (
     <Modal
+      title="Edit Shop"
       visible={props.editData !== undefined}
       onCancel={() => {
         props.setEditData(undefined);
