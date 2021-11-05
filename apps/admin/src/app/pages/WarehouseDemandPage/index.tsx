@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card } from 'antd';
+import { Card, Space } from 'antd';
 import WarehouseSelectorAll from 'app/components/WarehousesSelectorAll';
 import ShopsSelector from 'app/components/ShopsSelector';
 import WarehouseDemandTable from './components/WarehouseDemandTable';
@@ -13,9 +13,17 @@ export default function WarehouseDemandPage(): React.ReactElement {
       <Card className={styles.card}>
         <div className={styles.flexContainer}>
           <h2 className={styles.title}>VIEW DEMAND</h2>
-          <WarehouseSelectorAll />
-          <ShopsSelector onSelectShop={setShop} />
         </div>
+        <Space size="middle" className="picker">
+          <div>
+            <div>Warehouse:</div>
+            <WarehouseSelectorAll />
+          </div>
+          <div>
+            <div>Shop:</div>
+            <ShopsSelector onSelectShop={setShop} />
+          </div>
+        </Space>
       </Card>
       {shop ? <WarehouseDemandTable shopId={shop} /> : <div />}
     </div>

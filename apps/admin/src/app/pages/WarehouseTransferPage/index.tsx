@@ -29,11 +29,15 @@ export default function WarehouseTransferPage(): React.ReactElement {
         <div className={`${styles.flexContainer}`}>
           <h2 className={styles.title}>TRANSFER</h2>
         </div>
-        <Space size="middle" className={styles.warehousePicker}>
-          <span>FROM</span>
-          <WarehouseSelector feature="TRANSFER" />
-          <span>TO</span>
-          <WarehouseSelectorTo />
+        <Space size="middle" className="picker">
+          <div>
+            <div>From:</div>
+            <WarehouseSelector feature="TRANSFER" />
+          </div>
+          <div>
+            <div>To:</div>
+            <WarehouseSelectorTo />
+          </div>
         </Space>
       </Card>
       <Card className={styles.card}>

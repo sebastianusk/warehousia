@@ -28,8 +28,13 @@ export default function WarehouseInboundPage(): React.ReactElement {
       <Card className={styles.card}>
         <div className={`${styles.flexContainer}`}>
           <h2 className={styles.title}>CREATE INBOUND</h2>
-          <WarehouseSelector feature="INBOUND" />
         </div>
+        <Space size="middle" className="picker">
+          <div>
+            <div>Warehouse:</div>
+            <WarehouseSelector feature="INBOUND" />
+          </div>
+        </Space>
       </Card>
       <Card className={styles.card}>
         <InlineProductForm onAdd={onAdd} />

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Card, Button } from 'antd';
+import { Card, Button, Space } from 'antd';
 import WarehouseSelector from 'app/components/WarehousesSelector';
 import TablePreparation from 'app/components/TablePreparation';
 import PreparationsSelector from 'app/components/PreparationsSelector';
@@ -19,19 +19,21 @@ export default function WarehouseTransactionPage(): ReactElement {
   return (
     <>
       <Card className={styles.card}>
-        <div className={`${styles.flexContainer}`}>
+        <div>
           <h2 className={styles.title}>CREATE TRANSACTION</h2>
-          <div>
-            <div>Warehouse ID:</div>
-            <WarehouseSelector />
-          </div>
-          <div className={styles.prepSelector}>
-            <div>Preparation ID:</div>
-            <PreparationsSelector
-              onSelectPrep={onSelectPreparation}
-              dataSource={dataSource}
-            />
-          </div>
+          <Space size="middle" className="picker">
+            <div>
+              <div>Warehouse ID:</div>
+              <WarehouseSelector />
+            </div>
+            <div className={styles.prepSelector}>
+              <div>Preparation ID:</div>
+              <PreparationsSelector
+                onSelectPrep={onSelectPreparation}
+                dataSource={dataSource}
+              />
+            </div>
+          </Space>
         </div>
       </Card>
       {selectedPrep && (

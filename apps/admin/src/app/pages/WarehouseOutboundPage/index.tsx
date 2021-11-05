@@ -27,10 +27,14 @@ export default function WarehouseOutboundPage(): ReactElement {
           <h2 className={styles.title}>CREATE OUTBOUND</h2>
         </div>
         <Space size="middle" className={styles.warehousePicker}>
-          <span>FROM</span>
-          <WarehouseSelector feature="OUTBOUND" />
-          <span>FOR</span>
-          <ShopsSelector onSelectShop={setSelectedShop} />
+          <div>
+            <div>From Warehouse:</div>
+            <WarehouseSelector feature="OUTBOUND" />
+          </div>
+          <div>
+            <div>For Shop:</div>
+            <ShopsSelector onSelectShop={setSelectedShop} />
+          </div>
         </Space>
       </Card>
       <Card className={styles.card}>
