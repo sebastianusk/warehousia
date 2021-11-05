@@ -7,8 +7,10 @@ import { useContext, useState } from 'react';
 interface TransferPageState {
   warehouseFrom: string;
   warehouseTo: string;
-  dataList: { id: string; name: string; amount: number }[];
-  setData: React.Dispatch<React.SetStateAction<Data[]>>;
+  transfer: {
+    data: DataList;
+    set: React.Dispatch<React.SetStateAction<DataList>>;
+  };
   onAdd: (data: Data) => void;
   error: { id: string; message: string }[];
   setError: (data: { id: string; message: string }[]) => void;
@@ -22,10 +24,11 @@ type Data = {
   amount: number;
 };
 
+type DataList = Data[] | [];
+
 export default function useTranserPageHooks(): TransferPageState {
-  const { warehouse } = useContext(GlobalContext);
+  const { warehouse, transfer } = useContext(GlobalContext);
   const [error, setError] = useState<{ id: string; message: string }[]>([]);
-  const [dataList, setData] = useState<Data[]>([]);
   const [submitTransfer, { loading }] = useMutation(ADD_TRANSFER);
 
   const onSubmit = () => {
@@ -33,7 +36,10 @@ export default function useTranserPageHooks(): TransferPageState {
       variables: {
         warehouseId: warehouse.selectedWarehouse,
         destinationId: warehouse.selectedWarehouseTo,
-        items: dataList.map(({ id, amount }) => ({ productId: id, amount })),
+        items: transfer.data.map((datum: Data) => ({
+          productId: datum.id,
+          amount: datum.amount,
+        })),
       },
     }).then((data) => {
       if (data.errors?.length === 1 && data.errors[0].extensions) {
@@ -44,21 +50,20 @@ export default function useTranserPageHooks(): TransferPageState {
           }))
         );
       } else if (data.data) {
-        setData([]);
+        transfer.set([]);
         message.info('Success transfer');
       }
     });
   };
 
   const onAdd = (newData: Data) => {
-    setData((prev) => [...prev, newData]);
+    transfer.set((prev: DataList) => [...prev, newData]);
   };
 
   return {
     warehouseFrom: warehouse.selectedWarehouse,
     warehouseTo: warehouse.selectedWarehouseTo,
-    dataList,
-    setData,
+    transfer,
     onAdd,
     error,
     setError,

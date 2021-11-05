@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import { Button, Card } from 'antd';
 import ProductListComponent from 'app/components/ProductListComponent';
 import WarehouseSelectorAll from 'app/components/WarehousesSelectorAll';
+import { GlobalContext } from 'app/components/GlobalState';
 import ModalAddProduct from '../../components/ModalAddProduct';
 import useProductsPageHooks from './hooks';
 import ModalAddProductBulk from '../../components/ModalAddProductBulk';
 
 import styles from './index.module.css';
-import { GlobalContext } from 'app/components/GlobalState';
 
 export default function ProductsPage(): React.ReactElement {
   const {

@@ -1,15 +1,17 @@
+import { useContext, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { message } from 'antd';
 import { GlobalContext } from 'app/components/GlobalState';
-import { useContext, useState } from 'react';
-import { ADD_INBOUND } from '../../graph';
+import { ADD_INBOUND } from 'app/graph';
 
 interface InboundState {
   selectedWarehouse: string;
   error: { id: string }[];
   setError: (data: { id: string }[]) => void;
-  dataList: DataList;
-  setDataList: React.Dispatch<React.SetStateAction<DataList>>;
+  inbound: {
+    data: DataList;
+    set: React.Dispatch<React.SetStateAction<DataList>>;
+  };
   onSubmit(): void;
   loading: boolean;
   onAdd(data: Data): void;
@@ -25,16 +27,15 @@ type Data = {
 
 export default function useInboundHooks(): InboundState {
   const [error, setError] = useState<{ id: string }[]>([]);
-  const [dataList, setDataList] = useState<DataList>([]);
   const [addInbound, { loading }] = useMutation(ADD_INBOUND);
-  const { warehouse } = useContext(GlobalContext);
+  const { warehouse, inbound } = useContext(GlobalContext);
 
   const onAdd = (data: Data) => {
-    setDataList((prev) => [...prev, data]);
+    inbound.set((prev: DataList) => [...prev, data]);
   };
 
   const onSubmit = () => {
-    const dataSubmit = dataList.map((datum) => ({
+    const dataSubmit = inbound.data.map((datum: Data) => ({
       productId: datum.id,
       amount: datum.amount,
     }));
@@ -44,7 +45,7 @@ export default function useInboundHooks(): InboundState {
         items: dataSubmit,
       },
     }).then(() => {
-      setDataList([]);
+      inbound.set([]);
       message.info('Successfully upload inbounds');
     });
   };
@@ -53,8 +54,7 @@ export default function useInboundHooks(): InboundState {
     selectedWarehouse: warehouse.selectedWarehouse,
     error,
     setError,
-    dataList,
-    setDataList,
+    inbound,
     onSubmit,
     loading,
     onAdd,

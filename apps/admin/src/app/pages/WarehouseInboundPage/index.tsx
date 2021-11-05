@@ -7,7 +7,7 @@ import { SEARCH_PRODUCT } from 'app/graph';
 import ErrorLogModal from 'app/components/ErrorLogModal';
 import styles from './index.module.css';
 import InlineProductForm from '../../components/inlineProductForm';
-import InboundListEditor from '../../components/InboundListEditor';
+import ListEditor from '../../components/ListEditor';
 import useInboundHooks from './hooks';
 
 export default function WarehouseInboundPage(): React.ReactElement {
@@ -15,8 +15,7 @@ export default function WarehouseInboundPage(): React.ReactElement {
     selectedWarehouse,
     error,
     setError,
-    dataList,
-    setDataList,
+    inbound,
     onSubmit,
     loading,
     onAdd,
@@ -35,9 +34,9 @@ export default function WarehouseInboundPage(): React.ReactElement {
       <Card className={styles.card}>
         <InlineProductForm onAdd={onAdd} />
         <Divider />
-        <InboundListEditor
-          dataList={dataList}
-          setData={setDataList}
+        <ListEditor
+          dataList={inbound.data}
+          setData={inbound.set}
           selectedWarehouse={selectedWarehouse}
         />
         <div className={`${styles.bottomAction}`}>
@@ -63,7 +62,7 @@ export default function WarehouseInboundPage(): React.ReactElement {
                   setError(notFound.map((item) => ({ id: item.id })));
                   message.error('item not found, check log');
                 } else {
-                  setDataList([...dataList, ...result]);
+                  inbound.set((prev) => [...prev, ...result]);
                 }
               }}
             />
@@ -77,7 +76,7 @@ export default function WarehouseInboundPage(): React.ReactElement {
           <Button
             size="large"
             type="primary"
-            disabled={!selectedWarehouse || dataList.length === 0}
+            disabled={!selectedWarehouse || inbound.data.length === 0}
             onClick={onSubmit}
             loading={loading}
           >

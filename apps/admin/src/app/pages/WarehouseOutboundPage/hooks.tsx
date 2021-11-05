@@ -11,8 +11,10 @@ interface OutboundState {
   onAdd: (data: Data) => void;
   onSubmit(): void;
   loading: boolean;
-  dataList: DataList;
-  setDataList: React.Dispatch<React.SetStateAction<DataList>>;
+  outbound: {
+    data: DataList;
+    set: React.Dispatch<React.SetStateAction<DataList>>;
+  };
 }
 
 export type DataList = Data[] | [];
@@ -24,17 +26,16 @@ type Data = {
 };
 
 export default function useOutboundHooks(): OutboundState {
-  const { warehouse } = useContext(GlobalContext);
+  const { warehouse, outbound } = useContext(GlobalContext);
   const [selectedShop, setSelectedShop] = useState('');
-  const [dataList, setDataList] = useState<DataList>([]);
   const [addOutbound, { loading }] = useMutation(ADD_OUTBOUND);
 
   const onAdd = (data: Data) => {
-    setDataList((prev) => [...prev, data]);
+    outbound.set((prev: DataList) => [...prev, data]);
   };
 
   const onSubmit = () => {
-    const dataSubmit = dataList.map((datum) => ({
+    const dataSubmit = outbound.data.map((datum: Data) => ({
       productId: datum.id,
       amount: datum.amount,
     }));
@@ -46,7 +47,7 @@ export default function useOutboundHooks(): OutboundState {
       },
     }).then((resp) => {
       if (!resp.errors) {
-        setDataList([]);
+        outbound.set([]);
         message.info('Successfully create Outbound');
       } else {
         console.log(resp.errors);
@@ -61,7 +62,6 @@ export default function useOutboundHooks(): OutboundState {
     onAdd,
     onSubmit,
     loading,
-    dataList,
-    setDataList,
+    outbound,
   };
 }

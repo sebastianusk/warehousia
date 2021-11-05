@@ -3,7 +3,7 @@ import { Card, Divider, Button, Space, message } from 'antd';
 import WarehouseSelector from 'app/components/WarehousesSelector';
 import WarehouseSelectorTo from 'app/components/WarehousesSelectorTo';
 import InlineProductForm from 'app/components/inlineProductForm';
-import InboundListEditor from 'app/components/InboundListEditor';
+import ListEditor from 'app/components/ListEditor';
 import ExcelInput from 'app/components/ExcelInput';
 import { useApolloClient } from '@apollo/client';
 import { SEARCH_PRODUCT } from 'app/graph';
@@ -16,8 +16,7 @@ export default function WarehouseTransferPage(): React.ReactElement {
     warehouseFrom,
     warehouseTo,
     onAdd,
-    dataList,
-    setData,
+    transfer,
     error,
     setError,
     onSubmit,
@@ -41,9 +40,9 @@ export default function WarehouseTransferPage(): React.ReactElement {
         <h3>Items to transfer</h3>
         <InlineProductForm onAdd={onAdd} />
         <Divider />
-        <InboundListEditor
-          setData={setData}
-          dataList={dataList}
+        <ListEditor
+          setData={transfer.set}
+          dataList={transfer.data}
           selectedWarehouse={warehouseFrom}
         />
         <div className={`${styles.bottomAction}`}>
@@ -74,7 +73,7 @@ export default function WarehouseTransferPage(): React.ReactElement {
                   );
                   message.error('item not found, check log');
                 } else {
-                  setData([...dataList, ...result]);
+                  transfer.set((prev) => [...prev, ...result]);
                 }
               }}
             />
@@ -87,7 +86,7 @@ export default function WarehouseTransferPage(): React.ReactElement {
             disabled={
               !warehouseTo ||
               !warehouseFrom ||
-              dataList.length === 0 ||
+              transfer.data.length === 0 ||
               warehouseTo === warehouseFrom
             }
           >

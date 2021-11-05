@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { Card, Divider, Button, Space } from 'antd';
 import WarehouseSelector from 'app/components/WarehousesSelector';
 import ShopsSelector from 'app/components/ShopsSelector';
-import InboundListEditor from 'app/components/InboundListEditor';
+import ListEditor from 'app/components/ListEditor';
 import InlineProductForm from 'app/components/inlineProductForm';
 import ExcelInput from 'app/components/ExcelInput';
 import useOutboundHooks from './hooks';
@@ -17,8 +17,7 @@ export default function WarehouseOutboundPage(): ReactElement {
     onAdd,
     onSubmit,
     loading,
-    dataList,
-    setDataList,
+    outbound,
   } = useOutboundHooks();
 
   return (
@@ -38,9 +37,9 @@ export default function WarehouseOutboundPage(): ReactElement {
         <h3>Input Order</h3>
         <InlineProductForm onAdd={onAdd} />
         <Divider />
-        <InboundListEditor
-          dataList={dataList}
-          setData={setDataList}
+        <ListEditor
+          dataList={outbound.data}
+          setData={outbound.set}
           selectedWarehouse={selectedWarehouse}
         />
         <div className={`${styles.bottomAction}`}>
@@ -52,7 +51,7 @@ export default function WarehouseOutboundPage(): ReactElement {
                   name: '',
                   amount: parseInt(item[1], 10),
                 }));
-                setDataList([...dataList, ...result]);
+                outbound.set((prev) => [...prev, ...result]);
               }}
             />
             <Button>Error log</Button>
@@ -61,7 +60,7 @@ export default function WarehouseOutboundPage(): ReactElement {
             size="large"
             type="primary"
             disabled={
-              !selectedShop || !selectedWarehouse || dataList.length === 0
+              !selectedShop || !selectedWarehouse || outbound.data.length === 0
             }
             onClick={onSubmit}
             loading={loading}
