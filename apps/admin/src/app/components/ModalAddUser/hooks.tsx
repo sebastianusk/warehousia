@@ -84,13 +84,6 @@ export default function useModalAddUserHooks(
       refetchQueries: [
         {
           query: GET_ADMINS,
-          variables: {
-            query: '',
-            pagination: {
-              offset: 0,
-              limit: 10,
-            },
-          },
         },
       ],
     });
