@@ -12,11 +12,11 @@ import WarehousePreparingPage from './pages/WarehousePreparingPage';
 import WarehouseMissingPage from './pages/WarehouseMissingPage';
 import WarehouseTransactionPage from './pages/WarehouseTransactionPage';
 import AccountPage from './pages/AccountPage';
-import UserDetail from './components/UserDetail';
 import WarehouseDemandPage from './pages/WarehouseDemandPage';
 import SuperAdminWarehousePage from './pages/SuperAdminWarehousePage';
 import SuperAdminShopsPage from './pages/SuperAdminShopsPage';
 import SuperAdminPage from './pages/SuperAdminPage';
+import AdminDetailPage from './pages/AdminDetailPage';
 
 export default function App() {
   return (
@@ -172,7 +172,7 @@ export default function App() {
               path="/admin-detail/:id"
               render={() =>
                 localStorage.access_token ? (
-                  <UserDetail />
+                  <AdminDetailPage />
                 ) : (
                   <Redirect to="/login" />
                 )

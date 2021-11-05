@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 
 import styles from './index.module.css';
 
-export default function UserDetailHeader(props: {
+export default function AdminDetailHeader(props: {
   id: string;
 }): React.ReactElement {
   const { data } = useQuery(GET_ADMINS, {

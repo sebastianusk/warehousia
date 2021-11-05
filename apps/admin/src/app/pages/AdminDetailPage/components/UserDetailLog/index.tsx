@@ -8,7 +8,7 @@ import styles from './index.module.css';
 
 const LIMIT = 5;
 
-export default function UserDetailLog(props: {
+export default function AdminDetailLog(props: {
   id: string;
 }): React.ReactElement {
   const [page, setPage] = useState(1);
