@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Card, Button, Checkbox } from 'antd';
+import { Card, Button, Checkbox, Space } from 'antd';
 
 import WarehouseSelector from 'app/components/WarehousesSelector';
 import TablePreparation from '../../components/TablePreparation';
@@ -23,12 +23,12 @@ export default function WarehousePreparingPage(): ReactElement {
       <Card className={styles.card}>
         <div>
           <h2 className={styles.title}>CREATE PREPARING</h2>
-          <div className={styles.flexContainer}>
+          <Space size="middle" className="picker-container">
             <div>
               <div>Warehouse ID:</div>
               <WarehouseSelector />
             </div>
-            <div className={styles.shopSelectorContainer}>
+            <div>
               <div>Select Shop(s):</div>
               <div>
                 <Checkbox.Group
@@ -39,7 +39,7 @@ export default function WarehousePreparingPage(): ReactElement {
                 />
               </div>
             </div>
-          </div>
+          </Space>
         </div>
       </Card>
       <Card className={styles.card}>

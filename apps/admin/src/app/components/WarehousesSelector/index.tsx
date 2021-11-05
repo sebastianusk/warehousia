@@ -5,8 +5,6 @@ import { useQuery } from '@apollo/client';
 import { GET_WAREHOUSES } from 'app/graph';
 import { GlobalContext } from '../GlobalState';
 
-import styles from './index.module.css';
-
 interface WarehouseSelectorProps {
   feature?: string | undefined;
 }
@@ -42,7 +40,7 @@ export default function WarehouseSelector({
 
   return (
     <Select
-      className={styles.select}
+      className="wh-selector"
       onChange={(value) => onSelectWarehouse((value || '') as string)}
       value={warehouse.selectedWarehouse}
     >

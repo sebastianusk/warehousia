@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Button, Card, Input, Space, Table, Tag } from 'antd';
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import ModalAddUser from 'app/components/ModalAddUser';
 import { useHistory } from 'react-router-dom';
 import styles from './index.module.css';
@@ -29,7 +29,7 @@ export default function SuperAdminPage(): React.ReactElement {
           </div>
         </div>
       </Card>
-      <Card className={styles.card}>
+      <Card className={styles.card} loading={!data}>
         {data && (
           <Table
             size="middle"

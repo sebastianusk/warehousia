@@ -26,7 +26,7 @@ export default function WarehouseOutboundPage(): ReactElement {
         <div className={`${styles.flexContainer}`}>
           <h2 className={styles.title}>CREATE OUTBOUND</h2>
         </div>
-        <Space size="middle" className={styles.warehousePicker}>
+        <Space size="middle" className="picker-container">
           <div>
             <div>From Warehouse:</div>
             <WarehouseSelector feature="OUTBOUND" />
@@ -38,7 +38,7 @@ export default function WarehouseOutboundPage(): ReactElement {
         </Space>
       </Card>
       <Card className={styles.card}>
-        <h3>Input Order</h3>
+        <h3>Input Items To Outbound</h3>
         <InlineProductForm onAdd={onAdd} />
         <Divider />
         <ListEditor

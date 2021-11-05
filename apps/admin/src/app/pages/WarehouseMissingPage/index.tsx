@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Card, Button, Form, InputNumber, AutoComplete } from 'antd';
+import { Card, Button, Form, InputNumber, AutoComplete, Space } from 'antd';
 import WarehouseSelector from 'app/components/WarehousesSelector';
 import PreparationsSelector from 'app/components/PreparationsSelector';
 import useMissingHooks from './hooks';
@@ -22,19 +22,19 @@ export default function WarehouseMissingPage(): ReactElement {
       <Card className={styles.card}>
         <div>
           <h2 className={styles.title}>MISSING ITEM FORM</h2>
-          <div className={styles.flexContainer}>
-            <div className={styles.selectContainer}>
+          <Space size="middle" className="picker-container">
+            <div>
               <div>Warehouse ID:</div>
               <WarehouseSelector />
             </div>
-            <div className={styles.selectContainer}>
+            <div>
               <div>Preparation ID:</div>
               <PreparationsSelector
                 onSelectPrep={onSelectPreparation}
                 dataSource={dataSource}
               />
             </div>
-          </div>
+          </Space>
         </div>
         {selectedWarehouse && selectedPrep && (
           <Form

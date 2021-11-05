@@ -32,8 +32,8 @@ export default function EditShopModal(
           },
           refetchQueries: [GET_SHOPS],
         }).then(() => {
-          form.resetFields();
           props.setEditData(undefined);
+          form.resetFields();
         });
       }}
     >

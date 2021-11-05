@@ -34,7 +34,7 @@ export default function SuperAdminWarehousePage(): React.ReactElement {
           </div>
         </div>
       </Card>
-      <Card className={styles.card}>
+      <Card className={styles.card} loading={!data}>
         {data && (
           <Table
             size="middle"

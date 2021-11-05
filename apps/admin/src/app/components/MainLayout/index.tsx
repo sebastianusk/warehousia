@@ -59,7 +59,7 @@ const MainLayout: React.FC = ({ children }) => {
           {userData?.role === 'SUPER_ADMIN' ? (
             <SubMenu
               key="super-admin"
-              icon={<HomeOutlined />}
+              icon={<GroupOutlined />}
               title="Super Admin"
             >
               <Menu.Item key="super-admin-admins">Admins</Menu.Item>

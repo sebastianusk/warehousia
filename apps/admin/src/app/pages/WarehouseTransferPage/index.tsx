@@ -29,7 +29,7 @@ export default function WarehouseTransferPage(): React.ReactElement {
         <div className={`${styles.flexContainer}`}>
           <h2 className={styles.title}>TRANSFER</h2>
         </div>
-        <Space size="middle" className="picker">
+        <Space size="middle" className="picker-container">
           <div>
             <div>From:</div>
             <WarehouseSelector feature="TRANSFER" />
@@ -41,7 +41,7 @@ export default function WarehouseTransferPage(): React.ReactElement {
         </Space>
       </Card>
       <Card className={styles.card}>
-        <h3>Items to transfer</h3>
+        <h3>Input Items to Transfer</h3>
         <InlineProductForm onAdd={onAdd} />
         <Divider />
         <ListEditor

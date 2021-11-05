@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Button, Card } from 'antd';
+import { Button, Card, Space } from 'antd';
 import ProductListComponent from 'app/components/ProductListComponent';
 import WarehouseSelectorAll from 'app/components/WarehousesSelectorAll';
 import { GlobalContext } from 'app/components/GlobalState';
@@ -26,7 +26,6 @@ export default function ProductsPage(): React.ReactElement {
         <div className={`${styles.flexContainer}`}>
           <div>
             <h2>PRODUCTS</h2>
-            <WarehouseSelectorAll />
           </div>
           <div>
             <Button
@@ -44,6 +43,12 @@ export default function ProductsPage(): React.ReactElement {
             </Button>
           </div>
         </div>
+        <Space size="middle" className="picker-container">
+          <div>
+            <div>Warehouse:</div>
+            <WarehouseSelectorAll />
+          </div>
+        </Space>
       </Card>
       <ProductListComponent />
       <ModalAddProduct visible={showModal} setVisible={setShowModal} />

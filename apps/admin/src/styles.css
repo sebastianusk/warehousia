@@ -12,8 +12,11 @@ body {
   margin: 0;
 }
 
-.picker {
+.picker-container {
   margin-top: 15px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+}
+.wh-selector {
+  width: 250px;
 }

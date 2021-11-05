@@ -21,12 +21,12 @@ export default function WarehouseTransactionPage(): ReactElement {
       <Card className={styles.card}>
         <div>
           <h2 className={styles.title}>CREATE TRANSACTION</h2>
-          <Space size="middle" className="picker">
+          <Space size="middle" className="picker-container">
             <div>
               <div>Warehouse ID:</div>
               <WarehouseSelector />
             </div>
-            <div className={styles.prepSelector}>
+            <div>
               <div>Preparation ID:</div>
               <PreparationsSelector
                 onSelectPrep={onSelectPreparation}

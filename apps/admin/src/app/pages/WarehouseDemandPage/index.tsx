@@ -14,7 +14,7 @@ export default function WarehouseDemandPage(): React.ReactElement {
         <div className={styles.flexContainer}>
           <h2 className={styles.title}>VIEW DEMAND</h2>
         </div>
-        <Space size="middle" className="picker">
+        <Space size="middle" className="picker-container">
           <div>
             <div>Warehouse:</div>
             <WarehouseSelectorAll />

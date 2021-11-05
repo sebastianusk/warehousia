@@ -5,8 +5,6 @@ import { useQuery } from '@apollo/client';
 import { GET_WAREHOUSES } from 'app/graph';
 import { GlobalContext } from '../GlobalState';
 
-import styles from './index.module.css';
-
 export default function WarehouseSelectorAll(): React.ReactElement {
   const { userData, warehouse } = useContext(GlobalContext);
   useQuery(GET_WAREHOUSES, {
@@ -33,7 +31,7 @@ export default function WarehouseSelectorAll(): React.ReactElement {
 
   return (
     <Select
-      className={styles.select}
+      className="wh-selector"
       onChange={(value) => onSelectWarehouseAll((value || '') as string)}
       value={warehouse.selectedWarehouseAll}
     >

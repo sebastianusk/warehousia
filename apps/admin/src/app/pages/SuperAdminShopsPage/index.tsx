@@ -5,7 +5,7 @@ import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import ModalAddShop from 'app/components/ModalAddShop';
 import styles from './index.module.css';
 import useSuperAdminShopsHooks, { ShopItem } from './hooks';
-import EditShopModal from './components/EditWarehouseModal';
+import EditShopModal from './components/EditShopModal';
 
 export default function SuperAdminShopsPage(): React.ReactElement {
   const {
@@ -34,7 +34,7 @@ export default function SuperAdminShopsPage(): React.ReactElement {
           </div>
         </div>
       </Card>
-      <Card className={styles.card}>
+      <Card className={styles.card} loading={!data}>
         {data && (
           <Table
             size="middle"
