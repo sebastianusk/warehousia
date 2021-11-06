@@ -118,10 +118,12 @@ export class ProductStockModel {
       data.price,
       data.created_at,
       data.updated_at,
-      data.stock.map((item) => ({
-        warehouseId: item.warehouse_id,
-        amount: item.stock,
-      }))
+      data.stock
+        .map((item) => ({
+          warehouseId: item.warehouse_id,
+          amount: item.stock,
+        }))
+        .sort((a, b) => b.amount - a.amount)
     );
   }
 
