@@ -15,6 +15,7 @@ export default class WarehouseService {
     name: string,
     features: Feature[]
   ): Promise<string> {
+    const products = await this.db.product.findMany();
     const result = await this.db.$transaction([
       this.db.warehouse.create({
         data: {
@@ -23,6 +24,14 @@ export default class WarehouseService {
           features: features
             .filter((item) => item)
             .map((item) => item.toString()),
+          stock: {
+            createMany: {
+              data: products.map((product) => ({
+                stock: 0,
+                product_id: product.id,
+              })),
+            },
+          },
         },
       }),
       auth.log(this.db, 'createWarehouse', { id }),

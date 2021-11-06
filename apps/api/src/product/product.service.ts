@@ -17,10 +17,23 @@ export default class ProductService {
     products: { id: string; name?: string; price?: number }[]
   ): Promise<number> {
     if (products.length === 0) throw new FieldEmpty('products');
+    const warehouses = await this.db.warehouse.findMany();
     const result = await this.db.$transaction([
       ...products.map(({ id, name, price }) =>
         this.db.product.upsert({
-          create: { id, name, price },
+          create: {
+            id,
+            name,
+            price,
+            stock: {
+              createMany: {
+                data: warehouses.map((warehouse) => ({
+                  stock: 0,
+                  warehouse_id: warehouse.id,
+                })),
+              },
+            },
+          },
           update: { name, price },
           where: { id },
         })
