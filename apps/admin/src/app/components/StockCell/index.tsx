@@ -1,6 +1,6 @@
+import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCT_STOCK } from 'app/graph';
-import React from 'react';
 
 export default function StockCell({
   productId,
@@ -15,6 +15,7 @@ export default function StockCell({
     variables: {
       productId,
     },
+    fetchPolicy: 'no-cache',
   });
   if (loading) {
     return <span>Loading...</span>;
