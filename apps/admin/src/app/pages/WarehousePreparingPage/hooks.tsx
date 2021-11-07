@@ -4,6 +4,7 @@ import { message } from 'antd';
 import { ADD_PREPARATION, GET_OUTBOUNDS } from 'app/graph';
 import createPreparingXlsx from 'app/lib/xlsx/preparingXlsx';
 import { GlobalContext } from 'app/components/GlobalState';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 interface PreparingState {
   selectedWarehouse: string;
@@ -18,6 +19,7 @@ interface PreparingState {
   onSubmit(): void;
   loading: boolean;
   dataSource: DataSource;
+  onCheckAllChange(e: CheckboxChangeEvent): void;
 }
 
 type DataSource =
@@ -94,6 +96,10 @@ export default function usePreparingHooks(): PreparingState {
     });
   };
 
+  const onCheckAllChange = (e: CheckboxChangeEvent) => {
+    setSelectedShops(e.target.checked ? shopsOption : []);
+  };
+
   return {
     selectedWarehouse: warehouse.selectedWarehouse,
     shopsOption,
@@ -102,5 +108,6 @@ export default function usePreparingHooks(): PreparingState {
     onSubmit,
     loading,
     dataSource,
+    onCheckAllChange,
   };
 }

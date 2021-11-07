@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Card, Button, Checkbox, Space } from 'antd';
+import { Card, Button, Checkbox, Space, Divider } from 'antd';
 
 import WarehouseSelector from 'app/components/WarehousesSelector';
 import TablePreparation from '../../components/TablePreparation';
@@ -16,6 +16,7 @@ export default function WarehousePreparingPage(): ReactElement {
     selectedShops,
     onChangeSelectShops,
     dataSource,
+    onCheckAllChange,
   } = usePreparingHooks();
 
   return (
@@ -31,12 +32,20 @@ export default function WarehousePreparingPage(): ReactElement {
             <div>
               <div>Select Shop(s):</div>
               <div>
-                <Checkbox.Group
-                  onChange={onChangeSelectShops}
-                  value={selectedShops}
-                  options={shopsOption}
-                  disabled={!selectedWarehouse}
-                />
+                {shopsOption.length > 0 ? (
+                  <>
+                    <Checkbox onChange={onCheckAllChange}>Check All</Checkbox>
+                    <Divider type="vertical" />
+                    <Checkbox.Group
+                      onChange={onChangeSelectShops}
+                      value={selectedShops}
+                      options={shopsOption}
+                      disabled={!selectedWarehouse}
+                    />
+                  </>
+                ) : (
+                  <div>No Data</div>
+                )}
               </div>
             </div>
           </Space>
