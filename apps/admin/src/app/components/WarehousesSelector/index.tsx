@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { Select } from 'antd';
 import { useQuery } from '@apollo/client';
@@ -37,6 +37,22 @@ export default function WarehouseSelector({
   const onSelectWarehouse = (val: string) => {
     warehouse.setSelectedWarehouse(val);
   };
+
+  useEffect(() => {
+    if (warehouse.warehousesList.length > 0) {
+      const isOnTheList = warehouse.warehousesList.some(
+        (wh: any) => wh.id === warehouse.selectedWarehouse
+      );
+      if (isOnTheList) {
+        warehouse.setSelectedWarehouse(warehouse.selectedWarehouse);
+      } else {
+        warehouse.setSelectedWarehouse('');
+      }
+    } else {
+      warehouse.setSelectedWarehouse('');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [warehouse.warehousesList]);
 
   return (
     <Select

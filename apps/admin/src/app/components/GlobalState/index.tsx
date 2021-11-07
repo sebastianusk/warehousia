@@ -16,8 +16,8 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({
   children: ReactNode;
 }) => {
   const [userData, setUserData] = useState();
-  const [warehousesList, setWarehousesList] = useState();
-  const [warehousesListAll, setWarehousesListAll] = useState();
+  const [warehousesList, setWarehousesList] = useState([]);
+  const [warehousesListAll, setWarehousesListAll] = useState([]);
   const [selectedWarehouseTo, setSelectedWarehouseTo] = useState('');
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
   const [selectedWarehouseAll, setSelectedWarehouseAll] = useState('');
