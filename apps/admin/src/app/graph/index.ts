@@ -225,8 +225,8 @@ export const ADD_OUTBOUND = gql`
 `;
 
 export const GET_OUTBOUNDS = gql`
-  query Outbounds($warehouseId: String!, $shopId: String!) {
-    outbounds(warehouseId: $warehouseId, shopId: $shopId) {
+  query Outbounds($warehouseId: String!) {
+    outbounds(warehouseId: $warehouseId) {
       id
       createdAt
       createdBy
