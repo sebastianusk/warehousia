@@ -8,7 +8,7 @@ type Query {
   productStock(productId: String!): ProductStock
   searchProduct(query: String, limit: Int, offset: Int): [ProductAutoFill]
   productLog(productId: String, limit: Int, offset: Int): [ProductLog!]
-  outbounds(warehouseId: String!, shopId: String!): [Outbound]
+  outbounds(warehouseId: String!): [Outbound]
   demands(warehouseId: String, shopId: String, limit: Int, offset: Int): [Demand]
   preparations(query: String, warehouseId: String): PreparationList
   transactions(query: String, productId: String, warehouseId: String, shopId: String, limit: Int, offset: Int): [Transaction]

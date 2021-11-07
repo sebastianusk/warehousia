@@ -48,13 +48,9 @@ export default class TransactionResolver {
   @Query()
   @UseGuards(JwtAuthGuard)
   async outbounds(
-    @Args('warehouseId') warehouseId: string,
-    @Args('shopId') shopId: string
+    @Args('warehouseId') warehouseId: string
   ): Promise<Outbound[]> {
-    const data = await this.transactionService.getOutbounds(
-      warehouseId,
-      shopId
-    );
+    const data = await this.transactionService.getOutbounds(warehouseId);
     return data.map((item) => item.toResponse());
   }
 

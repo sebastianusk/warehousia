@@ -186,14 +186,10 @@ export default class TransactionService {
     return demands.map((data) => DemandModel.fromDB(data));
   }
 
-  async getOutbounds(
-    warehouseId: string,
-    shopId: string
-  ): Promise<OutboundModel[]> {
+  async getOutbounds(warehouseId: string): Promise<OutboundModel[]> {
     const outbounds = await this.db.outbound_item.findMany({
       where: {
         warehouse_id: warehouseId,
-        shop_id: shopId,
         preparation_id: null,
       },
       orderBy: { created_at: 'desc' },
