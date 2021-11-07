@@ -7,6 +7,7 @@ export default function JsonAsXlsx(dataSource: any) {
     ['ID Transaksi:', dataSource.id],
     ['Gudang:', dataSource.warehouseId],
     ['Toko:', dataSource.shopId],
+    ['', ''],
     ['Product Id', 'Amount'],
   ];
   dataSource.items.forEach((el: any) => {
