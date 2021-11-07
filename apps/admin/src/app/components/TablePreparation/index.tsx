@@ -18,7 +18,10 @@ export default function TablePreparation({
     <>
       <Table
         size="middle"
-        dataSource={data}
+        dataSource={data?.map((item) => ({
+          ...item,
+          key: item.productId,
+        }))}
         pagination={false}
         scroll={{ y: 400 }}
       >
