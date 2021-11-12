@@ -79,7 +79,8 @@ export default class ProductResolver {
     const id = await this.productService.editProduct(
       auth,
       input.id,
-      input.name
+      input.name,
+      input.price
     );
     return { id };
   }

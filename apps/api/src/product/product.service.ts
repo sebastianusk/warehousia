@@ -48,11 +48,12 @@ export default class ProductService {
   async editProduct(
     auth: AuthWrapper,
     id: string,
-    name: string
+    name: string,
+    price: number
   ): Promise<string> {
     const result = await this.db.$transaction([
       this.db.product.update({
-        data: { name },
+        data: { name, price },
         where: { id },
       }),
       auth.log(this.db, 'editProduct', { id }),
