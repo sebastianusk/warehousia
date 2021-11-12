@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import { message } from 'antd';
 import { ADD_OUTBOUND } from 'app/graph';
 import { GlobalContext } from 'app/components/GlobalState';
+import checkDupeData from 'app/helper/checkDupeData';
 
 interface OutboundState {
   selectedShop: string;
@@ -31,7 +32,7 @@ export default function useOutboundHooks(): OutboundState {
   const [addOutbound, { loading }] = useMutation(ADD_OUTBOUND);
 
   const onAdd = (data: Data) => {
-    outbound.set((prev: DataList) => [...prev, data]);
+    outbound.set((prev: DataList) => checkDupeData(data, prev));
   };
 
   const onSubmit = () => {

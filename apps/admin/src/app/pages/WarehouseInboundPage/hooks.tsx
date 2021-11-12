@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import { message } from 'antd';
 import { GlobalContext } from 'app/components/GlobalState';
 import { ADD_INBOUND } from 'app/graph';
+import checkDupeData from 'app/helper/checkDupeData';
 
 interface InboundState {
   selectedWarehouse: string;
@@ -31,7 +32,7 @@ export default function useInboundHooks(): InboundState {
   const { warehouse, inbound } = useContext(GlobalContext);
 
   const onAdd = (data: Data) => {
-    inbound.set((prev: DataList) => [...prev, data]);
+    inbound.set((prev: DataList) => checkDupeData(data, prev));
   };
 
   const onSubmit = () => {

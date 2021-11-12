@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client';
 import { message } from 'antd';
 import { GlobalContext } from 'app/components/GlobalState';
 import { ADD_TRANSFER } from 'app/graph';
+import checkDupeData from 'app/helper/checkDupeData';
 import { useContext, useState } from 'react';
 
 interface TransferPageState {
@@ -57,7 +58,7 @@ export default function useTranserPageHooks(): TransferPageState {
   };
 
   const onAdd = (newData: Data) => {
-    transfer.set((prev: DataList) => [...prev, newData]);
+    transfer.set((prev: DataList) => checkDupeData(newData, prev));
   };
 
   return {
