@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, Modal } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-import { ADD_PRODUCTS } from 'app/graph';
+import { EDIT_PRODUCT } from 'app/graph';
 import { useApolloClient, useMutation } from '@apollo/client';
 
 interface ProductEditModalProps {
@@ -17,7 +17,7 @@ export default function ProductEditModal(
   const { data, onCancel, visible } = props;
   const [form] = useForm();
   form.setFieldsValue({ name: data?.name, price: data?.price });
-  const [editProduct, { loading }] = useMutation(ADD_PRODUCTS, {
+  const [editProduct, { loading }] = useMutation(EDIT_PRODUCT, {
     onCompleted: () => {
       onCancel();
       client.refetchQueries({ include: ['ProductStock', 'ProductLog'] });
@@ -34,7 +34,11 @@ export default function ProductEditModal(
         if (data?.id)
           editProduct({
             variables: {
-              input: { id: data.id, name: values.name, price: values.price },
+              input: {
+                id: data.id,
+                name: values.name,
+                price: Number(values.price),
+              },
             },
           });
       }}
