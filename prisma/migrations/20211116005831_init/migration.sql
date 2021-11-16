@@ -156,6 +156,7 @@ CREATE TABLE "demand" (
     "created_by" TEXT NOT NULL,
     "remarks" JSONB NOT NULL,
     "fulfiled_at" TIMESTAMP(3),
+    "expired_at" TIMESTAMP(3),
     "fulfiled_outbound_id" TEXT,
     "previous_demand_id" TEXT,
 
