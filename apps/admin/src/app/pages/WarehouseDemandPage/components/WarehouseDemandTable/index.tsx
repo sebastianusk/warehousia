@@ -32,6 +32,12 @@ export default function WarehouseDemandTable(): React.ReactElement {
           },
           { key: 'by', dataIndex: 'createdBy', width: '20%', title: 'By' },
           {
+            key: 'expiredAt',
+            dataIndex: 'expiredAt',
+            width: '20%',
+            title: 'ExpiredAt',
+          },
+          {
             key: 'shopId',
             dataIndex: 'shopId',
             title: 'Shop ID',

@@ -356,6 +356,7 @@ export const GET_DEMANDS = gql`
       productId
       shopId
       warehouseId
+      expiredAt
     }
   }
 `;

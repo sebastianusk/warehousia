@@ -3,7 +3,7 @@ export const configs = {
   SESSION_EXPIRED: 86400000,
   JWT_SECRET: 'secretKey',
   JWT_EXPIRES_IN: '360s',
-  DEMAND_EXPIRED_AT: 5,
+  DEMAND_EXPIRED_AT: 10,
 };
 
 type Config = keyof typeof configs;
