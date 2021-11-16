@@ -287,6 +287,7 @@ type Demand {
   amount: Int!
   createdAt: String!
   createdBy: String!
+  expiredAt: String!
 }
 
 type PreparationList {

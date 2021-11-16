@@ -320,6 +320,7 @@ export class Demand {
     amount: number;
     createdAt: string;
     createdBy: string;
+    expiredAt: string;
 }
 
 export class PreparationList {

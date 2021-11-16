@@ -6,6 +6,7 @@ import {
   ProductsNotFound,
   WrongMissingAmount,
 } from '../common/errors';
+import { getEnvNumber } from '../config';
 import DBService from '../db/db.service';
 import {
   DemandModel,
@@ -128,6 +129,12 @@ export default class TransactionService {
       )
     );
 
+    const expiredAt = () => {
+      const now = new Date();
+      now.setDate(now.getDate() + getEnvNumber('DEMAND_EXPIRED_AT'));
+      return now;
+    };
+
     const demands = await this.db.$transaction(
       wrapper.demand.map(({ productId, amount }) =>
         this.db.demand.create({
@@ -137,6 +144,7 @@ export default class TransactionService {
             warehouse_id: warehouseId,
             shop_id: shopId,
             created_by: auth.username,
+            expired_at: expiredAt(),
             remarks: {
               source: 'outbound',
             },

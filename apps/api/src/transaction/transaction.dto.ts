@@ -1,5 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
-import { demand, outbound_item, Prisma } from '@prisma/client';
+import { demand, outbound_item } from '@prisma/client';
 import { Demand, Outbound, Preparation, Transaction } from '../graphql';
 
 export class DemandModel {
@@ -10,7 +10,8 @@ export class DemandModel {
     public productId: string,
     public amount: number,
     public createdAt: Date,
-    public createdBy: string
+    public createdBy: string,
+    public expiredAt: Date
   ) {}
 
   static fromDB(data: demand): DemandModel {
@@ -21,7 +22,8 @@ export class DemandModel {
       data.product_id,
       data.amount,
       data.created_at,
-      data.created_by
+      data.created_by,
+      data.expired_at
     );
   }
 
@@ -34,6 +36,7 @@ export class DemandModel {
       amount: this.amount,
       createdAt: this.createdAt.toISOString(),
       createdBy: this.createdBy,
+      expiredAt: this.expiredAt?.toISOString() || '',
     };
   }
 }

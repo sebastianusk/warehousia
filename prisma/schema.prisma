@@ -153,6 +153,7 @@ model demand {
   created_by           String
   remarks              Json
   fulfiled_at          DateTime?
+  expired_at           DateTime?
   fulfiled_outbound    outbound_item? @relation(fields: [fulfiled_outbound_id], references: [id])
   fulfiled_outbound_id String?
   previous_demand      demand?        @relation("child_demand", fields: [previous_demand_id], references: [id])
