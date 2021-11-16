@@ -4,11 +4,14 @@ import { GET_DEMANDS } from 'app/graph';
 import { useQuery } from '@apollo/client';
 import Page from 'app/components/Page';
 import { GlobalContext } from 'app/components/GlobalState';
+import { DemandItem } from '../../hooks';
+import EditDemandModal from '../EditDemandModal';
 
 const LIMIT = 10;
 
 export default function WarehouseDemandTable(): React.ReactElement {
   const [page, setPage] = useState(1);
+  const [editData, setEditData] = useState<DemandItem>();
   const { warehouse } = useContext(GlobalContext);
 
   const { data, fetchMore } = useQuery(GET_DEMANDS, {
@@ -27,29 +30,37 @@ export default function WarehouseDemandTable(): React.ReactElement {
           {
             key: 'createdAt',
             dataIndex: 'createdAt',
-            width: '30%',
+            width: '20%',
             title: 'Created',
           },
-          { key: 'by', dataIndex: 'createdBy', width: '20%', title: 'By' },
           {
             key: 'expiredAt',
             dataIndex: 'expiredAt',
             width: '20%',
             title: 'ExpiredAt',
           },
+          { key: 'by', dataIndex: 'createdBy', title: 'By' },
           {
             key: 'shopId',
             dataIndex: 'shopId',
             title: 'Shop ID',
-            width: '20%',
           },
           {
             key: 'product',
             dataIndex: 'productId',
-            width: '20%',
             title: 'Product',
           },
           { key: 'amount', dataIndex: 'amount', title: 'Amount' },
+          {
+            title: 'Action',
+            dataIndex: 'Action',
+            key: 'action',
+            render: (_text: any, record: DemandItem) => (
+              <a onClick={() => setEditData(record)} role="presentation">
+                View
+              </a>
+            ),
+          },
         ]}
       />
       <Page
@@ -63,6 +74,7 @@ export default function WarehouseDemandTable(): React.ReactElement {
         }}
         onPrev={() => setPage(page - 1)}
       />
+      <EditDemandModal editData={editData} setEditData={setEditData} />
     </Card>
   ) : (
     <div />
