@@ -59,12 +59,14 @@ export default function useModalAddUserHooks(
   const { loading: loadingDataWarehouses } = useQuery(GET_WAREHOUSES, {
     onCompleted(dataWarehouses) {
       const temp: WarehousesOptions = [];
-      dataWarehouses.warehouses.map((warehouse: WarehouseType) =>
-        temp.push({
-          label: warehouse.name,
-          value: warehouse.id,
-        })
-      );
+      dataWarehouses.warehouses.forEach((warehouse: WarehouseType) => {
+        if (warehouse.active) {
+          temp.push({
+            label: warehouse.name,
+            value: warehouse.id,
+          });
+        }
+      });
       setWarehousesOptions(temp);
     },
   });
