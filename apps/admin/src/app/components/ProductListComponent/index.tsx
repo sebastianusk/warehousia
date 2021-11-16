@@ -40,6 +40,8 @@ export default function ProductListComponent(): React.ReactElement {
     refetch({
       warehouseId: warehouse.selectedWarehouseAll,
       query: search,
+      offset: 0,
+      limit: LIMIT,
     });
   }, [refetch, warehouse.selectedWarehouseAll, search]);
 

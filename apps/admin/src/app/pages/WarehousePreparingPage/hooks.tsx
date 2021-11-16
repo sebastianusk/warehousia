@@ -62,14 +62,18 @@ export default function usePreparingHooks(): PreparingState {
     });
   }, [refetch, warehouse.selectedWarehouse]);
 
-  const onChangeSelectShops = (shopIds: any) => {
-    setSelectedShops(shopIds);
+  const fillDataSource = (shopIds: any) => {
     if (data.outbounds.length > 0) {
       const newData = data.outbounds
         .filter((item: any) => shopIds.includes(item.shopId))
         .map((el: any) => ({ productId: el.productId, actual: el.amount }));
       setDataSource(newData);
     }
+  };
+
+  const onChangeSelectShops = (shopIds: any) => {
+    setSelectedShops(shopIds);
+    fillDataSource(shopIds);
   };
 
   const onSubmit = () => {
@@ -97,7 +101,13 @@ export default function usePreparingHooks(): PreparingState {
   };
 
   const onCheckAllChange = (e: CheckboxChangeEvent) => {
-    setSelectedShops(e.target.checked ? shopsOption : []);
+    if (e.target.checked) {
+      setSelectedShops(shopsOption);
+      fillDataSource(shopsOption);
+    } else {
+      setSelectedShops([]);
+      fillDataSource([]);
+    }
   };
 
   return {
