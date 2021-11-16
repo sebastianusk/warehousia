@@ -7,16 +7,13 @@ import { GlobalContext } from 'app/components/GlobalState';
 
 const LIMIT = 10;
 
-export default function WarehouseDemandTable(props: {
-  shopId: string;
-}): React.ReactElement {
+export default function WarehouseDemandTable(): React.ReactElement {
   const [page, setPage] = useState(1);
   const { warehouse } = useContext(GlobalContext);
 
   const { data, fetchMore } = useQuery(GET_DEMANDS, {
     variables: {
       warehouseId: warehouse.selectedWarehouse,
-      shopId: props.shopId,
       limit: LIMIT,
       offset: (page - 1) * LIMIT,
     },
@@ -30,10 +27,16 @@ export default function WarehouseDemandTable(props: {
           {
             key: 'createdAt',
             dataIndex: 'createdAt',
-            width: '40%',
+            width: '30%',
             title: 'Created',
           },
           { key: 'by', dataIndex: 'createdBy', width: '20%', title: 'By' },
+          {
+            key: 'shopId',
+            dataIndex: 'shopId',
+            title: 'Shop ID',
+            width: '20%',
+          },
           {
             key: 'product',
             dataIndex: 'productId',

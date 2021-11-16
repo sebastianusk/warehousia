@@ -58,13 +58,11 @@ export default class TransactionResolver {
   @UseGuards(JwtAuthGuard)
   async demands(
     @Args('warehouseId') warehouseId: string,
-    @Args('shopId') shopId: string,
     @Args('offset') offset: number,
     @Args('limit') limit: number
   ): Promise<Demand[]> {
     const data = await this.transactionService.getDemands(
       warehouseId,
-      shopId,
       limit,
       offset
     );

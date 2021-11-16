@@ -347,18 +347,8 @@ export const ADD_TRANSFER = gql`
 `;
 
 export const GET_DEMANDS = gql`
-  query Demands(
-    $warehouseId: String!
-    $shopId: String!
-    $limit: Int
-    $offset: Int
-  ) {
-    demands(
-      warehouseId: $warehouseId
-      shopId: $shopId
-      limit: $limit
-      offset: $offset
-    ) {
+  query Demands($warehouseId: String!, $limit: Int, $offset: Int) {
+    demands(warehouseId: $warehouseId, limit: $limit, offset: $offset) {
       id
       createdAt
       createdBy

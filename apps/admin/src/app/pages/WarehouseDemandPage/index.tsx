@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, Space } from 'antd';
 import WarehouseSelectorAll from 'app/components/WarehousesSelectorAll';
-import ShopsSelector from 'app/components/ShopsSelector';
 import WarehouseDemandTable from './components/WarehouseDemandTable';
 
 import styles from './index.module.css';
 
 export default function WarehouseDemandPage(): React.ReactElement {
-  const [shop, setShop] = useState<string | undefined>();
   return (
     <div>
       <Card className={styles.card}>
@@ -19,13 +17,9 @@ export default function WarehouseDemandPage(): React.ReactElement {
             <div>Warehouse:</div>
             <WarehouseSelectorAll />
           </div>
-          <div>
-            <div>Shop:</div>
-            <ShopsSelector onSelectShop={setShop} />
-          </div>
         </Space>
       </Card>
-      {shop ? <WarehouseDemandTable shopId={shop} /> : <div />}
+      <WarehouseDemandTable />
     </div>
   );
 }

@@ -169,7 +169,6 @@ export default class TransactionService {
 
   async getDemands(
     warehouseId: string,
-    shopId: string,
     limit: number = 10,
     offset: number = 0
   ): Promise<DemandModel[]> {
@@ -178,7 +177,6 @@ export default class TransactionService {
       take: limit,
       where: {
         warehouse_id: warehouseId,
-        shop_id: shopId,
         fulfiled_at: null,
       },
       orderBy: { created_at: 'desc' },
