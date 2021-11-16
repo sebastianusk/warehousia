@@ -65,7 +65,6 @@ export default function useModalEditUserHooks(
       refetchQueries: [
         {
           query: GET_ADMINS,
-          variables: { query: input.username },
         },
       ],
     });
