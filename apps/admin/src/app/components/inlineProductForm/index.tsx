@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Button, InputNumber, AutoComplete } from 'antd';
 import { SEARCH_PRODUCT } from 'app/graph';
 import { useLazyQuery } from '@apollo/client';
@@ -15,9 +15,35 @@ export default function InlineProductForm({
     fetchPolicy: 'no-cache',
   });
   const [form] = useForm();
+  const [selectedProduct, setSelectedProduct] = useState({
+    id: '',
+    name: '',
+  });
+  const [canSubmit, setCanSubmit] = useState(false);
+
   const search = _.debounce((value) => {
+    setSelectedProduct({
+      id: '',
+      name: '',
+    });
     getProduct({ variables: { query: value } });
   }, 250);
+
+  const handleSelect = (value: any, options: any) => {
+    setSelectedProduct({
+      id: options.key,
+      name: options.dataname,
+    });
+  };
+
+  const checkCanSubmit = (_changedValues: any, allValues: any) => {
+    if (allValues.amount && allValues.product) {
+      setCanSubmit(true);
+    } else {
+      setCanSubmit(false);
+    }
+  };
+
   return (
     <div className={styles.formContainer}>
       <Form
@@ -26,16 +52,18 @@ export default function InlineProductForm({
         onFinish={(value: { product: string; amount: number }) => {
           form.resetFields();
           onAdd({
-            id: value.product.split('-')[0].trim(),
-            name: value.product.split('-')[1].trim(),
+            id: selectedProduct.id,
+            name: selectedProduct.name,
             amount: value.amount,
           });
         }}
+        onValuesChange={checkCanSubmit}
       >
         <Form.Item label="Product" name="product">
           <AutoComplete
             style={{ width: '500px' }}
             onSearch={(value) => search(value)}
+            onSelect={handleSelect}
             allowClear
             placeholder="search by product name or id"
           >
@@ -43,6 +71,7 @@ export default function InlineProductForm({
               <AutoComplete.Option
                 value={`${item.id} - ${item.name}`}
                 key={item.id}
+                dataname={item.name}
               >
                 {`${item.id} - ${item.name}`}
               </AutoComplete.Option>
@@ -53,7 +82,11 @@ export default function InlineProductForm({
           <InputNumber min={0} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button
+            type="primary"
+            htmlType="submit"
+            disabled={!canSubmit || !selectedProduct.id}
+          >
             Add
           </Button>
         </Form.Item>
