@@ -13,7 +13,7 @@ export default function WarehouseDemandTable(): React.ReactElement {
 
   const { data, fetchMore } = useQuery(GET_DEMANDS, {
     variables: {
-      warehouseId: warehouse.selectedWarehouse,
+      warehouseId: warehouse.selectedWarehouseAll,
       limit: LIMIT,
       offset: (page - 1) * LIMIT,
     },
