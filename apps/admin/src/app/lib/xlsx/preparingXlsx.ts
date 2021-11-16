@@ -1,4 +1,5 @@
 import XLSX from 'xlsx';
+import { fitToColumn } from 'app/helper/xlsx';
 
 export default function preparingXlsx(
   dataSource: any,
@@ -19,6 +20,7 @@ export default function preparingXlsx(
     data.push([el.productId, el.actual]);
   });
   const ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = fitToColumn(data);
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Preparation');
   XLSX.writeFile(wb, filename);

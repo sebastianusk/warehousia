@@ -1,4 +1,5 @@
 import XLSX from 'xlsx';
+import { fitToColumn } from 'app/helper/xlsx';
 
 export default function JsonAsXlsx(dataSource: any) {
   const filename = `${dataSource.id}.xlsx`;
@@ -14,6 +15,7 @@ export default function JsonAsXlsx(dataSource: any) {
     data.push([el.productId, el.amount]);
   });
   const ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = fitToColumn(data);
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Transaksi');
   XLSX.writeFile(wb, filename);
