@@ -1,6 +1,7 @@
-import { warehouse } from '.prisma/client';
+/* eslint-disable max-classes-per-file */
+import { demand, warehouse } from '@prisma/client';
 import { EnumNotValid } from '../common/errors';
-import { Warehouse } from '../graphql';
+import { Demand, Warehouse } from '../graphql';
 
 export enum Feature {
   INBOUND = 'INBOUND',
@@ -51,5 +52,44 @@ export default class WarehouseModel {
       default:
         throw new EnumNotValid('feature', feature);
     }
+  }
+}
+
+export class DemandModel {
+  constructor(
+    public id: string,
+    public warehouseId: string,
+    public shopId: string,
+    public productId: string,
+    public amount: number,
+    public createdAt: Date,
+    public createdBy: string,
+    public expiredAt: Date
+  ) {}
+
+  static fromDB(data: demand): DemandModel {
+    return new DemandModel(
+      data.id,
+      data.warehouse_id,
+      data.shop_id,
+      data.product_id,
+      data.amount,
+      data.created_at,
+      data.created_by,
+      data.expired_at
+    );
+  }
+
+  toResponse(): Demand {
+    return {
+      id: this.id,
+      warehouseId: this.warehouseId,
+      shopId: this.shopId,
+      productId: this.productId,
+      amount: this.amount,
+      createdAt: this.createdAt.toISOString(),
+      createdBy: this.createdBy,
+      expiredAt: this.expiredAt?.toISOString() || '',
+    };
   }
 }

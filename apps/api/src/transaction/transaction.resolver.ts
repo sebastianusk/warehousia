@@ -54,21 +54,6 @@ export default class TransactionResolver {
     return data.map((item) => item.toResponse());
   }
 
-  @Query()
-  @UseGuards(JwtAuthGuard)
-  async demands(
-    @Args('warehouseId') warehouseId: string,
-    @Args('offset') offset: number,
-    @Args('limit') limit: number
-  ): Promise<Demand[]> {
-    const data = await this.transactionService.getDemands(
-      warehouseId,
-      limit,
-      offset
-    );
-    return data.map((item) => item.toResponse());
-  }
-
   @Mutation()
   @UseGuards(JwtAuthGuard)
   async addPreparation(

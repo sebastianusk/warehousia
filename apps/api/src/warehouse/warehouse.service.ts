@@ -3,7 +3,7 @@ import AuthWrapper from '../auth/auth.wrapper';
 import { FieldEmpty, NotEnoughItems, ObjectNotFound } from '../common/errors';
 import DBService from '../db/db.service';
 import { InboundModel, TransferModel } from './stock.dto';
-import WarehouseModel, { Feature } from './warehouse.dto';
+import WarehouseModel, { DemandModel, Feature } from './warehouse.dto';
 
 @Injectable()
 export default class WarehouseService {
@@ -453,5 +453,23 @@ export default class WarehouseService {
       include: { unfulfilled_demand: true },
     });
     return updated.unfulfilled_demand.id;
+  }
+
+  async getDemands(
+    warehouseId: string,
+    limit: number = 10,
+    offset: number = 0
+  ): Promise<DemandModel[]> {
+    const demands = await this.db.demand.findMany({
+      skip: offset,
+      take: limit,
+      where: {
+        warehouse_id: warehouseId,
+        fulfiled_at: null,
+        expired_at: { gt: new Date() },
+      },
+      orderBy: { created_at: 'desc' },
+    });
+    return demands.map((data) => DemandModel.fromDB(data));
   }
 }

@@ -7,6 +7,7 @@ import { AppAbility, Action } from '../auth/policy.factory';
 import PoliciesGuard from '../auth/policy.guard';
 import {
   AddWarehouseInput,
+  Demand,
   EditWarehouseInput,
   IdPayload,
   InboundList,
@@ -158,5 +159,20 @@ export default class WarehouseResolver {
       amount
     );
     return { id: updatedDemandId };
+  }
+
+  @Query()
+  @UseGuards(JwtAuthGuard)
+  async demands(
+    @Args('warehouseId') warehouseId: string,
+    @Args('offset') offset: number,
+    @Args('limit') limit: number
+  ): Promise<Demand[]> {
+    const data = await this.warehouseService.getDemands(
+      warehouseId,
+      limit,
+      offset
+    );
+    return data.map((item) => item.toResponse());
   }
 }

@@ -9,7 +9,6 @@ import {
 import { getEnvNumber } from '../config';
 import DBService from '../db/db.service';
 import {
-  DemandModel,
   OutboundModel,
   PreparationModel,
   TransactionModel,
@@ -173,24 +172,6 @@ export default class TransactionService {
       demands: demands.map((item) => item.id),
       outbounds: outbounds.map((item) => item.id),
     };
-  }
-
-  async getDemands(
-    warehouseId: string,
-    limit: number = 10,
-    offset: number = 0
-  ): Promise<DemandModel[]> {
-    const demands = await this.db.demand.findMany({
-      skip: offset,
-      take: limit,
-      where: {
-        warehouse_id: warehouseId,
-        fulfiled_at: null,
-        expired_at: { gt: new Date() },
-      },
-      orderBy: { created_at: 'desc' },
-    });
-    return demands.map((data) => DemandModel.fromDB(data));
   }
 
   async getOutbounds(warehouseId: string): Promise<OutboundModel[]> {
