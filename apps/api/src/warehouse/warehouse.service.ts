@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import AuthWrapper from '../auth/auth.wrapper';
-import { FieldEmpty, NotEnoughItems } from '../common/errors';
+import { FieldEmpty, NotEnoughItems, ObjectNotFound } from '../common/errors';
 import DBService from '../db/db.service';
 import { InboundModel, TransferModel } from './stock.dto';
 import WarehouseModel, { Feature } from './warehouse.dto';
@@ -424,5 +424,34 @@ export default class WarehouseService {
       include: { transfer_item: true },
     });
     return data.map((item) => TransferModel.fromDB(item));
+  }
+
+  async updateDemand(
+    auth: AuthWrapper,
+    id: string,
+    expiredAt?: Date,
+    amount?: number
+  ): Promise<string> {
+    const demand = await this.db.demand.findUnique({ where: { id } });
+    if (!demand) throw new ObjectNotFound(id);
+    const updated = await this.db.demand.update({
+      where: { id },
+      data: {
+        fulfiled_at: new Date(),
+        unfulfilled_demand: {
+          create: {
+            product_id: demand.product_id,
+            created_by: auth.username,
+            warehouse_id: demand.warehouse_id,
+            remarks: demand.remarks,
+            shop_id: demand.shop_id,
+            expired_at: expiredAt || demand.expired_at,
+            amount: amount || demand.amount,
+          },
+        },
+      },
+      include: { unfulfilled_demand: true },
+    });
+    return updated.unfulfilled_demand.id;
   }
 }

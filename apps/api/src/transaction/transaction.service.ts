@@ -186,6 +186,7 @@ export default class TransactionService {
       where: {
         warehouse_id: warehouseId,
         fulfiled_at: null,
+        expired_at: { gt: new Date() },
       },
       orderBy: { created_at: 'desc' },
     });

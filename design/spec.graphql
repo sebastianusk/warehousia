@@ -41,6 +41,8 @@ type Mutation {
 
   addInbound(warehouseId: String!, items: [ProductAmountInput]!): IdPayload
   addTransfer(warehouseId: String!, destinationId: String!, items: [ProductAmountInput]!): IdPayload
+
+  updateDemand(demandId: String!, expiredAt: String, amount: Int): IdPayload
 }
 
 

@@ -158,6 +158,8 @@ export abstract class IMutation {
     abstract addInbound(warehouseId: string, items: Nullable<ProductAmountInput>[]): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
     abstract addTransfer(warehouseId: string, destinationId: string, items: Nullable<ProductAmountInput>[]): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
+
+    abstract updateDemand(demandId: string, expiredAt?: Nullable<string>, amount?: Nullable<number>): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 }
 
 export class IdPayload {

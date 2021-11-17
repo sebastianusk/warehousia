@@ -142,4 +142,21 @@ export default class WarehouseResolver {
     );
     return { data: data.map((item) => item.toResponse()) };
   }
+
+  @Mutation()
+  @UseGuards(JwtAuthGuard)
+  async updateDemand(
+    @CurrentAuth() auth: AuthWrapper,
+    @Args('demandId') id: string,
+    @Args('expiredAt') expiredAt: string,
+    @Args('amount') amount: number
+  ): Promise<IdPayload> {
+    const updatedDemandId = await this.warehouseService.updateDemand(
+      auth,
+      id,
+      new Date(expiredAt),
+      amount
+    );
+    return { id: updatedDemandId };
+  }
 }
