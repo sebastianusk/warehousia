@@ -170,6 +170,7 @@ export default class WarehouseService {
             warehouse_id: id,
             product_id: stock.productId,
             fulfiled_outbound_id: null,
+            expired_at: { gt: new Date() },
           },
           orderBy: { created_at: 'asc' },
         });
