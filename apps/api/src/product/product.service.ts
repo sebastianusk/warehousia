@@ -149,7 +149,7 @@ export default class ProductService {
         stock.updated_at AS stock_updated_at
       FROM product LEFT JOIN (
         SELECT product_id, stock, updated_at FROM stock WHERE stock.warehouse_id = ${warehouseId}
-      ) AS stock ON stock.product_id = product.id WHERE product.id LIKE ${likeQuery} OR product.name ILIKE ${likeQuery} 
+      ) AS stock ON stock.product_id = product.id WHERE product.id ILIKE ${likeQuery} OR product.name ILIKE ${likeQuery} 
       ORDER BY coalesce(stock.stock, 0) DESC, product.id LIMIT ${limit} OFFSET ${offset};
     `;
     return Promise.all(

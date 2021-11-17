@@ -240,7 +240,10 @@ export default class TransactionService {
       where: {
         AND: [
           {
-            OR: [{ id: { contains: id } }, { warehouse_id: warehouseId }],
+            OR: [
+              { id: { contains: id, mode: 'insensitive' } },
+              { warehouse_id: warehouseId },
+            ],
           },
           {
             transaction_id: null,
@@ -471,7 +474,7 @@ export default class TransactionService {
             warehouse_id: warehouseId,
             shop_id: shopId,
           },
-          { id: { contains: query } },
+          { id: { contains: query, mode: 'insensitive' } },
         ],
       },
       include: { items: true, failed: true },
