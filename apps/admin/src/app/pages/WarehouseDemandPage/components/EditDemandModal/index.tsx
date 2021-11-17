@@ -2,9 +2,9 @@ import React from 'react';
 import { useMutation } from '@apollo/client';
 import { DatePicker, Form, Input, Modal } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-import { EDIT_SHOP, GET_SHOPS } from 'app/graph';
-import { DemandItem } from '../../hooks';
+import { GET_DEMANDS, GET_SHOPS, UPDATE_DEMAND } from 'app/graph';
 import moment from 'moment';
+import { DemandItem } from '../../hooks';
 
 interface EditDemandModalProps {
   editData: DemandItem | undefined;
@@ -15,7 +15,7 @@ export default function EditDemandModal(
   props: EditDemandModalProps
 ): React.ReactElement {
   const [form] = useForm();
-  const [editShop] = useMutation(EDIT_SHOP);
+  const [updateDemand] = useMutation(UPDATE_DEMAND);
   return (
     <Modal
       title="Edit Demand"
@@ -25,12 +25,14 @@ export default function EditDemandModal(
         form.resetFields();
       }}
       onOk={() => {
-        const values = form.getFieldsValue();
-        editShop({
+        const { expiredAt, amount } = form.getFieldsValue();
+        updateDemand({
           variables: {
-            input: values,
+            demandId: props.editData?.id,
+            expiredAt: expiredAt.toISOString(),
+            amount: parseInt(amount, 10),
           },
-          refetchQueries: [GET_SHOPS],
+          refetchQueries: [GET_DEMANDS],
         }).then(() => {
           props.setEditData(undefined);
           form.resetFields();

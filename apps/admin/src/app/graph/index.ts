@@ -376,3 +376,11 @@ export const ADD_MISSING = gql`
     }
   }
 `;
+
+export const UPDATE_DEMAND = gql`
+  mutation UpdateDemand($demandId: String!, $amount: Int, $expiredAt: String) {
+    updateDemand(demandId: $demandId, amount: $amount, expiredAt: $expiredAt) {
+      id
+    }
+  }
+`;

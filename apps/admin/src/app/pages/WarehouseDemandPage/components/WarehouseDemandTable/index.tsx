@@ -57,7 +57,7 @@ export default function WarehouseDemandTable(): React.ReactElement {
             key: 'action',
             render: (_text: any, record: DemandItem) => (
               <a onClick={() => setEditData(record)} role="presentation">
-                View
+                Edit
               </a>
             ),
           },
