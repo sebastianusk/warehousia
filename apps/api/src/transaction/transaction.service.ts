@@ -187,7 +187,9 @@ export default class TransactionService {
 
   static generatePreparationId(warehouseId: string): string {
     const pad = (x: number) => `0${x}`.slice(-2);
-    const date = new Date();
+    const date = new Date(
+      new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
+    );
     const code = warehouseId.substring(0, 3).toUpperCase();
     const year = date.getFullYear() % 100;
     const month = pad(date.getMonth() + 1);
@@ -195,7 +197,7 @@ export default class TransactionService {
     const hour = pad(date.getHours());
     const minute = pad(date.getMinutes());
     const second = pad(date.getSeconds());
-    const id = `${code}-${year}${month}${day}-${hour}${minute}${second}`;
+    const id = `CG-${code}-${year}${month}${day}-${hour}${minute}${second}`;
     return id;
   }
 
