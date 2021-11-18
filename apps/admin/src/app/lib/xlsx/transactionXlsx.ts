@@ -11,7 +11,8 @@ export default function JsonAsXlsx(dataSource: any) {
     ['', ''],
     ['Product Id', 'Amount'],
   ];
-  dataSource.items.forEach((el: any) => {
+  const sortedItems = [...dataSource.items].sort((a, b) => b.amount - a.amount);
+  sortedItems.forEach((el: any) => {
     data.push([el.productId, el.amount]);
   });
   const ws = XLSX.utils.aoa_to_sheet(data);

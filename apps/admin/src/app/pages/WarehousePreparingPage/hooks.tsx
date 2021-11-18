@@ -67,6 +67,7 @@ export default function usePreparingHooks(): PreparingState {
       const newData = data.outbounds
         .filter((item: any) => shopIds.includes(item.shopId))
         .map((el: any) => ({ productId: el.productId, actual: el.amount }));
+      newData.sort((a: any, b: any) => b.actual - a.actual);
       setDataSource(newData);
     }
   };
@@ -94,6 +95,9 @@ export default function usePreparingHooks(): PreparingState {
 
         setDataSource([]);
         setSelectedShops([]);
+        refetch({
+          warehouseId: warehouse.selectedWarehouse,
+        });
       } else {
         console.log(resp.errors);
       }
