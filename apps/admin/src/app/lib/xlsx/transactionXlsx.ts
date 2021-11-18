@@ -9,7 +9,7 @@ export default function JsonAsXlsx(dataSource: any) {
     ['Gudang:', dataSource.warehouseId],
     ['Toko:', dataSource.shopId],
     ['', ''],
-    ['Product Id', 'Amount'],
+    ['Product Id', 'Quantity'],
   ];
   const sortedItems = [...dataSource.items].sort((a, b) => b.amount - a.amount);
   sortedItems.forEach((el: any) => {

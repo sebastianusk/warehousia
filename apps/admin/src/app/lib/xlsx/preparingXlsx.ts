@@ -14,7 +14,7 @@ export default function preparingXlsx(
     ['Gudang:', warehouseId],
     ['Toko:', shopIds.join(', ')],
     ['', ''],
-    ['Product Id', 'Amount'],
+    ['Product Id', 'Quantity'],
   ];
   dataSource.forEach((el: any) => {
     data.push([el.productId, el.actual]);
