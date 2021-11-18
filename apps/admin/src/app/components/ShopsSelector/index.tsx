@@ -24,6 +24,7 @@ export default function ShopSelector(
     <Select
       className={styles.select}
       onChange={(value) => props.onSelectShop((value || '') as string)}
+      showSearch
     >
       {items?.map((item: any) => (
         <Select.Option
