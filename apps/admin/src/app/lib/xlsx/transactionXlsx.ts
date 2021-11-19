@@ -28,7 +28,6 @@ export default function JsonAsXlsx(dataSource: any) {
 
   const columnIndex = ['A', 'B'];
   columnIndex.forEach((col) => {
-    // eslint-disable-next-line no-plusplus
     for (let i = 0; i <= sortedItems.length; i += 1) {
       ws[`${col}${6 + i}`].s = {
         border: {

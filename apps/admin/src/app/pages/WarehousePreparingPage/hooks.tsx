@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { message } from 'antd';
-import { ADD_PREPARATION, GET_OUTBOUNDS } from 'app/graph';
+import { ADD_PREPARATION, GET_OUTBOUNDS, SEARCH_PRODUCT } from 'app/graph';
 import createPreparingXlsx from 'app/lib/xlsx/preparingXlsx';
 import { GlobalContext } from 'app/components/GlobalState';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
@@ -26,6 +26,7 @@ type DataSource =
   | {
       productId: string;
       actual: number;
+      productName: string;
     }[]
   | [];
 
@@ -35,6 +36,7 @@ export default function usePreparingHooks(): PreparingState {
   const [selectedShops, setSelectedShops] = useState<string[] | []>([]);
   const [dataSource, setDataSource] = useState<DataSource>([]); // datatoshow
   const [addPreparation, { loading }] = useMutation(ADD_PREPARATION);
+  const { refetch: getProduct } = useQuery(SEARCH_PRODUCT, { skip: true });
 
   const { data, refetch } = useQuery(GET_OUTBOUNDS, {
     variables: {
@@ -62,11 +64,20 @@ export default function usePreparingHooks(): PreparingState {
     });
   }, [refetch, warehouse.selectedWarehouse]);
 
-  const fillDataSource = (shopIds: any) => {
+  const fillDataSource = async (shopIds: any) => {
     if (data.outbounds.length > 0) {
-      const newData = data.outbounds
-        .filter((item: any) => shopIds.includes(item.shopId))
-        .map((el: any) => ({ productId: el.productId, actual: el.amount }));
+      const newData: DataSource = await Promise.all(
+        data.outbounds
+          .filter((item: any) => shopIds.includes(item.shopId))
+          .map(async (el: any) => {
+            const productData: any = await getProduct({ query: el.productId });
+            return {
+              productId: el.productId,
+              actual: el.amount,
+              productName: productData.data?.searchProduct[0].name,
+            };
+          })
+      );
       newData.sort((a: any, b: any) => b.actual - a.actual);
       setDataSource(newData);
     }
