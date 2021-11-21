@@ -49,7 +49,7 @@ export default function WarehouseOutboundPage(): ReactElement {
         <div className={`${styles.bottomAction}`}>
           <Space size="middle">
             <ExcelInput
-              onDataInput={(data) => {
+              onDataInput={async (data) => {
                 const result = data.map((item) => ({
                   id: item[0],
                   name: '',

@@ -23,13 +23,13 @@ function parseExcel(file: File): Promise<string[][]> {
 }
 
 export default function ExcelInput(props: {
-  onDataInput: (data: string[][]) => void;
+  onDataInput: (data: string[][]) => Promise<void>;
 }): React.ReactElement {
   const [loading, setLoading] = useState(false);
   const handleFile = (file: File) => {
     setLoading(true);
-    parseExcel(file).then((excelData) => {
-      props.onDataInput(excelData);
+    parseExcel(file).then(async (excelData) => {
+      await props.onDataInput(excelData);
       setLoading(false);
     });
   };

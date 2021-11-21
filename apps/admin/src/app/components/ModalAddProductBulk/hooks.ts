@@ -9,7 +9,7 @@ export interface ProductData {
 }
 
 interface ModalAddProductBulkState {
-  handleFile(data: string[][]): void;
+  handleFile(data: string[][]): Promise<void>;
   data: ProductData[];
   setData: (excel: ProductData[]) => void;
   uploadData(): void;

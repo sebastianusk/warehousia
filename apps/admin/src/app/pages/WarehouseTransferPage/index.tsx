@@ -79,6 +79,7 @@ export default function WarehouseTransferPage(): React.ReactElement {
                 } else {
                   transfer.set((prev) => [...prev, ...result]);
                 }
+                return undefined;
               }}
             />
             <ErrorLogModal errors={error} />
