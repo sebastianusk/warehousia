@@ -69,72 +69,40 @@ export default function useTransactionHooks(): TransactionState {
       },
     }).then((resp) => {
       if (!resp.errors) {
-        resp.data.addTransaction.forEach((datum: any) => {
-          createTransactionXlsx(datum);
-        });
+        createTransactionXlsx(resp.data.addTransaction);
         message.info('Successfully create Transaction');
-        const failed = resp.data.addTransaction.reduce(
-          (
-            prev: {
-              shopId: string;
-              items: { productId: string; amount: number }[];
-            }[],
-            items: {
-              shopId: string;
-              failed: { id: string; productId: string; amount: number }[];
-            }
-          ) => {
-            const next = [...prev];
-            if (items.failed) {
-              next.push({
-                shopId: items.shopId,
-                items: items.failed.map(({ productId, amount }) => ({
-                  productId,
-                  amount,
-                })),
-              });
-            }
-            return next;
-          },
-          [] as {
-            shopId: string;
-            items: { productId: string; amount: string };
-          }[]
-        );
-        if (failed.length > 0) {
-          failed.forEach((el: any) => {
-            if (el.items > 0) {
-              const columns = [
-                {
-                  title: 'Product ID',
-                  dataIndex: 'productId',
-                  key: 'productId',
-                },
-                {
-                  title: 'Amount',
-                  dataIndex: 'amount',
-                  key: 'amount',
-                },
-              ];
-              const description = (
-                <Table
-                  dataSource={el.items}
-                  columns={columns}
-                  pagination={false}
-                />
-              );
-              notification.info({
-                message: `Failed Items on Shop ${el.shopId}`,
-                description,
-                placement: 'bottomRight',
-                duration: 7,
-              });
-            }
+        if (resp.data.addTransaction.failed.length !== 0) {
+          const columns = [
+            {
+              title: 'Product ID',
+              dataIndex: 'productId',
+              key: 'productId',
+            },
+            {
+              title: 'Amount',
+              dataIndex: 'amount',
+              key: 'amount',
+            },
+          ];
+          const description = (
+            <Table
+              dataSource={resp.data.addTransaction.failed}
+              columns={columns}
+              pagination={false}
+            />
+          );
+          notification.info({
+            message: `Failed Items`,
+            description,
+            placement: 'bottomRight',
+            duration: 7,
           });
         }
         refetch({
           warehouseId: warehouse.selectedWarehouse,
         });
+        setDataSource([]);
+        setSelectedPrep(undefined);
       } else {
         console.log(resp.errors);
       }

@@ -7,7 +7,7 @@ export default function JsonAsXlsx(dataSource: any) {
     ['TRANSAKSI'],
     ['ID Transaksi:', dataSource.id],
     ['Gudang:', dataSource.warehouseId],
-    ['Toko:', dataSource.shopId],
+    ['Toko:', dataSource.shops.toString()],
     ['', ''],
     ['Product Id', 'Quantity'],
   ];

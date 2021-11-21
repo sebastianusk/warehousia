@@ -268,12 +268,11 @@ export const ADD_TRANSACTION = gql`
   mutation AddTransaction($preparationId: String!) {
     addTransaction(preparationId: $preparationId) {
       id
-      shopId
+      shops
       warehouseId
       createdAt
       createdBy
       items {
-        id
         productId
         amount
       }
