@@ -20,7 +20,7 @@ export default function useModalAddProductBulkHooks(
   setVisible: Dispatch<SetStateAction<boolean>>
 ): ModalAddProductBulkState {
   const [data, setData] = useState<ProductData[]>([]);
-  const handleFile = (excel: string[][]) => {
+  const handleFile = async (excel: string[][]) => {
     const newData = excel.map((item) => ({
       id: item[0],
       name: item[1],
