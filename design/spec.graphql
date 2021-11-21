@@ -37,7 +37,7 @@ type Mutation {
   addOutbound(warehouseId: String!, shopId: String!, items: [ProductAmountInput]!): OutboundResponse
   addPreparation(warehouseId: String!, shopId: [String]!): IdPayload
   addMissing(preparationId: String!, productId: String!, amount: Int!): IdPayload
-  addTransaction(preparationId: String!, remarks: String): [Transaction]
+  addTransaction(preparationId: String!, remarks: String): TransactionResponse
 
   addInbound(warehouseId: String!, items: [ProductAmountInput]!): IdPayload
   addTransfer(warehouseId: String!, destinationId: String!, items: [ProductAmountInput]!): IdPayload
@@ -320,6 +320,21 @@ input AddTransactionInput {
   preparationId: String!
 }
 
+type TransactionResponse {
+  id: String!
+  shops: [String]
+  warehouseId: String!
+  createdAt: String!
+  createdBy: String!
+  items: [TransactionItemResponse]
+  failed: [TransactionItemResponse]
+}
+
+type TransactionItemResponse {
+  productId: String!
+  amount: Int!
+}
+
 type Transaction {
   id: String!
   shopId: String!
@@ -330,26 +345,11 @@ type Transaction {
   failed: [TransactionItem]
 }
 
-type ShopFailed {
-  shopId: String!
-  items: [ProductFailed]
-}
-
-type ProductFailed {
-  productId: String!
-  amount: Int!
-}
-
-type TransactionList {
-  data: [Transaction]
-}
-
 type TransactionItem {
   id: String!
   productId: String!
   amount: Int!
 }
-
 
 # Inbound Objects
 type InboundList {

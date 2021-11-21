@@ -13,6 +13,7 @@ import {
   PreparationList,
   ProductAmountInput,
   Transaction,
+  TransactionResponse,
 } from '../graphql';
 import { Feature } from '../warehouse/warehouse.dto';
 import WarehouseGuard from '../warehouse/warehouse.guard';
@@ -107,29 +108,27 @@ export default class TransactionResolver {
     @CurrentAuth() auth: AuthWrapper,
     @Args('preparationId') preparationId: string,
     @Args('remarks') remarks: string = ''
-  ): Promise<Transaction[]> {
-    const data = await this.transactionService.createTransaction(
-      auth,
-      preparationId,
-      remarks
-    );
-    return data.map(
-      ({ id, shopId, warehouseId, items, createdAt, createdBy, failed }) => ({
-        id,
-        warehouseId,
-        createdBy,
-        shopId,
-        createdAt: createdAt.toISOString(),
-        items,
-        failed,
-      })
-    );
+  ): Promise<TransactionResponse> {
+    const { id, warehouseId, shops, createdBy, createdAt, items, failed } =
+      await this.transactionService.createTransaction(
+        auth,
+        preparationId,
+        remarks
+      );
+    return {
+      id,
+      warehouseId,
+      createdBy,
+      shops,
+      createdAt: createdAt.toISOString(),
+      items,
+      failed,
+    };
   }
 
   @Query()
   @UseGuards(JwtAuthGuard)
   async transactions(
-    @CurrentAuth() auth: AuthWrapper,
     @Args('query') query: string,
     @Args('warehouseId') warehouseId: string,
     @Args('shopId') shopId: string,

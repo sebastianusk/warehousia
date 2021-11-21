@@ -325,17 +325,15 @@ export default class TransactionService {
     auth: AuthWrapper,
     preparationId: string,
     remarks: string
-  ): Promise<
-    {
-      id: string;
-      shopId: string;
-      warehouseId: string;
-      createdAt: Date;
-      createdBy: string;
-      items: { id: string; productId: string; amount: number }[];
-      failed: { id: string; productId: string; amount: number }[];
-    }[]
-  > {
+  ): Promise<{
+    id: string;
+    shops: string[];
+    warehouseId: string;
+    createdAt: Date;
+    createdBy: string;
+    items: { productId: string; amount: number }[];
+    failed: { productId: string; amount: number }[];
+  }> {
     const preparation = await this.db.preparation.findUnique({
       where: { id: preparationId },
       include: {
@@ -439,25 +437,44 @@ export default class TransactionService {
       transactions: data.map(({ id }) => id),
     });
 
-    return data.map(
-      ({ id, shop_id, created_at, created_by, items, failed }) => ({
-        id,
-        shopId: shop_id,
-        warehouseId: warehouse_id,
-        createdAt: created_at,
-        createdBy: created_by,
-        items: items.map((item) => ({
-          productId: item.product_id,
-          amount: item.amount,
-          id: item.id,
-        })),
-        failed: failed.map((item) => ({
-          productId: item.product_id,
-          amount: item.amount,
-          id: item.id,
-        })),
-      })
-    );
+    const transactionId = `TRX-${preparationId.substring(2)}`;
+    const items = data.reduce((prev, transaction) => {
+      const next = prev;
+      transaction.items.forEach((item) => {
+        if (!next[item.product_id]) {
+          next[item.product_id] = item.amount;
+        } else {
+          next[item.product_id] += item.amount;
+        }
+      });
+      return next;
+    }, {} as { [key: string]: number });
+    const failed = data.reduce((prev, transaction) => {
+      const next = prev;
+      transaction.failed.forEach((item) => {
+        if (!next[item.product_id]) {
+          next[item.product_id] = item.amount;
+        } else {
+          next[item.product_id] += item.amount;
+        }
+      });
+      return next;
+    }, {} as { [key: string]: number });
+    return {
+      id: transactionId,
+      warehouseId: warehouse_id,
+      shops: data.map(({ shop_id }) => shop_id),
+      createdAt: new Date(),
+      createdBy: auth.username,
+      items: Object.entries(items).map((item) => ({
+        productId: item[0],
+        amount: item[1],
+      })),
+      failed: Object.entries(failed).map((item) => ({
+        productId: item[0],
+        amount: item[1],
+      })),
+    };
   }
 
   async getTransactions(

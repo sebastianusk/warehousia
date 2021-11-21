@@ -153,7 +153,7 @@ export abstract class IMutation {
 
     abstract addMissing(preparationId: string, productId: string, amount: number): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
-    abstract addTransaction(preparationId: string, remarks?: Nullable<string>): Nullable<Nullable<Transaction>[]> | Promise<Nullable<Nullable<Transaction>[]>>;
+    abstract addTransaction(preparationId: string, remarks?: Nullable<string>): Nullable<TransactionResponse> | Promise<Nullable<TransactionResponse>>;
 
     abstract addInbound(warehouseId: string, items: Nullable<ProductAmountInput>[]): Nullable<IdPayload> | Promise<Nullable<IdPayload>>;
 
@@ -343,6 +343,21 @@ export class PreparationItem {
     actual: number;
 }
 
+export class TransactionResponse {
+    id: string;
+    shops?: Nullable<Nullable<string>[]>;
+    warehouseId: string;
+    createdAt: string;
+    createdBy: string;
+    items?: Nullable<Nullable<TransactionItemResponse>[]>;
+    failed?: Nullable<Nullable<TransactionItemResponse>[]>;
+}
+
+export class TransactionItemResponse {
+    productId: string;
+    amount: number;
+}
+
 export class Transaction {
     id: string;
     shopId: string;
@@ -351,20 +366,6 @@ export class Transaction {
     createdBy: string;
     items?: Nullable<Nullable<TransactionItem>[]>;
     failed?: Nullable<Nullable<TransactionItem>[]>;
-}
-
-export class ShopFailed {
-    shopId: string;
-    items?: Nullable<Nullable<ProductFailed>[]>;
-}
-
-export class ProductFailed {
-    productId: string;
-    amount: number;
-}
-
-export class TransactionList {
-    data?: Nullable<Nullable<Transaction>[]>;
 }
 
 export class TransactionItem {
