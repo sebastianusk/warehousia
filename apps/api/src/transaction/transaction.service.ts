@@ -437,7 +437,7 @@ export default class TransactionService {
       transactions: data.map(({ id }) => id),
     });
 
-    const transactionId = `TRX-${preparationId.substring(2)}`;
+    const transactionId = `TRX${preparationId.substring(2)}`;
     const items = data.reduce((prev, transaction) => {
       const next = prev;
       transaction.items.forEach((item) => {
