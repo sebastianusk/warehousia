@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { message, notification, Table } from 'antd';
 
 import createTransactionXlsx from 'app/lib/xlsx/transactionXlsx';
-import { ADD_TRANSACTION, GET_PREPARATION } from 'app/graph';
+import { ADD_TRANSACTION, GET_PREPARATION, GET_PRODUCT_STOCK } from 'app/graph';
 import { GlobalContext } from 'app/components/GlobalState';
 
 type Preparation =
@@ -36,6 +36,9 @@ export default function useTransactionHooks(): TransactionState {
   const [dataSource, setDataSource] = useState<DataSource>([]);
   const [selectedPrep, setSelectedPrep] = useState<Preparation>();
   const [addTransaction, { loading }] = useMutation(ADD_TRANSACTION);
+  const { refetch: getProductStock } = useQuery(GET_PRODUCT_STOCK, {
+    skip: true,
+  });
 
   const { refetch } = useQuery(GET_PREPARATION, {
     variables: {
@@ -62,6 +65,20 @@ export default function useTransactionHooks(): TransactionState {
     });
   };
 
+  const createXlsx = async (addTrxData: any) => {
+    const newItems = await Promise.all(
+      addTrxData.items.map(async (item: any) => {
+        const { data } = await getProductStock({ productId: item.productId });
+        return {
+          ...item,
+          name: data.productStock.name,
+          price: data.productStock.price,
+        };
+      })
+    );
+    createTransactionXlsx({ ...addTrxData, items: newItems });
+  };
+
   const onSubmit = () => {
     addTransaction({
       variables: {
@@ -69,7 +86,7 @@ export default function useTransactionHooks(): TransactionState {
       },
     }).then((resp) => {
       if (!resp.errors) {
-        createTransactionXlsx(resp.data.addTransaction);
+        createXlsx(resp.data.addTransaction);
         message.info('Successfully create Transaction');
         if (resp.data.addTransaction.failed.length !== 0) {
           const columns = [
