@@ -25,7 +25,14 @@ const MainLayout: React.FC = ({ children }) => {
           <h3>WAREHOUSIA</h3>
         </div>
         <div className={styles.userInfo}>
-          <div className={styles.userAvatar} />
+          <div className={styles.userAvatar}>
+            <img
+              src={`https://avatars.dicebear.com/api/bottts/${userData?.username}.svg`}
+              alt="profile"
+              width={50}
+              height={50}
+            />
+          </div>
           <div>
             <h4 className={styles.avatarText}>{userData?.username}</h4>
           </div>
