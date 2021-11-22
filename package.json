@@ -18,6 +18,8 @@
     "db:reset": "prisma migrate reset",
     "db:push": "prisma db push",
     "db:reload": "rm -rf prisma/migrations/ && prisma migrate dev --name init",
+    "db:prod:init": "prisma migrate dev --name init",
+    "db:prod:seed": "ts-node --script-mode --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\" apps/api/src/prod-seed.ts",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
     "affected:build": "nx affected:build",
