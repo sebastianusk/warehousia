@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin
+  namespace: production
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: admin
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin
+  template:
+    metadata:
+      labels:
+        app: admin
+    spec:
+      containers:
+        - name: admin
+          image: ghcr.io/sebastianusk/warehousia-admin:production
+          ports:
+            - containerPort: 80
