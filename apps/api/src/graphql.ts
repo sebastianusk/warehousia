@@ -334,6 +334,7 @@ export class Preparation {
     warehouseId: string;
     createdBy: string;
     createdAt: string;
+    shops?: Nullable<Nullable<string>[]>;
     items?: Nullable<Nullable<PreparationItem>[]>;
 }
 

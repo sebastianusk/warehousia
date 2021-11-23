@@ -301,6 +301,7 @@ type Preparation {
   warehouseId: String!
   createdBy: String!
   createdAt: String!
+  shops: [String]
   items: [PreparationItem]
 }
 

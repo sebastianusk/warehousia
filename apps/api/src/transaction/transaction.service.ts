@@ -274,9 +274,13 @@ export default class TransactionService {
           actual: product[1] - missing,
         };
       });
+      const shops = [
+        ...new Set(preparation.outbound.map(({ shop_id }) => shop_id)),
+      ];
       return new PreparationModel(
         preparation.id,
         preparation.warehouse_id,
+        shops,
         preparation.created_by,
         preparation.created_at,
         amount

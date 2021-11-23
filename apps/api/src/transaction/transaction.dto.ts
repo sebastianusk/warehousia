@@ -42,6 +42,7 @@ export class PreparationModel {
   constructor(
     public id: string,
     public warehouseId: string,
+    public shops: string[],
     public createdBy: string,
     public createdAt: Date,
     public items: {
@@ -55,6 +56,7 @@ export class PreparationModel {
     return {
       id: this.id,
       warehouseId: this.warehouseId,
+      shops: this.shops,
       items: this.items,
       createdAt: this.createdAt.toISOString(),
       createdBy: this.createdBy,
