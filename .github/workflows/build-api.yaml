@@ -40,6 +40,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/sebastianusk/warehousia-api:latest
+          tags: ghcr.io/sebastianusk/warehousia-api:latest, ghcr.io/sebastianusk/warehousia-api:${{ github.sha }}
           file: ./apps/api/Dockerfile
           context: ./
