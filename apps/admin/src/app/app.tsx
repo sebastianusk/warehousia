@@ -17,6 +17,7 @@ import SuperAdminWarehousePage from './pages/SuperAdminWarehousePage';
 import SuperAdminShopsPage from './pages/SuperAdminShopsPage';
 import SuperAdminPage from './pages/SuperAdminPage';
 import AdminDetailPage from './pages/AdminDetailPage';
+import WarehouseTransactionListPage from './pages/WarehouseTransactionListPage';
 
 export default function App() {
   return (
@@ -128,10 +129,20 @@ export default function App() {
               }
             />
             <Route
-              path="/warehouse-transaction"
+              path="/warehouse-create-transaction"
               render={() =>
                 localStorage.access_token ? (
                   <WarehouseTransactionPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/warehouse-transaction"
+              render={() =>
+                localStorage.access_token ? (
+                  <WarehouseTransactionListPage />
                 ) : (
                   <Redirect to="/login" />
                 )

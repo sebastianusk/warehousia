@@ -383,3 +383,33 @@ export const UPDATE_DEMAND = gql`
     }
   }
 `;
+
+export const GET_TRANSACTIONS = gql`
+  query Transactions(
+    $query: String
+    $warehouseId: String
+    $offset: Int
+    $limit: Int
+  ) {
+    transactions(
+      query: $query
+      warehouseId: $warehouseId
+      offset: $offset
+      limit: $limit
+    ) {
+      id
+      shops
+      warehouseId
+      createdAt
+      createdBy
+      items {
+        productId
+        amount
+      }
+      failed {
+        productId
+        amount
+      }
+    }
+  }
+`;
