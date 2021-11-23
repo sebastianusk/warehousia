@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { message, notification, Table } from 'antd';
 
 import createTransactionXlsx from 'app/lib/xlsx/transactionXlsx';
-import { ADD_TRANSACTION, GET_PREPARATION, GET_PRODUCT_STOCK } from 'app/graph';
+import { ADD_TRANSACTION, GET_PREPARATION, GET_PRODUCT_STOCK, GET_TRANSACTIONS } from 'app/graph';
 import { GlobalContext } from 'app/components/GlobalState';
 import useTransactionXslxHooks from 'app/lib/xlsx/transactionXlsxHooks';
 
@@ -64,6 +64,7 @@ export default function useTransactionHooks(): TransactionState {
   };
 
   const { buildTransactionXlsx } = useTransactionXslxHooks();
+  const client = useApolloClient();
 
   const onSubmit = () => {
     addTransaction({
@@ -104,6 +105,7 @@ export default function useTransactionHooks(): TransactionState {
         refetch({
           warehouseId: warehouse.selectedWarehouse,
         });
+        client.refetchQueries({ include: [GET_TRANSACTIONS] });
         setDataSource([]);
         setSelectedPrep(undefined);
       } else {
