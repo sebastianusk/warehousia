@@ -1,22 +1,33 @@
 import XLSX from 'xlsx-js-style';
 import { fitToColumn } from 'app/helper/xlsx';
 
-export default function preparingXlsx(
-  dataSource: any,
-  id: string,
-  warehouseId: string,
-  shopIds: string[]
-) {
+type PreparingProps = {
+  items: {
+    productId: string;
+    productName: string;
+    actual: number;
+  }[];
+  id: string;
+  warehouseId: string;
+  shops: string[];
+};
+
+export default function preparingXlsx({
+  items,
+  id,
+  warehouseId,
+  shops,
+}: PreparingProps) {
   const filename = `${id}.xlsx`;
   const data = [
     ['LIST CARI GUDANG'],
     ['Preparation ID:', id],
     ['Gudang:', warehouseId],
-    ['Toko:', shopIds.join(', ')],
+    ['Toko:', shops.join(', ')],
     ['', '', ''],
     ['Product Id', 'Product Name', 'Quantity'],
   ];
-  dataSource.forEach((el: any) => {
+  items.forEach((el: any) => {
     data.push([el.productId, el.productName, el.actual]);
   });
   const ws = XLSX.utils.aoa_to_sheet(data);
@@ -44,7 +55,7 @@ export default function preparingXlsx(
 
   const columnIndex = ['A', 'B', 'C'];
   columnIndex.forEach((col) => {
-    for (let i = 0; i < dataSource.length; i += 1) {
+    for (let i = 0; i < items.length; i += 1) {
       ws[`${col}${7 + i}`].s = {
         border: {
           top: { style: 'thin', color: { rgb: 'FF000000' } },

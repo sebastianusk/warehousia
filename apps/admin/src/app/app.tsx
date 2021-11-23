@@ -18,6 +18,7 @@ import SuperAdminShopsPage from './pages/SuperAdminShopsPage';
 import SuperAdminPage from './pages/SuperAdminPage';
 import AdminDetailPage from './pages/AdminDetailPage';
 import WarehouseTransactionListPage from './pages/WarehouseTransactionListPage';
+import WarehousePreparingListPage from './pages/WarehousePreparingListPage';
 
 export default function App() {
   return (
@@ -109,10 +110,20 @@ export default function App() {
               }
             />
             <Route
-              path="/warehouse-preparing"
+              path="/warehouse-create-preparing"
               render={() =>
                 localStorage.access_token ? (
                   <WarehousePreparingPage />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/warehouse-preparing"
+              render={() =>
+                localStorage.access_token ? (
+                  <WarehousePreparingListPage />
                 ) : (
                   <Redirect to="/login" />
                 )

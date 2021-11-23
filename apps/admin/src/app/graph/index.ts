@@ -254,6 +254,7 @@ export const GET_PREPARATION = gql`
         warehouseId
         createdAt
         createdBy
+        shops
         items {
           productId
           expected

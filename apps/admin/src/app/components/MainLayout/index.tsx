@@ -56,7 +56,10 @@ const MainLayout: React.FC = ({ children }) => {
             <Menu.Item key="warehouse-inbound">Create Inbound</Menu.Item>
             <Menu.Item key="warehouse-transfer">Transfer Items</Menu.Item>
             <Menu.Item key="warehouse-outbound">Create Outbound</Menu.Item>
-            <Menu.Item key="warehouse-preparing">Create Preparing</Menu.Item>
+            <Menu.Item key="warehouse-create-preparing">
+              Create Preparing
+            </Menu.Item>
+            <Menu.Item key="warehouse-preparing">Preparing List</Menu.Item>
             <Menu.Item key="warehouse-missing">Item Missing Form</Menu.Item>
             <Menu.Item key="warehouse-create-transaction">
               Create Transaction

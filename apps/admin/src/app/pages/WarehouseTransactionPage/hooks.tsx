@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { message, notification, Table } from 'antd';
 
-import createTransactionXlsx from 'app/lib/xlsx/transactionXlsx';
-import { ADD_TRANSACTION, GET_PREPARATION, GET_PRODUCT_STOCK, GET_TRANSACTIONS } from 'app/graph';
+import { ADD_TRANSACTION, GET_PREPARATION, GET_TRANSACTIONS } from 'app/graph';
 import { GlobalContext } from 'app/components/GlobalState';
 import useTransactionXslxHooks from 'app/lib/xlsx/transactionXlsxHooks';
 
