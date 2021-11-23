@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'apps/admin/**'
+      - '.github/workflows/build-admin.yaml'
 env:
   REGISTRY: ghcr.io
 jobs:

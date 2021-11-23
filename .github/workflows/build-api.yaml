@@ -4,6 +4,7 @@ on:
     paths:
       - 'apps/api/**'
       - 'prisma/**'
+      - '.github/workflows/build-api.yaml'
 env:
   REGISTRY: ghcr.io
 jobs:
