@@ -325,15 +325,7 @@ export default class TransactionService {
     auth: AuthWrapper,
     preparationId: string,
     remarks: string
-  ): Promise<{
-    id: string;
-    shops: string[];
-    warehouseId: string;
-    createdAt: Date;
-    createdBy: string;
-    items: { productId: string; amount: number }[];
-    failed: { productId: string; amount: number }[];
-  }> {
+  ): Promise<TransactionModel> {
     const preparation = await this.db.preparation.findUnique({
       where: { id: preparationId },
       include: {
@@ -399,88 +391,54 @@ export default class TransactionService {
       }
       return next;
     }, {});
-    const data = await Promise.all(
-      Object.entries(perShop).map(async (transaction) => {
-        const shopId = transaction[0];
-        const { items, failed } = transaction[1];
-        return this.db.transaction.create({
-          data: {
-            preparation: { connect: { id: preparationId } },
-            created_by: auth.username,
-            shop_id: shopId,
-            warehouse_id,
-            remarks,
-            items: {
-              createMany: {
-                data: items.map(({ productId, amount }) => ({
-                  product_id: productId,
-                  amount,
-                })),
-              },
-            },
-            failed: {
-              createMany: {
-                data: failed.map(({ productId, amount }) => ({
-                  product_id: productId,
-                  amount,
-                })),
-              },
-            },
+
+    const transactionId = `TRX${preparationId.substring(2)}`;
+    const data = await this.db.transaction.create({
+      include: { items: true, failed: true },
+      data: {
+        id: transactionId,
+        preparation: { connect: { id: preparationId } },
+        remarks,
+        created_by: auth.username,
+        warehouse_id,
+        items: {
+          createMany: {
+            data: Object.entries(perShop).flatMap((transactionItem) => {
+              const shopId = transactionItem[0];
+              return transactionItem[1].items.map(({ amount, productId }) => ({
+                shop_id: shopId,
+                amount,
+                product_id: productId,
+              }));
+            }),
           },
-          include: { items: true, failed: true },
-        });
-      })
-    );
+        },
+        failed: {
+          createMany: {
+            data: Object.entries(perShop).flatMap((transactionItem) => {
+              const shopId = transactionItem[0];
+              return transactionItem[1].failed.map(({ amount, productId }) => ({
+                shop_id: shopId,
+                amount,
+                product_id: productId,
+              }));
+            }),
+          },
+        },
+      },
+    });
 
     await auth.log(this.db, 'createTransaction', {
       preparationId,
-      transactions: data.map(({ id }) => id),
+      transactions: data.id,
     });
 
-    const transactionId = `TRX${preparationId.substring(2)}`;
-    const items = data.reduce((prev, transaction) => {
-      const next = prev;
-      transaction.items.forEach((item) => {
-        if (!next[item.product_id]) {
-          next[item.product_id] = item.amount;
-        } else {
-          next[item.product_id] += item.amount;
-        }
-      });
-      return next;
-    }, {} as { [key: string]: number });
-    const failed = data.reduce((prev, transaction) => {
-      const next = prev;
-      transaction.failed.forEach((item) => {
-        if (!next[item.product_id]) {
-          next[item.product_id] = item.amount;
-        } else {
-          next[item.product_id] += item.amount;
-        }
-      });
-      return next;
-    }, {} as { [key: string]: number });
-    return {
-      id: transactionId,
-      warehouseId: warehouse_id,
-      shops: data.map(({ shop_id }) => shop_id),
-      createdAt: new Date(),
-      createdBy: auth.username,
-      items: Object.entries(items).map((item) => ({
-        productId: item[0],
-        amount: item[1],
-      })),
-      failed: Object.entries(failed).map((item) => ({
-        productId: item[0],
-        amount: item[1],
-      })),
-    };
+    return TransactionModel.fromDB(data);
   }
 
   async getTransactions(
     query: string,
     warehouseId: string,
-    shopId: string,
     offset: number = 0,
     limit: number = 10
   ): Promise<TransactionModel[]> {
@@ -489,34 +447,14 @@ export default class TransactionService {
       skip: offset * limit,
       where: {
         OR: [
-          {
-            warehouse_id: warehouseId,
-            shop_id: shopId,
-          },
+          { warehouse_id: warehouseId },
           { id: { contains: query, mode: 'insensitive' } },
         ],
       },
       include: { items: true, failed: true },
     });
-    return transactions.map(
-      ({ id, shop_id, warehouse_id, created_at, created_by, items, failed }) =>
-        new TransactionModel(
-          id,
-          shop_id,
-          warehouse_id,
-          created_at,
-          created_by,
-          items.map((item) => ({
-            id: item.id,
-            amount: item.amount,
-            productId: item.product_id,
-          })),
-          failed.map((item) => ({
-            id: item.id,
-            amount: item.amount,
-            productId: item.product_id,
-          }))
-        )
+    return transactions.map((transaction) =>
+      TransactionModel.fromDB(transaction)
     );
   }
 }

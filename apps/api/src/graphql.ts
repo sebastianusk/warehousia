@@ -117,7 +117,7 @@ export abstract class IQuery {
 
     abstract preparations(query?: Nullable<string>, warehouseId?: Nullable<string>): Nullable<PreparationList> | Promise<Nullable<PreparationList>>;
 
-    abstract transactions(query?: Nullable<string>, productId?: Nullable<string>, warehouseId?: Nullable<string>, shopId?: Nullable<string>, limit?: Nullable<number>, offset?: Nullable<number>): Nullable<Nullable<Transaction>[]> | Promise<Nullable<Nullable<Transaction>[]>>;
+    abstract transactions(query?: Nullable<string>, warehouseId?: Nullable<string>, limit?: Nullable<number>, offset?: Nullable<number>): Nullable<Nullable<TransactionResponse>[]> | Promise<Nullable<Nullable<TransactionResponse>[]>>;
 
     abstract inbounds(warehouseId: string, pagination?: Nullable<PaginationInput>): Nullable<InboundList> | Promise<Nullable<InboundList>>;
 

@@ -131,14 +131,12 @@ export default class TransactionResolver {
   async transactions(
     @Args('query') query: string,
     @Args('warehouseId') warehouseId: string,
-    @Args('shopId') shopId: string,
     @Args('limit') limit: number,
     @Args('offset') offset: number
-  ): Promise<Transaction[]> {
+  ): Promise<TransactionResponse[]> {
     const data = await this.transactionService.getTransactions(
       query,
       warehouseId,
-      shopId,
       offset,
       limit
     );

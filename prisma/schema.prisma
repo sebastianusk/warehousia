@@ -174,7 +174,6 @@ model missing {
 model transaction {
   id           String             @id @default(uuid())
   warehouse_id String
-  shop_id      String
   preparation  preparation?
   remarks      Json
   created_at   DateTime           @default(now())
@@ -186,6 +185,7 @@ model transaction {
 model transaction_item {
   id             String      @id @default(uuid())
   product_id     String
+  shop_id        String
   amount         Int
   transaction    transaction @relation(fields: [transaction_id], references: [id])
   transaction_id String
@@ -194,6 +194,7 @@ model transaction_item {
 model failed {
   id             String      @id @default(uuid())
   product_id     String
+  shop_id        String
   amount         Int
   transaction    transaction @relation(fields: [transaction_id], references: [id])
   transaction_id String

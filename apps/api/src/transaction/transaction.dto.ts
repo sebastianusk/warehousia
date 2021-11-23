@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
-import { outbound_item } from '@prisma/client';
-import { Outbound, Preparation, Transaction } from '../graphql';
+import { outbound_item, Prisma } from '@prisma/client';
+import { Outbound, Preparation, TransactionResponse } from '../graphql';
 
 export class OutboundModel {
   constructor(
@@ -65,7 +65,7 @@ export class PreparationModel {
 export class TransactionModel {
   constructor(
     public id: string,
-    public shopId: string,
+    public shops: string[],
     public warehouseId: string,
     public createdAt: Date,
     public createdBy: string,
@@ -73,10 +73,37 @@ export class TransactionModel {
     public failed: { id: string; productId: string; amount: number }[]
   ) {}
 
-  toResponse(): Transaction {
+  static fromDB(data: TransactionItemDB): TransactionModel {
+    const shops = [
+      ...new Set(
+        data.items
+          .map(({ shop_id }) => shop_id)
+          .concat(data.failed.map(({ shop_id }) => shop_id))
+      ),
+    ];
+    return new TransactionModel(
+      data.id,
+      shops,
+      data.warehouse_id,
+      data.created_at,
+      data.created_by,
+      data.items.map(({ id, product_id, amount }) => ({
+        id,
+        productId: product_id,
+        amount,
+      })),
+      data.failed.map(({ id, product_id, amount }) => ({
+        id,
+        productId: product_id,
+        amount,
+      }))
+    );
+  }
+
+  toResponse(): TransactionResponse {
     return {
       id: this.id,
-      shopId: this.shopId,
+      shops: this.shops,
       warehouseId: this.warehouseId,
       createdAt: this.createdAt.toISOString(),
       createdBy: this.createdBy,
@@ -85,3 +112,11 @@ export class TransactionModel {
     };
   }
 }
+
+const transactionItems = Prisma.validator<Prisma.transactionArgs>()({
+  include: { items: true, failed: true },
+});
+
+export type TransactionItemDB = Prisma.transactionGetPayload<
+  typeof transactionItems
+>;
