@@ -5,6 +5,7 @@ import { message, notification, Table } from 'antd';
 import createTransactionXlsx from 'app/lib/xlsx/transactionXlsx';
 import { ADD_TRANSACTION, GET_PREPARATION, GET_PRODUCT_STOCK } from 'app/graph';
 import { GlobalContext } from 'app/components/GlobalState';
+import useTransactionXslxHooks from 'app/lib/xlsx/transactionXlsxHooks';
 
 type Preparation =
   | {
@@ -36,9 +37,6 @@ export default function useTransactionHooks(): TransactionState {
   const [dataSource, setDataSource] = useState<DataSource>([]);
   const [selectedPrep, setSelectedPrep] = useState<Preparation>();
   const [addTransaction, { loading }] = useMutation(ADD_TRANSACTION);
-  const { refetch: getProductStock } = useQuery(GET_PRODUCT_STOCK, {
-    skip: true,
-  });
 
   const { refetch } = useQuery(GET_PREPARATION, {
     variables: {
@@ -65,19 +63,7 @@ export default function useTransactionHooks(): TransactionState {
     });
   };
 
-  const createXlsx = async (addTrxData: any) => {
-    const newItems = await Promise.all(
-      addTrxData.items.map(async (item: any) => {
-        const { data } = await getProductStock({ productId: item.productId });
-        return {
-          ...item,
-          name: data.productStock.name,
-          price: data.productStock.price,
-        };
-      })
-    );
-    createTransactionXlsx({ ...addTrxData, items: newItems });
-  };
+  const { buildTransactionXlsx } = useTransactionXslxHooks();
 
   const onSubmit = () => {
     addTransaction({
@@ -86,7 +72,7 @@ export default function useTransactionHooks(): TransactionState {
       },
     }).then((resp) => {
       if (!resp.errors) {
-        createXlsx(resp.data.addTransaction);
+        buildTransactionXlsx(resp.data.addTransaction);
         message.info('Successfully create Transaction');
         if (resp.data.addTransaction.failed.length !== 0) {
           const columns = [
