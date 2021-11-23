@@ -24,6 +24,7 @@ export default function WarehousePreparingListPage(): React.ReactElement {
     variables: {
       warehouseId: warehouse.selectedWarehouse,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const { buildPreparingXlsx } = usePreparingXslxHooks();
