@@ -179,7 +179,6 @@ CREATE TABLE "missing" (
 CREATE TABLE "transaction" (
     "id" TEXT NOT NULL,
     "warehouse_id" TEXT NOT NULL,
-    "shop_id" TEXT NOT NULL,
     "remarks" JSONB NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" TEXT NOT NULL,
@@ -191,6 +190,7 @@ CREATE TABLE "transaction" (
 CREATE TABLE "transaction_item" (
     "id" TEXT NOT NULL,
     "product_id" TEXT NOT NULL,
+    "shop_id" TEXT NOT NULL,
     "amount" INTEGER NOT NULL,
     "transaction_id" TEXT NOT NULL,
 
@@ -201,6 +201,7 @@ CREATE TABLE "transaction_item" (
 CREATE TABLE "failed" (
     "id" TEXT NOT NULL,
     "product_id" TEXT NOT NULL,
+    "shop_id" TEXT NOT NULL,
     "amount" INTEGER NOT NULL,
     "transaction_id" TEXT NOT NULL,
 
