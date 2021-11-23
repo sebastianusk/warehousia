@@ -28,5 +28,6 @@ spec:
       containers:
         - name: admin
           image: ghcr.io/sebastianusk/warehousia-admin:production
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
