@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: ghcr.io/sebastianusk/warehousia-api:latest
+          image: ghcr.io/sebastianusk/warehousia-api:e2c852da5fb2695e22f04248484e8958fb80e09d
           imagePullPolicy: Always
           ports:
             - containerPort: 3333
