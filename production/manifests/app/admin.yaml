@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: admin
-          image: ghcr.io/sebastianusk/warehousia-admin:production
+          image: ghcr.io/sebastianusk/warehousia-admin@sha256:c499e92cdc9ea52f516868dd1ccb44adb6c025dbaa466c8be9a26a4d4abc715f
           imagePullPolicy: Always
           ports:
             - containerPort: 80
