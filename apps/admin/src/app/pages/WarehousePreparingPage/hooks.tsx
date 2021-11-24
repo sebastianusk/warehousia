@@ -63,6 +63,23 @@ export default function usePreparingHooks(): PreparingState {
     });
   }, [refetch, warehouse.selectedWarehouse]);
 
+  const mergeDuplicateId = (arr: any[]) => {
+    const result = arr.reduce((acc, obj) => {
+      let found = false;
+      for (let i = 0; i < acc.length; i += 1) {
+        if (acc[i].productId === obj.productId) {
+          found = true;
+          acc[i].actual += obj.actual;
+        }
+      }
+      if (!found) {
+        acc.push(obj);
+      }
+      return acc;
+    }, []);
+    return result;
+  };
+
   const fillDataSource = (shopIds: any) => {
     if (data.outbounds.length > 0) {
       const newData: DataSource = data.outbounds
@@ -71,8 +88,9 @@ export default function usePreparingHooks(): PreparingState {
           productId: el.productId,
           actual: el.amount,
         }));
-      newData.sort((a: any, b: any) => b.actual - a.actual);
-      setDataSource(newData);
+      const mergedData = mergeDuplicateId(newData);
+      mergedData.sort((a: any, b: any) => b.actual - a.actual);
+      setDataSource(mergedData);
     }
   };
 
