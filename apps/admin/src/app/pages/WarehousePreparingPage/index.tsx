@@ -34,7 +34,12 @@ export default function WarehousePreparingPage(): ReactElement {
               <div>
                 {shopsOption.length > 0 ? (
                   <>
-                    <Checkbox onChange={onCheckAllChange}>Check All</Checkbox>
+                    <Checkbox
+                      onChange={onCheckAllChange}
+                      checked={shopsOption.length === selectedShops.length}
+                    >
+                      Check All
+                    </Checkbox>
                     <Divider type="vertical" />
                     <Checkbox.Group
                       onChange={onChangeSelectShops}
