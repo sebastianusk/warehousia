@@ -447,7 +447,7 @@ export default class WarehouseService {
             remarks: demand.remarks,
             shop_id: demand.shop_id,
             expired_at: expiredAt || demand.expired_at,
-            amount: amount || demand.amount,
+            amount: amount !== undefined ? amount : demand.amount,
           },
         },
       },
@@ -468,6 +468,7 @@ export default class WarehouseService {
         warehouse_id: warehouseId,
         fulfiled_at: null,
         expired_at: { gt: new Date() },
+        amount: { gt: 0 },
       },
       orderBy: { created_at: 'desc' },
     });
