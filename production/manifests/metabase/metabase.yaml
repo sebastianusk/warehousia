@@ -35,6 +35,12 @@ spec:
       containers:
         - name: metabase
           image: metabase/metabase:v0.41.1
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "50m"
+            limits:
+              memory: "1024Mi"
           ports:
             - containerPort: 3000
           env:
