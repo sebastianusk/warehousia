@@ -32,9 +32,11 @@ npm run gql
 
 A lot of things need to be done in database side
 
-#### Setup First Time
+#### Initial Setup (Just clone, fresh db)
 ```
-npm run db:init
+npm run db:up
+npm run db:push
+npm run db:seed
 ```
 
 ### Want to turn off your database
@@ -43,18 +45,29 @@ because you have to run other databse on other project
 npm run db:down
 ```
 
-### Turn on again your database
+#### Turn on your database
 ```
 npm run db:up
 ```
 
-### Refresh database
+### Change the Schema
+Our database is controlled by prisma, prisma file is here: `prisma/schema.prisma`, during the development, you'll need to run this in order to just push the DB and
 ```
-npm run db:refresh
+npm run db:push
+```
+during the development, in case you found that the previous change is not good, you can refresh the database
+```
+npm run db:reset
+npm run db:seed
+```
+After the development finalize, you can run the migration to generate the migration schema
+```
+npm run db:migrate
 ```
 
-### Reload Schema
-Our database is controlled by prisma, prisma file is here: `prisma/schema.prisma`, after change the schema, we can reinitiate the database by
+### update your changes in the staging/production
+change `.env` to point to the staging/prod db, you can run it by
 ```
-npm run db:reload
+npm run db:deploy
 ```
+you can run reset into staging if needed. BE CAREFUL not to run reset in prod. do snapshot often
