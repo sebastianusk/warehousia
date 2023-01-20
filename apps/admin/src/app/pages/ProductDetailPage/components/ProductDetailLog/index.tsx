@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Table } from 'antd';
 import Column from 'antd/lib/table/Column';
 import { useQuery } from '@apollo/client';
@@ -15,13 +15,20 @@ export default function ProductDetailLog(props: {
   productId: string;
 }): React.ReactElement {
   const [page, setPage] = useState(1);
-  const { loading, data, fetchMore } = useQuery(GET_PRODUCT_LOGS, {
+  const { loading, data, fetchMore, refetch } = useQuery(GET_PRODUCT_LOGS, {
     variables: {
       productId: props.productId,
       offset: (page - 1) * LIMIT,
       limit: LIMIT,
     },
   });
+
+  useEffect(() => {
+    refetch({
+      productId: props.productId,
+    });
+  }, [refetch, props.productId]);
+
   return (
     <Card className={styles.card} key="logs">
       <Table
