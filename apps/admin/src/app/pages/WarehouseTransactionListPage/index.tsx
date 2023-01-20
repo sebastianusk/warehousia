@@ -96,7 +96,7 @@ export default function WarehouseTransactionListPage(): React.ReactElement {
           <Page
             page={page}
             prevEnable={page !== 1}
-            nextEnable={data?.transactions.lenght !== 0}
+            nextEnable={data?.transactions.length !== 0}
             onNext={() => {
               const newOffset = page * LIMIT;
               fetchMore({ variables: { offset: newOffset } }).then(() =>

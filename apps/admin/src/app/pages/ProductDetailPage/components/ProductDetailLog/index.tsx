@@ -26,10 +26,13 @@ export default function ProductDetailLog(props: {
     <Card className={styles.card} key="logs">
       <Table
         loading={loading}
-        dataSource={data?.productLog.map((item: { id: string }) => ({
-          ...item,
-          key: item.id,
-        }))}
+        dataSource={data?.productLog.map(
+          (item: { id: string; createdAt: string }) => ({
+            ...item,
+            createdAt: new Date(item.createdAt).toLocaleString(),
+            key: item.id,
+          })
+        )}
         pagination={false}
       >
         <Column
@@ -51,7 +54,7 @@ export default function ProductDetailLog(props: {
       <Page
         page={page}
         prevEnable={page !== 1}
-        nextEnable={data?.productLog.lenght !== 0}
+        nextEnable={data?.productLog?.length !== 0}
         onNext={() => {
           const newOffset = page * LIMIT;
           fetchMore({ variables: { offset: newOffset } }).then(() =>
