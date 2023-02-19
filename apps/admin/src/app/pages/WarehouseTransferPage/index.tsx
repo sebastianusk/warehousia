@@ -6,7 +6,7 @@ import InlineProductForm from 'app/components/inlineProductForm';
 import ListEditor from 'app/components/ListEditor';
 import ExcelInput from 'app/components/ExcelInput';
 import { useApolloClient } from '@apollo/client';
-import { SEARCH_PRODUCT } from 'app/graph';
+import { GET_PRODUCTS_BY_IDS } from 'app/graph';
 import ErrorLogModal from 'app/components/ErrorLogModal';
 import styles from './index.module.css';
 import useTransferPageHooks from './hooks';
@@ -53,21 +53,19 @@ export default function WarehouseTransferPage(): React.ReactElement {
           <Space size="middle">
             <ExcelInput
               onDataInput={async (data) => {
-                const result = await Promise.all(
-                  data.map(async (item) => {
-                    const searchProduct = await client.query({
-                      query: SEARCH_PRODUCT,
-                      variables: { query: item[0] },
-                    });
-                    const { name } = searchProduct.data.searchProduct[0] || '';
-                    return {
-                      id: item[0],
-                      name,
-                      amount: parseInt(item[1], 10),
-                    };
-                  })
-                );
-                const notFound = result.filter((item) => !item.name);
+                const result = await client.query({
+                  query: GET_PRODUCTS_BY_IDS,
+                  variables: { ids: data.map((item) => item[0]) },
+                });
+
+                const mergedList = data.map((item) => ({
+                  id: item[0],
+                  name: result.data.getProductsByIds.find(
+                    (product: any) => product.id === item[0]
+                  )?.name,
+                  amount: parseInt(item[1], 10),
+                }));
+                const notFound = mergedList.filter((item) => !item.name);
                 if (notFound.length !== 0) {
                   setError(
                     notFound.map((item) => ({
@@ -77,7 +75,7 @@ export default function WarehouseTransferPage(): React.ReactElement {
                   );
                   message.error('item not found, check log');
                 } else {
-                  transfer.set((prev) => [...prev, ...result]);
+                  transfer.set((prev) => [...prev, ...mergedList]);
                 }
                 return undefined;
               }}

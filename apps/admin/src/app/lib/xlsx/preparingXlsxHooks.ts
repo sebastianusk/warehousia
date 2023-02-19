@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client';
-import { SEARCH_PRODUCT } from 'app/graph';
+import { GET_PRODUCTS_BY_IDS } from 'app/graph';
 import JsonAsXlsx from './preparingXlsx';
 
 type PreparingProps = {
@@ -16,22 +16,22 @@ interface PreparingXslxState {
   buildPreparingXlsx(data: PreparingProps): Promise<void>;
 }
 
-export default function useTransactionXslxHooks(): PreparingXslxState {
+export default function usePreparingXslxHooks(): PreparingXslxState {
   const client = useApolloClient();
 
   const buildPreparingXlsx = async (props: PreparingProps) => {
-    const newItems = await Promise.all(
-      props.items.map(async (item: any) => {
-        const { data } = await client.query({
-          query: SEARCH_PRODUCT,
-          variables: { query: item.productId },
-        });
-        return {
-          ...item,
-          productName: data.searchProduct[0].name,
-        };
-      })
-    );
+    const products = await client.query({
+      query: GET_PRODUCTS_BY_IDS,
+      variables: { ids: props.items.map((item) => item.productId) },
+    });
+
+    const newItems = props.items.map((item: any) => ({
+      ...item,
+      productName: products.data.getProductsByIds.find(
+        (product: any) => product.id === item.productId
+      )?.name,
+    }));
+
     newItems.sort((a: any, b: any) => b.actual - a.actual);
     JsonAsXlsx({ ...props, items: newItems });
   };

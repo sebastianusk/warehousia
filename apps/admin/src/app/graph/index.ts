@@ -321,6 +321,16 @@ export const UPDATE_PRODUCT_STOCK = gql`
   }
 `;
 
+export const GET_PRODUCTS_BY_IDS = gql`
+  query getProductsById($ids: [String]!) {
+    getProductsByIds(ids: $ids) {
+      id
+      name
+      price
+    }
+  }
+`;
+
 export const SEARCH_PRODUCT = gql`
   query SearchProduct($query: String!, $offset: Int, $limit: Int) {
     searchProduct(query: $query, offset: $offset, limit: $limit) {
