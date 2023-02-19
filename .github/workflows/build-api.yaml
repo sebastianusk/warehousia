@@ -5,6 +5,7 @@ on:
       - 'apps/api/**'
       - 'prisma/**'
       - '.github/workflows/build-api.yaml'
+      - 'package.json'
 env:
   REGISTRY: ghcr.io
 jobs:
