@@ -104,6 +104,15 @@ export default class ProductResolver {
   }
 
   @Query()
+  // @UseGuards(JwtAuthGuard)
+  async getProductsByIds(
+    @Args('ids') ids: string[]
+  ): Promise<{ id: string; name: string; price: number }[]> {
+    const data = await this.productService.getProductsByIds(ids);
+    return data;
+  }
+
+  @Query()
   @UseGuards(JwtAuthGuard)
   async searchProduct(
     @Args('query') query: string,

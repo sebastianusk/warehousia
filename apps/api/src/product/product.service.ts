@@ -194,6 +194,17 @@ export default class ProductService {
     );
   }
 
+  async getProductsByIds(
+    ids: string[]
+  ): Promise<{ id: string; name: string; price: number }[]> {
+    const data = await this.db.product.findMany({
+      where: {
+        id: { in: ids },
+      },
+    });
+    return data.map(({ id, name, price }) => ({ id, name, price }));
+  }
+
   async searchProduct(
     query: string,
     limit: number = 10,

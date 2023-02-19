@@ -6,6 +6,7 @@ type Query {
   shops(query: String): [Shop]
   products(warehouseId: String!, query: String, limit: Int, offset: Int): [Product]
   productStock(productId: String!): ProductStock
+  getProductsByIds(ids: [String]!): [ProductInfo]
   searchProduct(query: String, limit: Int, offset: Int): [ProductAutoFill]
   productLog(productId: String, limit: Int, offset: Int): [ProductLog!]
   outbounds(warehouseId: String!): [Outbound]
@@ -149,6 +150,12 @@ type Product {
   stock: Stock!
   createdAt: String!
   updatedAt: String!
+}
+
+type ProductInfo {
+  id: String!
+  name: String!
+  price: Int!
 }
 
 type ProductAutoFillList {
