@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
+      - run: npm run db:generate
       - run: npm run build:api
       - name: Set up Docker Buildx
         id: buildx

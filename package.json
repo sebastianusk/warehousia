@@ -12,6 +12,7 @@
     "lint": "nx run-many --all --target=lint",
     "gql": "nx serve api",
     "db:stock": "ts-node --script-mode --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\" apps/api/src/stocks.ts",
+    "db:generate": "primsa generate",
     "db:up": "docker-compose -f dep-containers/docker-compose.yaml up -d",
     "db:down": "docker-compose -f dep-containers/docker-compose.yaml down",
     "db:seed": "ts-node --script-mode --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\" apps/api/src/seed.ts",
