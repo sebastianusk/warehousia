@@ -104,7 +104,7 @@ export default class ProductResolver {
   }
 
   @Query()
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async getProductsByIds(
     @Args('ids') ids: string[]
   ): Promise<{ id: string; name: string; price: number }[]> {
