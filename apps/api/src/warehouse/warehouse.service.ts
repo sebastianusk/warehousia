@@ -169,11 +169,12 @@ export default class WarehouseService {
           where: {
             warehouse_id: id,
             product_id: stock.productId,
-            fulfiled_at: null,
+            OR: [{ fulfiled_outbound_id: null }, { previous_demand_id: null }],
             expired_at: { gt: new Date() },
           },
           orderBy: { created_at: 'asc' },
         });
+        console.log(demands);
 
         let available = stock.amount;
         const updatedDemands = new Array<{
