@@ -107,9 +107,9 @@ export abstract class IQuery {
 
     abstract productStock(productId: string): Nullable<ProductStock> | Promise<Nullable<ProductStock>>;
 
-    abstract getProductsByIds(ids: Nullable<string>[]): Nullable<Nullable<ProductInfo>[]> | Promise<Nullable<Nullable<ProductInfo>[]>>;
+    abstract getProductsByIds(ids: Nullable<string>[]): Nullable<Nullable<ProductStock>[]> | Promise<Nullable<Nullable<ProductStock>[]>>;
 
-    abstract searchProduct(query?: Nullable<string>, limit?: Nullable<number>, offset?: Nullable<number>): Nullable<Nullable<ProductAutoFill>[]> | Promise<Nullable<Nullable<ProductAutoFill>[]>>;
+    abstract searchProduct(query?: Nullable<string>, limit?: Nullable<number>, offset?: Nullable<number>): Nullable<Nullable<ProductStock>[]> | Promise<Nullable<Nullable<ProductStock>[]>>;
 
     abstract productLog(productId?: Nullable<string>, limit?: Nullable<number>, offset?: Nullable<number>): Nullable<ProductLog[]> | Promise<Nullable<ProductLog[]>>;
 
@@ -229,21 +229,6 @@ export class Product {
     stock: Stock;
     createdAt: string;
     updatedAt: string;
-}
-
-export class ProductInfo {
-    id: string;
-    name: string;
-    price: number;
-}
-
-export class ProductAutoFillList {
-    data: Nullable<ProductAutoFill>[];
-}
-
-export class ProductAutoFill {
-    id: string;
-    name: string;
 }
 
 export class Stock {

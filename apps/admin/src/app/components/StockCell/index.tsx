@@ -1,29 +1,20 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
-import { GET_PRODUCT_STOCK } from 'app/graph';
 
 export default function StockCell({
-  productId,
+  stocksData,
   warehouseId,
   dataToShow,
 }: {
-  productId: string;
+  stocksData: {
+    warehouseId: string;
+    amount: number;
+  }[];
   warehouseId?: string;
   dataToShow: 'stock' | 'total';
 }) {
-  const { data, loading } = useQuery(GET_PRODUCT_STOCK, {
-    variables: {
-      productId,
-    },
-    fetchPolicy: 'no-cache',
-  });
-  if (loading) {
-    return <span>Loading...</span>;
-  }
-
-  if (data) {
+  if (stocksData) {
     if (dataToShow === 'stock') {
-      const currentWHStock = data.productStock.stocks.find(
+      const currentWHStock = stocksData.find(
         (datum: any) => datum.warehouseId === warehouseId
       );
       if (currentWHStock) {
@@ -33,7 +24,7 @@ export default function StockCell({
     }
     if (dataToShow === 'total') {
       let totalStock = 0;
-      data.productStock.stocks.forEach((productStock: any) => {
+      stocksData.forEach((productStock: any) => {
         totalStock += productStock.amount;
       });
       return <span>{totalStock}</span>;

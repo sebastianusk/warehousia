@@ -327,6 +327,10 @@ export const GET_PRODUCTS_BY_IDS = gql`
       id
       name
       price
+      stocks {
+        warehouseId
+        amount
+      }
     }
   }
 `;
@@ -336,6 +340,11 @@ export const SEARCH_PRODUCT = gql`
     searchProduct(query: $query, offset: $offset, limit: $limit) {
       id
       name
+      price
+      stocks {
+        warehouseId
+        amount
+      }
     }
   }
 `;

@@ -6,23 +6,17 @@ import {
   EditableRow,
   EditableCell,
 } from '../EditableTable';
-import { DataList } from '../../pages/WarehouseInboundPage/hooks';
+import { DataList, Data } from '../GlobalState';
 import StockCell from '../StockCell';
 
-type DataType = {
-  id: string;
-  name: string;
-  amount: number;
-};
-
-function InboundListEditor(
+function ListEditor(
   props: EditableTableProps & {
     dataList: DataList;
     setData: React.Dispatch<React.SetStateAction<DataList>>;
     selectedWarehouse?: string;
   }
 ) {
-  const handleSave = (row: DataType) => {
+  const handleSave = (row: Data) => {
     const newData = props.dataList.map((datum) => {
       if (datum.id === row.id) {
         return {
@@ -55,9 +49,9 @@ function InboundListEditor(
     {
       title: 'Current WH Stock',
       dataIndex: 'Stock',
-      render: (_text: any, record: DataType) => (
+      render: (_text: any, record: Data) => (
         <StockCell
-          productId={record.id}
+          stocksData={record.stocks}
           warehouseId={props.selectedWarehouse}
           dataToShow="stock"
         />
@@ -66,9 +60,9 @@ function InboundListEditor(
     {
       title: 'Total Stock',
       dataIndex: 'Stock',
-      render: (_text: any, record: DataType) => (
+      render: (_text: any, record: Data) => (
         <StockCell
-          productId={record.id}
+          stocksData={record.stocks}
           warehouseId={props.selectedWarehouse}
           dataToShow="total"
         />
@@ -78,7 +72,7 @@ function InboundListEditor(
       title: 'Add Amount',
       dataIndex: 'amount',
       editable: true,
-      onCell: (record: DataType) => ({
+      onCell: (record: Data) => ({
         record,
         editable: true,
         dataIndex: 'amount',
@@ -89,7 +83,7 @@ function InboundListEditor(
     {
       title: 'Action',
       dataIndex: 'Action',
-      render: (_text: any, _record: DataType, index: number) =>
+      render: (_text: any, _record: Data, index: number) =>
         props.dataList.length >= 1 ? (
           <>
             <Popconfirm
@@ -122,8 +116,8 @@ function InboundListEditor(
     </div>
   );
 }
-export default InboundListEditor;
+export default ListEditor;
 
-InboundListEditor.defaultProps = {
+ListEditor.defaultProps = {
   selectedWarehouse: '',
 };

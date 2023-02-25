@@ -9,7 +9,6 @@ import {
   CountPayload,
   IdPayload,
   Product,
-  ProductAutoFill,
   ProductInput,
   ProductLog,
   ProductStock,
@@ -105,9 +104,7 @@ export default class ProductResolver {
 
   @Query()
   @UseGuards(JwtAuthGuard)
-  async getProductsByIds(
-    @Args('ids') ids: string[]
-  ): Promise<{ id: string; name: string; price: number }[]> {
+  async getProductsByIds(@Args('ids') ids: string[]): Promise<ProductStock[]> {
     const data = await this.productService.getProductsByIds(ids);
     return data;
   }
@@ -118,7 +115,7 @@ export default class ProductResolver {
     @Args('query') query: string,
     @Args('offset') offset: number,
     @Args('limit') limit: number
-  ): Promise<ProductAutoFill[]> {
+  ): Promise<ProductStock[]> {
     const data = await this.productService.searchProduct(query, limit, offset);
     return data;
   }
