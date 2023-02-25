@@ -36,6 +36,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/sebastianusk/warehousia-admin:latest, ghcr.io/sebastianusk/warehousia-admin:${{ github.sha }}
+          tags: ghcr.io/sebastianusk/warehousia-admin:production-${{ github.sha }}
           file: ./apps/admin/docker/Dockerfile
           context: ./
