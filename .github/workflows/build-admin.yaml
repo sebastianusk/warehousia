@@ -4,6 +4,7 @@ on:
     paths:
       - 'apps/admin/**'
       - '.github/workflows/build-admin.yaml'
+      - 'package.json'
 env:
   REGISTRY: ghcr.io
 jobs:
