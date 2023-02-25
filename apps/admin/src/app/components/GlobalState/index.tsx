@@ -2,13 +2,18 @@ import React, { ReactNode, useState } from 'react';
 
 const GlobalContext = React.createContext<any>(null);
 
-type Data =
-  | {
-      id: string;
-      name: string;
-      amount: number;
-    }[]
-  | [];
+type Data = {
+  id: string;
+  name: string;
+  amount: number;
+  price: number;
+  stocks: {
+    warehouseId: string;
+    amount: number;
+  }[];
+};
+
+type DataList = Data[] | [];
 
 const GlobalProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -21,9 +26,9 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({
   const [selectedWarehouseTo, setSelectedWarehouseTo] = useState('');
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
   const [selectedWarehouseAll, setSelectedWarehouseAll] = useState('');
-  const [inboundData, setInboundData] = useState<Data>([]);
-  const [outboundData, setOutboundData] = useState<Data>([]);
-  const [transferData, setTransferData] = useState<Data>([]);
+  const [inboundData, setInboundData] = useState<DataList>([]);
+  const [outboundData, setOutboundData] = useState<DataList>([]);
+  const [transferData, setTransferData] = useState<DataList>([]);
 
   return (
     <GlobalContext.Provider
@@ -60,4 +65,4 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-export { GlobalProvider, GlobalContext };
+export { GlobalProvider, GlobalContext, Data, DataList };

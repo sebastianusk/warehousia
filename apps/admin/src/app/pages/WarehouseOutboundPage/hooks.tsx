@@ -2,12 +2,14 @@ import { useContext, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { message } from 'antd';
 import { ADD_OUTBOUND } from 'app/graph';
-import { GlobalContext } from 'app/components/GlobalState';
+import { GlobalContext, Data, DataList } from 'app/components/GlobalState';
 import checkDupeData from 'app/helper/checkDupeData';
 
 interface OutboundState {
-  selectedShop: string;
   selectedWarehouse: string;
+  error: { id: string }[];
+  setError: (data: { id: string }[]) => void;
+  selectedShop: string;
   setSelectedShop: (shopId: string) => void;
   onAdd: (data: Data) => void;
   onSubmit(): void;
@@ -18,15 +20,8 @@ interface OutboundState {
   };
 }
 
-export type DataList = Data[] | [];
-
-type Data = {
-  id: string;
-  name: string;
-  amount: number;
-};
-
 export default function useOutboundHooks(): OutboundState {
+  const [error, setError] = useState<{ id: string }[]>([]);
   const { warehouse, outbound } = useContext(GlobalContext);
   const [selectedShop, setSelectedShop] = useState('');
   const [addOutbound, { loading }] = useMutation(ADD_OUTBOUND);
@@ -58,6 +53,8 @@ export default function useOutboundHooks(): OutboundState {
 
   return {
     selectedWarehouse: warehouse.selectedWarehouse,
+    error,
+    setError,
     selectedShop,
     setSelectedShop,
     onAdd,

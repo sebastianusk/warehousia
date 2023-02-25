@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { message } from 'antd';
-import { GlobalContext } from 'app/components/GlobalState';
+import { GlobalContext, Data, DataList } from 'app/components/GlobalState';
 import { ADD_INBOUND } from 'app/graph';
 import checkDupeData from 'app/helper/checkDupeData';
 
@@ -17,14 +17,6 @@ interface InboundState {
   loading: boolean;
   onAdd(data: Data): void;
 }
-
-export type DataList = Data[] | [];
-
-type Data = {
-  id: string;
-  name: string;
-  amount: number;
-};
 
 export default function useInboundHooks(): InboundState {
   const [error, setError] = useState<{ id: string }[]>([]);

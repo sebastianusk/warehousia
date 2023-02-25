@@ -58,13 +58,18 @@ export default function WarehouseTransferPage(): React.ReactElement {
                   variables: { ids: data.map((item) => item[0]) },
                 });
 
-                const mergedList = data.map((item) => ({
-                  id: item[0],
-                  name: result.data.getProductsByIds.find(
+                const mergedList = data.map((item) => {
+                  const matchedProduct = result.data.getProductsByIds.find(
                     (product: any) => product.id === item[0]
-                  )?.name,
-                  amount: parseInt(item[1], 10),
-                }));
+                  );
+                  return {
+                    id: item[0],
+                    name: matchedProduct?.name,
+                    amount: parseInt(item[1], 10),
+                    price: matchedProduct?.price,
+                    stocks: matchedProduct?.stocks,
+                  }
+                });
                 const notFound = mergedList.filter((item) => !item.name);
                 if (notFound.length !== 0) {
                   setError(

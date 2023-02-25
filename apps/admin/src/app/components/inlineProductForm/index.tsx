@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, InputNumber, AutoComplete } from 'antd';
 import { SEARCH_PRODUCT } from 'app/graph';
+import { Data } from 'app/components/GlobalState';
 import { useLazyQuery } from '@apollo/client';
 import { useForm } from 'antd/lib/form/Form';
 import _ from 'lodash';
@@ -9,31 +10,36 @@ import styles from './index.module.css';
 export default function InlineProductForm({
   onAdd,
 }: {
-  onAdd(data: { id: string; name: string; amount: number }): void;
+  onAdd(data: Data): void;
 }): React.ReactElement {
   const [getProduct, { data }] = useLazyQuery(SEARCH_PRODUCT, {
     fetchPolicy: 'no-cache',
   });
   const [form] = useForm();
-  const [selectedProduct, setSelectedProduct] = useState({
+  const emptyStateSelected = {
     id: '',
     name: '',
-  });
+    amount: 0,
+    price: 0,
+    stocks: [
+      {
+        warehouseId: '',
+        amount: 0,
+      },
+    ],
+  }
+  const [selectedProduct, setSelectedProduct] = useState(emptyStateSelected);
   const [canSubmit, setCanSubmit] = useState(false);
 
   const search = _.debounce((value) => {
-    setSelectedProduct({
-      id: '',
-      name: '',
-    });
+    setSelectedProduct(emptyStateSelected);
     getProduct({ variables: { query: value } });
   }, 250);
 
   const handleSelect = (value: any, options: any) => {
-    setSelectedProduct({
-      id: options.key,
-      name: options.dataname,
-    });
+    setSelectedProduct(
+      data?.searchProduct.find((datum: Data) => datum.id === options.key)
+    );
   };
 
   const checkCanSubmit = (_changedValues: any, allValues: any) => {
@@ -52,8 +58,7 @@ export default function InlineProductForm({
         onFinish={(value: { product: string; amount: number }) => {
           form.resetFields();
           onAdd({
-            id: selectedProduct.id,
-            name: selectedProduct.name,
+            ...selectedProduct,
             amount: value.amount,
           });
         }}

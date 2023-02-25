@@ -1,8 +1,11 @@
 import React, { ReactElement } from 'react';
-import { Card, Divider, Button, Space } from 'antd';
+import { useApolloClient } from '@apollo/client';
+import { Card, Divider, Button, Space, message } from 'antd';
+import { GET_PRODUCTS_BY_IDS } from 'app/graph';
 import WarehouseSelector from 'app/components/WarehousesSelector';
 import ShopsSelector from 'app/components/ShopsSelector';
 import ListEditor from 'app/components/ListEditor';
+import ErrorLogModal from 'app/components/ErrorLogModal';
 import InlineProductForm from 'app/components/inlineProductForm';
 import ExcelInput from 'app/components/ExcelInput';
 import useOutboundHooks from './hooks';
@@ -14,11 +17,15 @@ export default function WarehouseOutboundPage(): ReactElement {
     selectedShop,
     setSelectedShop,
     selectedWarehouse,
+    error,
+    setError,
     onAdd,
     onSubmit,
     loading,
     outbound,
   } = useOutboundHooks();
+
+  const client = useApolloClient();
 
   return (
     <>
@@ -50,15 +57,39 @@ export default function WarehouseOutboundPage(): ReactElement {
           <Space size="middle">
             <ExcelInput
               onDataInput={async (data) => {
-                const result = data.map((item) => ({
-                  id: item[0],
-                  name: '',
-                  amount: parseInt(item[1], 10),
-                }));
-                outbound.set((prev) => [...prev, ...result]);
+                const result = await client.query({
+                  query: GET_PRODUCTS_BY_IDS,
+                  variables: { ids: data.map((item) => item[0]) },
+                });
+
+                const mergedList = data.map((item) => {
+                  const matchedProduct = result.data.getProductsByIds.find(
+                    (product: any) => product.id === item[0]
+                  );
+                  return {
+                    id: item[0],
+                    name: matchedProduct?.name,
+                    amount: parseInt(item[1], 10),
+                    price: matchedProduct?.price,
+                    stocks: matchedProduct?.stocks,
+                  };
+                });
+
+                const notFound = mergedList.filter((item) => !item.name);
+                if (notFound.length !== 0) {
+                  setError(notFound.map((item) => ({ id: item.id })));
+                  message.error('item not found, check log');
+                } else {
+                  outbound.set((prev) => [...prev, ...mergedList]);
+                }
               }}
             />
-            <Button>Error log</Button>
+            <ErrorLogModal
+              errors={error.map((data) => ({
+                ...data,
+                message: 'product not found',
+              }))}
+            />
           </Space>
           <Button
             size="large"
