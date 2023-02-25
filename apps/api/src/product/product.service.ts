@@ -7,6 +7,7 @@ import {
   ProductModel,
   ProductStockModel,
 } from './product.dto';
+import { ProductStock } from '../graphql';
 
 @Injectable()
 export default class ProductService {
@@ -194,22 +195,23 @@ export default class ProductService {
     );
   }
 
-  async getProductsByIds(
-    ids: string[]
-  ): Promise<{ id: string; name: string; price: number }[]> {
+  async getProductsByIds(ids: string[]): Promise<ProductStock[]> {
     const data = await this.db.product.findMany({
       where: {
         id: { in: ids },
       },
+      include: { stock: true },
     });
-    return data.map(({ id, name, price }) => ({ id, name, price }));
+    return data.map((product) =>
+      ProductStockModel.fromDB(product).toResponse()
+    );
   }
 
   async searchProduct(
     query: string,
     limit: number = 10,
     offset: number = 0
-  ): Promise<{ id: string; name: string }[]> {
+  ): Promise<ProductStock[]> {
     const data = await this.db.product.findMany({
       skip: offset,
       take: limit,
@@ -219,8 +221,11 @@ export default class ProductService {
           { name: { contains: query, mode: 'insensitive' } },
         ],
       },
+      include: { stock: true },
     });
-    return data.map(({ id, name }) => ({ id, name }));
+    return data.map((product) =>
+      ProductStockModel.fromDB(product).toResponse()
+    );
   }
 
   async getProductStock(id: string): Promise<ProductStockModel> {
