@@ -169,7 +169,7 @@ export default class WarehouseService {
           where: {
             warehouse_id: id,
             product_id: stock.productId,
-            fulfiled_outbound_id: null,
+            fulfiled_at: null,
             expired_at: { gt: new Date() },
           },
           orderBy: { created_at: 'asc' },
