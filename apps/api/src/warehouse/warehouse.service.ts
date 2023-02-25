@@ -174,7 +174,6 @@ export default class WarehouseService {
           },
           orderBy: { created_at: 'asc' },
         });
-        console.log(demands);
 
         let available = stock.amount;
         const updatedDemands = new Array<{
