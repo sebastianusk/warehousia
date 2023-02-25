@@ -27,14 +27,14 @@ spec:
     spec:
       containers:
         - name: api
-          image: ghcr.io/sebastianusk/warehousia-api:09ac4f7fbdddc9f39683e1c23d4c2d48ed9b5dd0
+          image: ghcr.io/sebastianusk/warehousia-api:8a0158dcf58d357458a09b5894c07e296e37903f
           imagePullPolicy: Always
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "50m"
+              memory: '128Mi'
+              cpu: '50m'
             limits:
-              memory: "256Mi"
+              memory: '256Mi'
           ports:
             - containerPort: 3333
           env:

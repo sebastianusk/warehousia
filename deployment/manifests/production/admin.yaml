@@ -27,13 +27,13 @@ spec:
     spec:
       containers:
         - name: admin
-          image: ghcr.io/sebastianusk/warehousia-admin:7c8793d82c3fa381569395bbcd6f8cdd
+          image: ghcr.io/sebastianusk/warehousia-admin:prod-8a0158dcf58d357458a09b5894c07e296e37903f
           imagePullPolicy: Always
           ports:
             - containerPort: 80
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "50m"
+              memory: '128Mi'
+              cpu: '50m'
             limits:
-              memory: "256Mi"
+              memory: '256Mi'
