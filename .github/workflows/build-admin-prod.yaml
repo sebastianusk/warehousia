@@ -1,4 +1,4 @@
-name: GitHub Actions Admin Warehousia
+name: GitHub Actions Admin Production Warehousia
 on: workflow_dispatch
 env:
   REGISTRY: ghcr.io
