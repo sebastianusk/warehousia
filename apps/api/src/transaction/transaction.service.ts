@@ -253,6 +253,7 @@ export default class TransactionService {
         ],
       },
       include: { outbound: true, missing: true },
+      orderBy: { created_at: 'desc' },
     });
     return data.map((preparation) => {
       const products = preparation.outbound.reduce((prev, item) => {
@@ -456,6 +457,7 @@ export default class TransactionService {
         ],
       },
       include: { items: true, failed: true },
+      orderBy: { created_at: 'desc' },
     });
     return transactions.map((transaction) =>
       TransactionModel.fromDB(transaction)
