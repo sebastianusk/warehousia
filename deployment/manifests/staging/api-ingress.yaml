@@ -4,21 +4,21 @@ metadata:
   name: api-ingress
   namespace: staging
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    kubernetes.io/ingress.class: 'nginx'
+    cert-manager.io/cluster-issuer: 'letsencrypt-prod'
 spec:
   tls:
     - hosts:
-      - gql.staging.warehousia.com
+        - gql.staging.warehousia.com
       secretName: api-staging-tls
   rules:
-  - host: gql.staging.warehousia.com
-    http:
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: api
-              port:
-                number: 80
+    - host: gql.staging.warehousia.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 80
