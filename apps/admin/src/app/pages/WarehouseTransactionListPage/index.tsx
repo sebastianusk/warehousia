@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/client';
 import Page from 'app/components/Page';
 import useTransactionXslxHooks from 'app/lib/xlsx/transactionXlsxHooks';
 import styles from './index.module.css';
+import renderDate from 'app/helper/renderDate';
 
 const LIMIT = 10;
 
@@ -68,11 +69,13 @@ export default function WarehouseTransactionListPage(): React.ReactElement {
               title="Created At"
               dataIndex="createdAt"
               key="createdAt"
+              render={renderDate}
             />
             <Table.Column
               title="Created By"
               dataIndex="createdBy"
               key="createdBy"
+              render={renderDate}
             />
             <Table.Column
               title="Action"

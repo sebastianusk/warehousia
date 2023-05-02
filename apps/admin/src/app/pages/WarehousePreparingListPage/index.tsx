@@ -7,6 +7,7 @@ import { GET_PREPARATION } from 'app/graph';
 import { useQuery } from '@apollo/client';
 import usePreparingXslxHooks from 'app/lib/xlsx/preparingXlsxHooks';
 import styles from './index.module.css';
+import renderDate from 'app/helper/renderDate';
 
 interface PreparationModel {
   items: {
@@ -60,6 +61,7 @@ export default function WarehousePreparingListPage(): React.ReactElement {
               title="Created At"
               dataIndex="createdAt"
               key="createdAt"
+              render={renderDate}
             />
             <Table.Column
               title="Created By"

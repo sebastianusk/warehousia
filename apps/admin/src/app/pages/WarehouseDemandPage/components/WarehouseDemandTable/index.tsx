@@ -4,6 +4,7 @@ import { GET_DEMANDS } from 'app/graph';
 import { useQuery } from '@apollo/client';
 import Page from 'app/components/Page';
 import { GlobalContext } from 'app/components/GlobalState';
+import renderDate from 'app/helper/renderDate';
 import { DemandItem } from '../../hooks';
 import EditDemandModal from '../EditDemandModal';
 
@@ -32,12 +33,14 @@ export default function WarehouseDemandTable(): React.ReactElement {
             dataIndex: 'createdAt',
             width: '20%',
             title: 'Created',
+            render: renderDate,
           },
           {
             key: 'expiredAt',
             dataIndex: 'expiredAt',
             width: '20%',
             title: 'ExpiredAt',
+            render: renderDate,
           },
           { key: 'by', dataIndex: 'createdBy', title: 'By' },
           {
