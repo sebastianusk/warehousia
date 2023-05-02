@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: ghcr.io/sebastianusk/warehousia-api:8a0158dcf58d357458a09b5894c07e296e37903f
+          image: ghcr.io/sebastianusk/warehousia-api:b418db0ff2b94aad17894b356ef3830ef4c967ee
           imagePullPolicy: Always
           resources:
             requests:
