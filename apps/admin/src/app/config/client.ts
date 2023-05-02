@@ -50,7 +50,7 @@ export default function useGraphQLClient(): {
     link: from([errorLink, authLink.concat(httpLink)]),
     cache,
     defaultOptions: {
-      query: { errorPolicy: 'all' },
+      query: { errorPolicy: 'all', fetchPolicy: 'no-cache' },
       mutate: { errorPolicy: 'all' },
       watchQuery: { errorPolicy: 'all' },
     },
