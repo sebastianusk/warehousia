@@ -17,10 +17,11 @@ interface ModalAddProductBulkState {
 }
 
 export default function useModalAddProductBulkHooks(
-  setVisible: Dispatch<SetStateAction<boolean>>
+  onCompleteBulkUpload: () => void
 ): ModalAddProductBulkState {
   const [data, setData] = useState<ProductData[]>([]);
   const handleFile = async (excel: string[][]) => {
+    setData([]);
     const newData = excel.map((item) => ({
       id: item[0],
       name: item[1],
@@ -32,7 +33,7 @@ export default function useModalAddProductBulkHooks(
   const client = useApolloClient();
   const [addProducts, { loading }] = useMutation(ADD_PRODUCTS, {
     onCompleted() {
-      setVisible(false);
+      onCompleteBulkUpload();
       client.refetchQueries({
         include: ['products'],
       });

@@ -14,9 +14,14 @@ import ExcelInput from '../ExcelInput';
 export default function ModalAddProductBulk(props: {
   visible: boolean;
   setVisible: Dispatch<SetStateAction<boolean>>;
+  onComplete: () => void;
 }): React.ReactElement {
   const { handleFile, data, setData, loading, uploadData } =
-    useModalAddProductBulkHooks(props.setVisible);
+    useModalAddProductBulkHooks(() => {
+      props.setVisible(false);
+      props.onComplete();
+    });
+
   const columns: EditableColumnTypes<ProductData>[] = [
     {
       title: 'Kode Produk',

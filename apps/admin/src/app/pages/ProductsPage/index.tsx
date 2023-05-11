@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Button, Card, Space } from 'antd';
+import { Button, Card, Space, message } from 'antd';
 import ProductListComponent from 'app/components/ProductListComponent';
 import WarehouseSelectorAll from 'app/components/WarehousesSelectorAll';
 import { GlobalContext } from 'app/components/GlobalState';
@@ -18,10 +18,12 @@ export default function ProductsPage(): React.ReactElement {
     setShowBulkModal,
     openBulkModal,
   } = useProductsPageHooks();
+  const [messageApi, contextHolder] = message.useMessage();
   const { warehouse } = useContext(GlobalContext);
 
   return (
     <>
+      {contextHolder}
       <Card className={styles.card}>
         <div className={`${styles.flexContainer}`}>
           <div>
@@ -55,6 +57,9 @@ export default function ProductsPage(): React.ReactElement {
       <ModalAddProductBulk
         visible={showBulkModal}
         setVisible={setShowBulkModal}
+        onComplete={() => {
+          messageApi.info('Upload Complete');
+        }}
       />
     </>
   );
