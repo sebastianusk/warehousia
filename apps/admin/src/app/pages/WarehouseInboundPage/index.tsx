@@ -11,6 +11,8 @@ import ListEditor from '../../components/ListEditor';
 import useInboundHooks from './hooks';
 
 export default function WarehouseInboundPage(): React.ReactElement {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const {
     selectedWarehouse,
     error,
@@ -70,9 +72,10 @@ export default function WarehouseInboundPage(): React.ReactElement {
                 const notFound = mergedList.filter((item) => !item.name);
                 if (notFound.length !== 0) {
                   setError(notFound.map((item) => ({ id: item.id })));
-                  message.error('item not found, check log');
+                  messageApi.error('item not found, check log');
                 } else {
-                  inbound.set((prev) => [...prev, ...mergedList]);
+                  inbound.set(() => mergedList);
+                  messageApi.info('upload complete');
                 }
               }}
             />
@@ -94,6 +97,7 @@ export default function WarehouseInboundPage(): React.ReactElement {
           </Button>
         </div>
       </Card>
+      {contextHolder}
     </>
   );
 }

@@ -27,6 +27,8 @@ export default function WarehouseOutboundPage(): ReactElement {
 
   const client = useApolloClient();
 
+  const [messageApi, contextHolder] = message.useMessage();
+
   return (
     <>
       <Card className={styles.card}>
@@ -78,9 +80,10 @@ export default function WarehouseOutboundPage(): ReactElement {
                 const notFound = mergedList.filter((item) => !item.name);
                 if (notFound.length !== 0) {
                   setError(notFound.map((item) => ({ id: item.id })));
-                  message.error('item not found, check log');
+                  messageApi.error('item not found, check log');
                 } else {
-                  outbound.set((prev) => [...prev, ...mergedList]);
+                  outbound.set(() => mergedList);
+                  messageApi.info('upload success');
                 }
               }}
             />
@@ -104,6 +107,7 @@ export default function WarehouseOutboundPage(): ReactElement {
           </Button>
         </div>
       </Card>
+      {contextHolder}
     </>
   );
 }

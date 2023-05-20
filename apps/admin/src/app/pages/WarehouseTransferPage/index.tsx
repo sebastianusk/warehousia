@@ -23,6 +23,8 @@ export default function WarehouseTransferPage(): React.ReactElement {
   } = useTransferPageHooks();
   const client = useApolloClient();
 
+  const [messageApi, contextHolder] = message.useMessage();
+
   return (
     <>
       <Card className={styles.card}>
@@ -68,7 +70,7 @@ export default function WarehouseTransferPage(): React.ReactElement {
                     amount: parseInt(item[1], 10),
                     price: matchedProduct?.price,
                     stocks: matchedProduct?.stocks,
-                  }
+                  };
                 });
                 const notFound = mergedList.filter((item) => !item.name);
                 if (notFound.length !== 0) {
@@ -78,9 +80,10 @@ export default function WarehouseTransferPage(): React.ReactElement {
                       message: 'product not found',
                     }))
                   );
-                  message.error('item not found, check log');
+                  messageApi.error('item not found, check log');
                 } else {
-                  transfer.set((prev) => [...prev, ...mergedList]);
+                  transfer.set(() => mergedList);
+                  messageApi.info('upload complete');
                 }
                 return undefined;
               }}
@@ -102,6 +105,7 @@ export default function WarehouseTransferPage(): React.ReactElement {
           </Button>
         </div>
       </Card>
+      {contextHolder}
     </>
   );
 }
