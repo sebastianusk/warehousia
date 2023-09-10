@@ -16,7 +16,7 @@ metadata:
   name: admin
   namespace: staging
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: admin

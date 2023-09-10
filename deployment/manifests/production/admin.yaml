@@ -16,7 +16,7 @@ metadata:
   name: admin
   namespace: production
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: admin
@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: admin
-          image: ghcr.io/sebastianusk/warehousia-admin:prod-8fb37254f5544d58213df97d7585b1cb32b37b2a
+          image: ghcr.io/sebastianusk/warehousia-admin:prod-84a48e0cb0d32f0a66da4386afccdf4b0b9c1343
           imagePullPolicy: Always
           ports:
             - containerPort: 80
