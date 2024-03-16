@@ -12,7 +12,10 @@ function parseExcel(file: File): Promise<string[][]> {
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
         const data = excel.utils.sheet_to_json<string[]>(ws, { header: 1 });
-        resolve(data.slice(1));
+        resolve(data
+          .filter((item) => item.length !== 0)
+          .slice(1)
+        );
         return;
       }
       reject();
