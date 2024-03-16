@@ -57,7 +57,7 @@ export default function WarehouseTransferPage(): React.ReactElement {
               onDataInput={async (data) => {
                 const result = await client.query({
                   query: GET_PRODUCTS_BY_IDS,
-                  variables: { ids: data.map((item) => item[0]) },
+                  variables: { ids: data.map((item) => item[0]).filter((item) => item !== undefined) },
                 });
 
                 const mergedList = data.map((item) => {
