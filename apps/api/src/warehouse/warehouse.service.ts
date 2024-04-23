@@ -7,7 +7,7 @@ import WarehouseModel, { DemandModel, Feature } from './warehouse.dto';
 
 @Injectable()
 export default class WarehouseService {
-  constructor(private db: DBService) {}
+  constructor(private db: DBService) { }
 
   async createWarehouse(
     auth: AuthWrapper,
@@ -49,11 +49,11 @@ export default class WarehouseService {
       take: limit,
       where: query
         ? {
-            OR: [
-              { name: { contains: query, mode: 'insensitive' } },
-              { id: { contains: query, mode: 'insensitive' } },
-            ],
-          }
+          OR: [
+            { name: { contains: query, mode: 'insensitive' } },
+            { id: { contains: query, mode: 'insensitive' } },
+          ],
+        }
         : undefined,
       orderBy: [{ active: 'desc' }, { id: 'asc' }],
     });
@@ -91,6 +91,7 @@ export default class WarehouseService {
     id: string,
     items: { productid: string; amount: number }[]
   ): Promise<string> {
+    // create the inbound
     if (items.length === 0) throw new FieldEmpty('items');
     const inbound = await this.db.inbound.create({
       data: {
@@ -104,6 +105,8 @@ export default class WarehouseService {
         },
       },
     });
+
+    // increase the stock
     const stocks = await Promise.all(
       items.map(async (item) =>
         this.db.stock.upsert({
@@ -169,7 +172,7 @@ export default class WarehouseService {
           where: {
             warehouse_id: id,
             product_id: stock.productId,
-            OR: [{ fulfiled_outbound_id: null }, { previous_demand_id: null }],
+            fulfiled_at: null,
             expired_at: { gt: new Date() },
           },
           orderBy: { created_at: 'asc' },
@@ -182,6 +185,7 @@ export default class WarehouseService {
           shopId: string;
           amount: number;
           unfullfiled?: number;
+          expired_at?: Date;
         }>();
 
         for (let i = 0; i < demands.length && available > 0; i += 1) {
@@ -193,10 +197,13 @@ export default class WarehouseService {
             amount: available > demand.amount ? demand.amount : available,
             unfullfiled:
               available > demand.amount ? undefined : demand.amount - available,
+            expired_at: demand.expired_at,
           });
           available = available > demand.amount ? available - demand.amount : 0;
         }
+        console.log(updatedDemands);
 
+        // check if there is no demands that need to be updated
         if (stock.amount === available || updatedDemands.length === 0)
           return { productId: stock.productId, amount: 0 };
 
@@ -235,15 +242,16 @@ export default class WarehouseService {
               },
               unfulfilled_demand: demand.unfullfiled
                 ? {
-                    create: {
-                      warehouse_id: id,
-                      product_id: demand.productId,
-                      shop_id: demand.shopId,
-                      created_by: auth.username,
-                      amount: demand.unfullfiled,
-                      remarks,
-                    },
-                  }
+                  create: {
+                    warehouse_id: id,
+                    product_id: demand.productId,
+                    shop_id: demand.shopId,
+                    created_by: auth.username,
+                    amount: demand.unfullfiled,
+                    expired_at: demand.expired_at,
+                    remarks,
+                  },
+                }
                 : undefined,
             },
           })
@@ -472,6 +480,7 @@ export default class WarehouseService {
       },
       orderBy: { created_at: 'desc' },
     });
+    console.log(demands);
     return demands.map((data) => DemandModel.fromDB(data));
   }
 }

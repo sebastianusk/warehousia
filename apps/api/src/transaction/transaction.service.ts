@@ -16,7 +16,7 @@ import {
 
 @Injectable()
 export default class TransactionService {
-  constructor(private db: DBService) {}
+  constructor(private db: DBService) { }
 
   async createOutbound(
     auth: AuthWrapper,
@@ -28,6 +28,7 @@ export default class TransactionService {
       throw new FieldEmpty('items');
     }
 
+    // validate if the products is exists
     const products = await Promise.all(
       items.map(async ({ productId, amount }) => {
         const product = await this.db.product.findUnique({
@@ -43,6 +44,8 @@ export default class TransactionService {
       throw new ProductsNotFound(notFound.map((item) => item.productId));
     }
 
+
+    // get the stocks of the products
     const stocks = await Promise.all(
       items.map(async ({ productId, amount }) => {
         const stock = await this.db.stock.findUnique({
@@ -67,6 +70,7 @@ export default class TransactionService {
       })
     );
 
+    // compare the stock with the requested amount
     const data = stocks.map((stock) => {
       if (stock.stock > stock.amount) {
         return {
@@ -82,6 +86,7 @@ export default class TransactionService {
       };
     });
 
+    // reformat the data to be demand and outbound
     const wrapper = data.reduce(
       (formatter, { productId, outbound, demand }) => {
         if (outbound !== 0)
@@ -95,6 +100,7 @@ export default class TransactionService {
       }
     );
 
+    // create transaction
     await this.db.$transaction(
       wrapper.outbound.map(({ productId, amount }) =>
         this.db.stock.update({
@@ -114,6 +120,7 @@ export default class TransactionService {
       )
     );
 
+    // create the outbound
     const outbounds = await this.db.$transaction(
       wrapper.outbound.map(({ amount, productId }) =>
         this.db.outbound_item.create({
@@ -128,6 +135,7 @@ export default class TransactionService {
       )
     );
 
+    // setup demand with expired at
     const expiredAt = () => {
       const now = new Date();
       now.setDate(now.getDate() + getEnvNumber('DEMAND_EXPIRED_AT'));
