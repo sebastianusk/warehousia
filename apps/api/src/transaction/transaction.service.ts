@@ -24,13 +24,26 @@ export default class TransactionService {
     shopId: string,
     items: { productId: string; amount: number }[]
   ): Promise<{ demands: string[]; outbounds: string[] }> {
-    if (items.length === 0) {
+    // reduce duplicates items
+    const cleanItems = items.reduce<{ productId: string; amount: number }[]>(
+      (acc, { productId, amount }) => {
+        const item = acc.find((item) => item.productId === productId);
+        if (item)
+          item.amount += amount
+        else
+          acc.push({ productId, amount });
+        return acc;
+      }, []
+    )
+
+
+    if (cleanItems.length === 0) {
       throw new FieldEmpty('items');
     }
 
     // validate if the products is exists
     const products = await Promise.all(
-      items.map(async ({ productId, amount }) => {
+      cleanItems.map(async ({ productId, amount }) => {
         const product = await this.db.product.findUnique({
           where: { id: productId },
         });
@@ -47,7 +60,7 @@ export default class TransactionService {
 
     // get the stocks of the products
     const stocks = await Promise.all(
-      items.map(async ({ productId, amount }) => {
+      cleanItems.map(async ({ productId, amount }) => {
         const stock = await this.db.stock.findUnique({
           where: {
             product_id_warehouse_id: {
@@ -163,7 +176,7 @@ export default class TransactionService {
     await auth.log(this.db, 'createOutbound', {
       warehouseId,
       shopId,
-      items,
+      cleanItems,
       demands: demands.map(({ product_id, shop_id, amount }) => ({
         productId: product_id,
         shopId: shop_id,

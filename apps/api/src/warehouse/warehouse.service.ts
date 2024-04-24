@@ -91,14 +91,27 @@ export default class WarehouseService {
     id: string,
     items: { productid: string; amount: number }[]
   ): Promise<string> {
+
+    // reduce duplicates items
+    const cleanItems = items.reduce<{ productid: string; amount: number }[]>(
+      (acc, { productid, amount }) => {
+        const item = acc.find((item) => item.productid === productid);
+        if (item)
+          item.amount += amount
+        else
+          acc.push({ productid, amount });
+        return acc;
+      }, []
+    )
+
     // create the inbound
-    if (items.length === 0) throw new FieldEmpty('items');
+    if (cleanItems.length === 0) throw new FieldEmpty('items');
     const inbound = await this.db.inbound.create({
       data: {
         warehouse: id,
         created_by: auth.username,
         inbound_item: {
-          create: items.map((item) => ({
+          create: cleanItems.map((item) => ({
             amount: item.amount,
             product_id: item.productid,
           })),
@@ -108,7 +121,7 @@ export default class WarehouseService {
 
     // increase the stock
     const stocks = await Promise.all(
-      items.map(async (item) =>
+      cleanItems.map(async (item) =>
         this.db.stock.upsert({
           create: {
             product_id: item.productid,
@@ -154,7 +167,7 @@ export default class WarehouseService {
 
     await auth.log(this.db, 'inbound', {
       id,
-      items,
+      cleanItems,
       fulfilledDemands: fulfilledDemands.filter(({ amount }) => amount !== 0),
     });
     return inbound.id;
@@ -480,7 +493,6 @@ export default class WarehouseService {
       },
       orderBy: { created_at: 'desc' },
     });
-    console.log(demands);
     return demands.map((data) => DemandModel.fromDB(data));
   }
 }
