@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 type UserData = {
   username: string;
   password?: string;
-  role: 'ADMIN' | 'SUPER_ADMIN';
+  role: 'ADMIN' | 'SUPER_ADMIN' | 'ADMIN_MANAGER';
   warehouses: string[];
   active: boolean;
 };

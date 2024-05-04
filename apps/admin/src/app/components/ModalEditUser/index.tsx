@@ -1,14 +1,14 @@
 import React, { ReactElement, Dispatch, SetStateAction } from 'react';
 import { Modal, Form, Input, Checkbox, Radio, Switch, Button } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import useModalAddUserHooks from './hooks';
+import useModalEditUserHooks from './hooks';
 
 type ModalProps = {
   visible: boolean;
   setVisible: Dispatch<SetStateAction<boolean>>;
   userData: {
     username: string;
-    role: 'ADMIN' | 'SUPER_ADMIN';
+    role: 'ADMIN' | 'SUPER_ADMIN' | 'ADMIN_MANAGER';
     warehouses: string[];
     active: boolean;
   };
@@ -27,7 +27,7 @@ export default function ModalEditUser({
     loadingDataWarehouses,
     warehousesOptions,
     form,
-  } = useModalAddUserHooks(setVisible);
+  } = useModalEditUserHooks(setVisible);
   return (
     <>
       <Modal
@@ -43,8 +43,8 @@ export default function ModalEditUser({
           <>
             <Form
               layout="horizontal"
-              labelCol={{ span: 9 }}
-              wrapperCol={{ span: 14 }}
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
               onFinish={handleOk}
               form={form}
               initialValues={userData}
@@ -60,6 +60,7 @@ export default function ModalEditUser({
               >
                 <Radio.Group>
                   <Radio.Button value="ADMIN">Admin</Radio.Button>
+                  <Radio.Button value="ADMIN_MANAGER">Admin Manager</Radio.Button>
                   <Radio.Button value="SUPER_ADMIN">Super Admin</Radio.Button>
                 </Radio.Group>
               </Form.Item>

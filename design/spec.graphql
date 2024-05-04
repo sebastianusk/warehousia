@@ -110,6 +110,7 @@ type Admin {
 enum Role {
   ADMIN
   SUPER_ADMIN
+  ADMIN_MANAGER
 }
 
 type AdminLogList {

@@ -9,7 +9,8 @@
 /* eslint-disable */
 export enum Role {
     ADMIN = "ADMIN",
-    SUPER_ADMIN = "SUPER_ADMIN"
+    SUPER_ADMIN = "SUPER_ADMIN",
+    ADMIN_MANAGER = "ADMIN_MANAGER"
 }
 
 export class PaginationInput {

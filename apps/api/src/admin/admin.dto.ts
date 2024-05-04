@@ -6,6 +6,7 @@ import { Admin, AdminLog, Role } from '../graphql';
 export enum RoleModel {
   ADMIN = 'ADMIN',
   SUPER_ADMIN = 'SUPER_ADMIN',
+  ADMIN_MANAGER = 'ADMIN_MANAGER',
 }
 
 export class AdminModel {
@@ -15,6 +16,8 @@ export class AdminModel {
         return RoleModel.SUPER_ADMIN;
       case 'ADMIN':
         return RoleModel.ADMIN;
+      case 'ADMIN_MANAGER':
+        return RoleModel.ADMIN_MANAGER;
       default:
         return undefined;
     }
@@ -41,10 +44,14 @@ export class AdminModel {
   }
 
   static toResponseRole(role: RoleModel): Role {
-    if (role === RoleModel.SUPER_ADMIN) {
-      return Role.SUPER_ADMIN;
+    switch (role) {
+      case  RoleModel.SUPER_ADMIN:
+        return Role.SUPER_ADMIN;
+      case  RoleModel.ADMIN_MANAGER:
+        return Role.ADMIN_MANAGER;
+      default:
+        return Role.ADMIN;
     }
-    return Role.ADMIN;
   }
 
   toResponse(): Admin {

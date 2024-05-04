@@ -38,8 +38,8 @@ export default function ModalAddUser({
           <>
             <Form
               layout="horizontal"
-              labelCol={{ span: 9 }}
-              wrapperCol={{ span: 14 }}
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
             >
               <Form.Item label="Username">
                 <Input
@@ -58,6 +58,7 @@ export default function ModalAddUser({
               <Form.Item label="Role">
                 <Radio.Group onChange={onChangeRole} value={formData.role}>
                   <Radio.Button value="ADMIN">Admin</Radio.Button>
+                  <Radio.Button value="ADMIN_MANAGER">Admin Manager</Radio.Button>
                   <Radio.Button value="SUPER_ADMIN">Super Admin</Radio.Button>
                 </Radio.Group>
               </Form.Item>

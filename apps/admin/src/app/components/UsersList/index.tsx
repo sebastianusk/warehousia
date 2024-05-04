@@ -13,7 +13,7 @@ type UsersListProps = {
 
 type UsersListType = {
   username: string;
-  role: 'ADMIN' | 'SUPER_ADMIN';
+  role: 'ADMIN' | 'SUPER_ADMIN' | 'ADMIN_MANAGER';
   warehouses: string[];
   active: boolean;
 }[];

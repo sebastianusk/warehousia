@@ -66,6 +66,10 @@ export default function useModalEditUserHooks(
         {
           query: GET_ADMINS,
         },
+        {
+          query: GET_ADMINS,
+          variables: { query: input.username }
+        },
       ],
     });
   };
