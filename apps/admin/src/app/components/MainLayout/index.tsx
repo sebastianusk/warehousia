@@ -27,7 +27,7 @@ const MainLayout: React.FC = ({ children }) => {
         <div className={styles.userInfo}>
           <div className={styles.userAvatar}>
             <img
-              src={`https://avatars.dicebear.com/api/bottts/${userData?.username}.svg`}
+              src={`https://api.dicebear.com/8.x/bottts/svg?seed=${userData?.username}`}
               alt="profile"
               width={50}
               height={50}
