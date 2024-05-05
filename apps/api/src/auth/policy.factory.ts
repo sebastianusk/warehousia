@@ -41,6 +41,10 @@ export class AbilityFactory {
       can(Action.Manage, 'all');
     }
 
+    if (admin.role === RoleModel.ADMIN_MANAGER) {
+      can(Action.Create, ProductModel)
+    }
+
     if (warehouse && admin.warehouses.includes(warehouse.id)) {
       warehouse.features.forEach((feature) => {
         can(Action.Create, feature);
